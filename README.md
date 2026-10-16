@@ -1,2 +1,3 @@
-# nutricore
-dieta
+# NutriCore
+
+Apps privadas, cifradas con contraseña.
