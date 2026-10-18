@@ -2,13 +2,15 @@ import { NextResponse } from 'next/server';
 import { getProducts } from '@/lib/products';
 import { getPack } from '@/lib/packs';
 import { quoteShipping } from '@/lib/services/envia';
-import { createPreference } from '@/lib/services/mercadopago';
+import { getProvider } from '@/lib/payments';
+import { SITE_URL } from '@/lib/format';
 import { getServiceClient } from '@/lib/supabase';
 
 interface Body {
   items: { productId: string; quantity: number }[];
   address: Record<string, string>;
   shipping: { carrier: string; service: string };
+  provider?: string; // 'mercadopago' | 'conekta'
 }
 
 /**
@@ -38,25 +40,32 @@ export async function POST(req: Request) {
   const rate = rates.find((r) => r.carrier === body.shipping?.carrier && r.service === body.shipping?.service) ?? rates[0];
   const total = subtotal + rate.price;
 
+  const provider = getProvider(body.provider);
   const orderId = `MOS-${Date.now().toString(36).toUpperCase()}`;
   const db = getServiceClient();
   if (db) {
     const { error } = await db.from('orders').insert({
-      id: orderId, status: 'pendiente', customer: a, shipping: rate, subtotal, shipping_cost: rate.price, total,
+      id: orderId, status: 'pendiente', payment_provider: provider?.id ?? 'demo', customer: a, shipping: rate, subtotal, shipping_cost: rate.price, total,
       items: lines.map((l) => ({ productId: l.p.id, name: l.p.name, price: l.p.price, quantity: l.qty })),
     });
     if (error) return NextResponse.json({ error: 'No se pudo registrar el pedido' }, { status: 500 });
   }
 
+  // Sin credenciales de ninguna pasarela: flujo de demostración, no cobra.
+  if (!provider) return NextResponse.json({ orderId, total, url: `/gracias?order=${orderId}&demo=1`, demo: true });
+
   try {
-    const pref = await createPreference({
+    const checkout = await provider.createCheckout({
       orderId,
-      items: lines.map((l) => ({ title: l.p.name, quantity: l.qty, unit_price: l.p.price })),
+      items: lines.map((l) => ({ title: l.p.name, quantity: l.qty, unitPrice: l.p.price })),
       shippingCost: rate.price,
-      payer: { name: a.name, email: a.email },
+      customer: { name: a.name, email: a.email, phone: a.phone },
+      address: { street: a.street, colony: a.colony, city: a.city, state: a.state, postalCode: a.postalCode },
+      siteUrl: SITE_URL,
     });
-    return NextResponse.json({ orderId, total, url: pref.url, demo: pref.demo });
-  } catch {
+    return NextResponse.json({ orderId, total, url: checkout.url, provider: provider.id });
+  } catch (err) {
+    console.error(`[checkout] ${provider.id}:`, err);
     return NextResponse.json({ error: 'No se pudo iniciar el pago' }, { status: 502 });
   }
 }

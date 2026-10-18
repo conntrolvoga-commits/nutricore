@@ -20,8 +20,13 @@ export default function Checkout() {
   const [quoting, setQuoting] = useState(false);
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState('');
+  const [providers, setProviders] = useState<{ id: string; label: string }[]>([]);
+  const [provider, setProvider] = useState('');
 
   useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    fetch('/api/payments').then((r) => r.json()).then((d) => { setProviders(d.providers ?? []); setProvider(d.providers?.[0]?.id ?? ''); }).catch(() => {});
+  }, []);
   const set = (k: keyof typeof empty) => (e: React.ChangeEvent<HTMLInputElement>) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   // Cotización automática en cuanto el CP tiene 5 dígitos (se cancela si cambia el carrito o el CP).
@@ -48,7 +53,7 @@ export default function Checkout() {
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })), address: form, shipping: { carrier: selected.carrier, service: selected.service } }),
+        body: JSON.stringify({ items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })), address: form, shipping: { carrier: selected.carrier, service: selected.service }, provider }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Error al procesar el pedido');
@@ -116,8 +121,19 @@ export default function Checkout() {
           <div className="flex justify-between font-display text-2xl font-bold"><span>Total</span><span>{mxn(total)}</span></div>
         </div>
         {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
-        <button className="btn-primary w-full" disabled={paying || !selected}>{paying ? 'Procesando…' : 'Pagar con Mercado Pago'}</button>
-        <p className="text-center text-xs text-grape-500">Tarjeta, OXXO o SPEI. Pago seguro.</p>
+        {providers.length > 1 && (
+          <fieldset className="space-y-2">
+            <legend className="font-display font-semibold">Pagar con</legend>
+            {providers.map((p) => (
+              <label key={p.id} className={`flex cursor-pointer items-center gap-2 rounded-2xl border-2 p-2 ${provider === p.id ? 'border-grape-600 bg-grape-50' : 'border-grape-100'}`}>
+                <input type="radio" name="provider" checked={provider === p.id} onChange={() => setProvider(p.id)} />
+                <span>{p.label}</span>
+              </label>
+            ))}
+          </fieldset>
+        )}
+        <button className="btn-primary w-full" disabled={paying || !selected}>{paying ? 'Procesando…' : providers.length ? 'Ir a pagar' : 'Confirmar pedido (demo)'}</button>
+        <p className="text-center text-xs text-grape-500">{providers.length ? 'Tarjeta, OXXO o SPEI. Pago seguro en la página de la pasarela.' : 'Modo demo: no se realiza ningún cobro.'}</p>
       </aside>
     </form>
   );

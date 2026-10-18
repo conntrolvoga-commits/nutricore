@@ -32,3 +32,26 @@ create table if not exists orders (
 alter table products enable row level security;
 alter table orders enable row level security;
 create policy "catalogo publico" on products for select using (true);
+
+-- ── Pagos ──────────────────────────────────────────────────────────────
+alter table orders add column if not exists payment_provider text;
+alter table orders add column if not exists payment_id text;
+alter table orders add column if not exists paid_at timestamptz;
+
+-- Marca el pedido como pagado y descuenta stock en una sola transacción.
+-- Idempotente: un webhook repetido devuelve false y no vuelve a descontar.
+create or replace function mark_order_paid(p_order_id text, p_provider text, p_payment_id text)
+returns boolean language plpgsql security definer set search_path = public as $$
+declare o orders%rowtype; it jsonb;
+begin
+  select * into o from orders where id = p_order_id for update;
+  if not found or o.status = 'pagado' then return false; end if;
+  update orders set status = 'pagado', payment_provider = p_provider, payment_id = p_payment_id, paid_at = now() where id = p_order_id;
+  for it in select * from jsonb_array_elements(o.items) loop
+    if (it->>'productId') ~ '^[0-9a-f-]{36}$' then
+      update products set stock = greatest(0, stock - (it->>'quantity')::int) where id = (it->>'productId')::uuid;
+    end if;
+  end loop;
+  return true;
+end $$;
+revoke execute on function mark_order_paid(text, text, text) from public, anon, authenticated;

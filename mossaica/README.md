@@ -12,19 +12,47 @@ npm run dev        # http://localhost:3000
 ## Estructura
 ```
 src/app/                 páginas: / · /catalogo · /producto/[slug] · /checkout · /gracias · /admin
-src/app/api/             shipping (Envia.com) · checkout (Mercado Pago) · admin/{login,products}
+src/app/api/             shipping (Envia.com) · checkout · payments · webhooks/{mercadopago,conekta} · admin
 src/components/          Header, SideCart, ProductCard, CatalogClient, AdminPanel...
-src/lib/services/        envia.ts · mercadopago.ts
+src/lib/services/        envia.ts
+src/lib/payments/        Mercado Pago y Conekta (ver Pagos)
 src/lib/products.ts      Supabase si está configurado; si no, src/lib/seed.ts
 src/store/cart.ts        carrito (Zustand + localStorage)
 supabase/schema.sql      tablas products y orders con RLS
 ```
 
+## Pagos: Mercado Pago y Conekta
+Las dos pasarelas cumplen el mismo contrato (`src/lib/payments/types.ts`). Se activa cada una con sus llaves; si hay las dos, el cliente elige en el checkout; si no hay ninguna, el checkout funciona en modo demo y no cobra.
+
+```
+src/lib/payments/
+  types.ts         contrato PaymentProvider (agregar Stripe/PayPal = un archivo nuevo)
+  payloads.ts      constructores puros de la orden/preferencia + firma de webhook (con pruebas)
+  mercadopago.ts   Checkout Pro: tarjeta, OXXO y SPEI en su pantalla de pago
+  conekta.ts       Checkout alojado: card, cash (OXXO) y bank_transfer (SPEI)
+  index.ts         registro: lista solo las pasarelas con credenciales
+src/lib/orders.ts  markPaid (idempotente, descuenta stock en una transacción SQL)
+src/app/api/{payments,checkout}/route.ts
+src/app/api/webhooks/{mercadopago,conekta}/route.ts
+```
+
+**Flujo:** el cliente elige envío y pasarela → `/api/checkout` recalcula precios en el servidor, guarda el pedido como `pendiente` y devuelve la URL de pago → el cliente paga (tarjeta al momento; OXXO/SPEI genera una referencia y paga después) → la pasarela avisa al **webhook** → el servidor consulta el pago directo a la API y solo entonces marca el pedido `pagado` y descuenta stock.
+
+**Seguridad:** el cuerpo del webhook nunca se da por bueno; siempre se confirma con la API usando la llave privada. Con `MP_WEBHOOK_SECRET` además se verifica la firma `x-signature` de Mercado Pago. Los montos de Conekta van en centavos.
+
+**Configurar (una sola vez):**
+1. Mercado Pago: crea una aplicación en Mercado Pago Developers → copia el *Access Token* a `MP_ACCESS_TOKEN`; en Webhooks agrega `https://TU-DOMINIO/api/webhooks/mercadopago` (evento *Pagos*) y copia el secreto a `MP_WEBHOOK_SECRET`.
+2. Conekta: en el panel copia la *llave privada* a `CONEKTA_PRIVATE_KEY`; en Webhooks agrega `https://TU-DOMINIO/api/webhooks/conekta`.
+3. En Supabase corre `supabase/schema.sql` (agrega la función `mark_order_paid`).
+4. Prueba primero con las llaves de **pruebas** de cada pasarela; cambia a las de producción al salir.
+
+**Pruebas:** `node --experimental-strip-types --test scripts/payments.test.mts` (payloads de ambas pasarelas y firma del webhook; no requiere llaves).
+
 ## Activar servicios
 | Servicio | Variables | Sin configurar |
 |---|---|---|
 | Supabase (catálogo, pedidos, admin CRUD) | `NEXT_PUBLIC_SUPABASE_URL`, `..._ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (+ correr `supabase/schema.sql`) | catálogo semilla, admin solo lectura |
-| Mercado Pago (tarjeta, OXXO, SPEI) | `MP_ACCESS_TOKEN` | checkout demo, no cobra |
+| Mercado Pago / Conekta | ver sección Pagos | checkout demo, no cobra |
 | Envia.com (Estafeta, FedEx, DHL) | `ENVIA_API_TOKEN`, `ENVIA_ORIGIN_*` | tarifas estimadas |
 | Admin `/admin` | `ADMIN_PASSWORD` | no se puede entrar |
 
@@ -33,6 +61,5 @@ El servidor recalcula precios, stock y envío en `/api/checkout`; nunca confía 
 
 ## Pendiente antes de producción
 - Imágenes reales (subir a Supabase Storage y poner URLs en `images`; hoy se usa arte con emoji).
-- Webhook de Mercado Pago para marcar pedidos como pagados y descontar stock.
 - Correos transaccionales y guía de rastreo (generar etiqueta con Envia.com).
 - PayPal: no incluido; Mercado Pago ya cubre tarjeta, OXXO y SPEI.
