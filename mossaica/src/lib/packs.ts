@@ -1,23 +1,13 @@
 import type { Product, Rango } from './types';
-import { seedProducts } from './seed';
 
 export const PACK_SIZES = [25, 50, 100] as const;
 export type PackSize = (typeof PACK_SIZES)[number];
 export type PackRango = Rango | 'MIX';
 
-// ⚠ Descuentos PROVISIONALES por volumen; el precio base sale del precio unitario del catálogo.
-export const PACK_DISCOUNT: Record<PackSize, number> = { 25: 0.1, 50: 0.15, 100: 0.2 };
+/** Precio fijo en MXN por tamaño de paquete (igual para cualquier rango). */
+export const PACK_PRICE: Record<PackSize, number> = { 25: 70, 50: 135, 100: 280 };
 
-const avg = (list: Product[]) => list.reduce((n, p) => n + p.price, 0) / (list.length || 1);
-
-export function unitPrice(rango: PackRango): number {
-  const list = rango === 'MIX' ? seedProducts : seedProducts.filter((p) => p.rango === rango);
-  return avg(list);
-}
-
-export function packPrice(size: PackSize, rango: PackRango): number {
-  return Math.round((size * unitPrice(rango) * (1 - PACK_DISCOUNT[size])) / 5) * 5;
-}
+export const packPrice = (size: PackSize, _rango?: PackRango): number => PACK_PRICE[size];
 
 export const packId = (size: PackSize, rango: PackRango) => `pack-${size}-${rango}`;
 

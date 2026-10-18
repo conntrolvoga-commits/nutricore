@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { PACK_DISCOUNT, PACK_SIZES, getPack, packPrice, unitPrice, type PackRango, type PackSize } from '@/lib/packs';
+import { PACK_SIZES, getPack, packPrice, type PackRango, type PackSize } from '@/lib/packs';
 import { mxn } from '@/lib/format';
 import { useCart } from '@/store/cart';
 
@@ -23,21 +23,18 @@ export default function PackPicker() {
       <div className="grid gap-5 md:grid-cols-3">
         {PACK_SIZES.map((size: PackSize) => {
           const price = packPrice(size, rango);
-          const full = Math.round(size * unitPrice(rango));
-          const best = size === 100;
           return (
-            <article key={size} className={`relative flex flex-col rounded-3xl border-2 border-grape-900 p-6 shadow-pop ${best ? 'bg-sun' : 'bg-white'}`}>
-              {best && <span className="chip absolute -top-3 right-4 bg-candy text-white">Mejor precio</span>}
+            <article key={size} className="relative flex flex-col rounded-3xl border-2 border-grape-900 bg-white p-6 shadow-pop">
               <p className="font-display text-6xl font-bold">{size}</p>
               <p className="font-display text-xl">fichas</p>
               <p className="mt-4 font-display text-4xl font-bold">{mxn(price)}</p>
-              <p className="text-sm"><s className="opacity-60">{mxn(full)}</s> · ahorras {PACK_DISCOUNT[size] * 100}% ({mxn(price / size)} c/u)</p>
+              <p className="text-sm">{mxn(Math.round((price / size) * 100) / 100)} por ficha</p>
               <ul className="mt-4 flex-1 space-y-1 text-sm">
                 <li>✔ Diseños surtidos al azar</li>
                 <li>✔ {rango === 'MIX' ? 'Mezcla de los rangos A, B y C' : `Solo diseños del Rango ${rango}`}</li>
                 <li>✔ Ideal para fiestas, rifas y reventa</li>
               </ul>
-              <button className={`${best ? 'btn-dark' : 'btn-primary'} mt-6`} onClick={() => add(getPack(`pack-${size}-${rango}`)!)}>Añadir al carrito</button>
+              <button className="btn-primary mt-6" onClick={() => add(getPack(`pack-${size}-${rango}`)!)}>Añadir al carrito</button>
             </article>
           );
         })}
