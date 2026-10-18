@@ -497,6 +497,7 @@ function openCheckout() {
   if (quoteItems.length) {
     $('#payNote').textContent = 'Tu pedido incluye artículos por cotizar (' + quoteItems.map((i) => i.name).join(', ') + '). Envíalo por WhatsApp y te confirmamos el precio para pagar.';
   } else {
+    if (location.protocol === 'file:') return;   // abierto como archivo local: no hay servidor de cobro
     fetch('/api/providers.php', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
       const provs = (d && d.providers) || [];
       if (!provs.length || $('#payBox') === null) return;
