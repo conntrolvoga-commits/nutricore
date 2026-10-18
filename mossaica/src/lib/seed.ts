@@ -1,6 +1,6 @@
 import type { Product, Rango } from './types';
 
-// Catálogo real de fichas (Rango A: 10 · Rango B: 28 · Rango C: 22).
+// Catálogo real de fichas (Rango A: 7 · Rango B: 23 · Rango C: 20).
 // Precio por ficha: $5 MXN en los tres rangos (editable aquí o en el panel /admin).
 type Row = [slug: string, name: string, rango: Rango, category: string, price: number, emoji: string, flags: string];
 
@@ -13,9 +13,6 @@ const rows: Row[] = [
   ["empanada", "Empanada", 'A', "Comida", 5, '🥟', ''],
   ["chocolate-abuelita", "Chocolate Abuelita", 'A', "Dulces", 5, '🍫', 'f'],
   ["panditas", "Panditas", 'A', "Dulces", 5, '🧸', 'n'],
-  ["barrilito", "Barrilito", 'A', "Bebidas", 5, '🛢️', ''],
-  ["cantarito", "Cantarito", 'A', "Bebidas", 5, '🏺', 'f'],
-  ["trebol-de-la-suerte", "Trébol de la Suerte", 'A', "Suerte", 5, '🍀', ''],
   ["croc", "Croc", 'B', "Moda", 5, '🩴', ''],
   ["olla-con-monedas-de-oro", "Olla con monedas de oro", 'B', "Suerte", 5, '🪙', 'f'],
   ["jabon-zote", "Jabón Zote", 'B', "Hogar", 5, '🧼', ''],
@@ -30,7 +27,6 @@ const rows: Row[] = [
   ["alien", "Alien", 'B', "Pop", 5, '👽', 'b'],
   ["elote-en-vaso", "Elote en vaso", 'B', "Antojitos", 5, '🌽', 'f'],
   ["coquita-de-vidrio", "Coquita de vidrio", 'B', "Bebidas", 5, '🥤', 'b'],
-  ["concha-de-vainilla", "Concha de vainilla", 'B', "Pan", 5, '🐚', 'b'],
   ["concha-de-chocolate", "Concha de chocolate", 'B', "Pan", 5, '🐚', ''],
   ["cafe", "Café", 'B', "Bebidas", 5, '☕', ''],
   ["concha-de-fresa", "Concha de fresa", 'B', "Pan", 5, '🐚', 'b'],
@@ -38,20 +34,14 @@ const rows: Row[] = [
   ["casco-de-obra", "Casco de obra", 'B', "Hogar", 5, '⛑️', ''],
   ["fantasmita-nalgon", "Fantasmita nalgón", 'B', "Temporada", 5, '👻', 'n'],
   ["cono-de-seguridad", "Cono de seguridad", 'B', "Hogar", 5, '🚧', ''],
-  ["el-corazon", "El corazón", 'B', "Lotería", 5, '❤️', 'f'],
   ["queso", "Queso", 'B', "Comida", 5, '🧀', ''],
-  ["paleta-payaso", "Paleta Payaso", 'B', "Dulces", 5, '🍭', ''],
-  ["la-arana", "La araña", 'B', "Lotería", 5, '🕷️', 'n'],
-  ["cupcake", "Cupcake", 'B', "Dulces", 5, '🧁', 'n'],
   ["dr-simi", "Dr. Simi", 'C', "Pop", 5, '👨‍⚕️', 'bf'],
   ["vaporera", "Vaporera", 'C', "Hogar", 5, '🍲', ''],
   ["papitas", "Papitas", 'C', "Comida", 5, '🍟', 'bf'],
   ["teletubi-lala", "Teletubi Lala", 'C', "Pop", 5, '🧸', 'n'],
   ["grinch", "Grinch", 'C', "Pop", 5, '💚', 'f'],
   ["gatito-negro", "Gatito Negro", 'C', "Animales", 5, '🐈‍⬛', 'n'],
-  ["laton", "Latón", 'C', "Bebidas", 5, '🥫', ''],
   ["caguama", "Caguama", 'C', "Bebidas", 5, '🍺', 'f'],
-  ["gengar", "Gengar", 'C', "Pop", 5, '🟣', 'bn'],
   ["caguama-tecate-light", "Caguama Tecate Light", 'C', "Bebidas", 5, '🍺', 'n'],
   ["caguama-tecate-original", "Caguama Tecate Original", 'C', "Bebidas", 5, '🍺', 'n'],
   ["caguama-indio", "Caguama Indio", 'C', "Bebidas", 5, '🍺', 'n'],
