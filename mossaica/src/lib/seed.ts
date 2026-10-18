@@ -1,6 +1,6 @@
 import type { Product, Rango } from './types';
 
-// Catálogo real de fichas (Rango A: 9 · Rango B: 27 · Rango C: 9).
+// Catálogo real de fichas (Rango A: 10 · Rango B: 27 · Rango C: 22).
 // Precio por ficha: $5 MXN en los tres rangos (editable aquí o en el panel /admin).
 type Row = [slug: string, name: string, rango: Rango, category: string, price: number, emoji: string, flags: string];
 
@@ -52,6 +52,20 @@ const rows: Row[] = [
   ["laton", "Latón", 'C', "Bebidas", 5, '🥫', ''],
   ["caguama", "Caguama", 'C', "Bebidas", 5, '🍺', 'f'],
   ["gengar", "Gengar", 'C', "Pop", 5, '🟣', 'bn'],
+  ["caguama-tecate-light", "Caguama Tecate Light", 'C', "Bebidas", 5, '🍺', 'n'],
+  ["caguama-tecate-original", "Caguama Tecate Original", 'C', "Bebidas", 5, '🍺', 'n'],
+  ["caguama-indio", "Caguama Indio", 'C', "Bebidas", 5, '🍺', 'n'],
+  ["caguama-dos-equis", "Caguama Dos Equis", 'C', "Bebidas", 5, '🍺', 'n'],
+  ["aguamita-tecate-light", "Aguamita Tecate Light", 'C', "Bebidas", 5, '🍺', 'n'],
+  ["aguamita-carta-blanca", "Aguamita Carta Blanca", 'C', "Bebidas", 5, '🍺', 'n'],
+  ["aguamita-tecate-original", "Aguamita Tecate Original", 'C', "Bebidas", 5, '🍺', 'n'],
+  ["lata-tecate-light", "Lata Tecate Light", 'C', "Bebidas", 5, '🥫', 'n'],
+  ["lata-tecate-original", "Lata Tecate Original", 'C', "Bebidas", 5, '🥫', 'n'],
+  ["lata-indio", "Lata Indio", 'C', "Bebidas", 5, '🥫', 'n'],
+  ["lata-dos-equis", "Lata Dos Equis", 'C', "Bebidas", 5, '🥫', 'n'],
+  ["lata-pepsi", "Lata Pepsi", 'C', "Bebidas", 5, '🥫', 'n'],
+  ["lata-coca-cola", "Lata Coca-Cola", 'C', "Bebidas", 5, '🥫', 'n'],
+  ["pan-de-muerto", "Pan de muerto", 'A', "Pan", 5, '🍞', 'n'],
 ];
 
 export const seedProducts: Product[] = rows.map(([slug, name, rango, category, price, emoji, flags], i) => ({
