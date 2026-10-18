@@ -232,6 +232,8 @@ svg [fill="#25104f"]{fill:var(--art)}
 .soc.wac{background:#25d366;color:#06361a}.soc.ig{background:linear-gradient(45deg,#f09433,#dc2743 55%,#bc1888)}.soc.tt{background:#111}.soc.fb{background:#1877f2}
 @media(max-width:700px){footer .shop-links{grid-template-columns:1fr 1fr}}
 footer .soc{color:#fff}footer .soc.wac{color:#06361a}
+.packimg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.packimg img{aspect-ratio:1;object-fit:cover;border:2px solid var(--ink);border-radius:12px;background:#fff}
 </style>
 </head>
 <body>
@@ -372,7 +374,7 @@ function addItem(item, qty) {
 const productItem = (p) => ({ id:p.id, name:p.name, price:p.price, emoji:p.emoji, img:p.img, weight:0.05, stock:60 });
 function packItem(size, rango) {
   const label = rango === 'MIX' ? 'Surtido A+B+C' : 'Rango ' + rango;
-  return { id:`pack-${size}-${rango}`, name:`Paquete de ${size} fichas · ${label}`, price:PACKS[size], emoji:'📦', img:'', weight:size*0.05, stock:99 };
+  return { id:`pack-${size}-${rango}`, name:`Paquete de ${size} fichas · ${label}`, price:PACKS[size], emoji:'📦', img:(packPick(rango)[0] || {}).img || '', weight:size*0.05, stock:99 };
 }
 
 /* ---------- catálogo ---------- */
@@ -399,14 +401,22 @@ function renderGrid() {
 }
 
 /* ---------- paquetes ---------- */
+const packPick = (rango) => {
+  const pool = PRODUCTS.filter((p) => p.img && (rango === 'MIX' || p.rango === rango));
+  if (rango === 'MIX') { const g = ['A', 'B', 'C'].map((r) => PRODUCTS.filter((p) => p.img && p.rango === r)); return [g[0][0], g[1][1], g[2][0], g[1][5]].filter(Boolean); }
+  return pool.filter((_, i) => i % Math.max(1, Math.floor(pool.length / 4)) === 0).slice(0, 4);
+};
 function renderPacks() {
+  const pick = packPick(state.packRango);
   $('#packRangos').innerHTML = PACK_RANGOS.map(([id, l]) => `<button class="chip" data-pr="${id}" aria-pressed="${state.packRango === id}">${l}</button>`).join('');
   $('#packs').innerHTML = [25, 50, 100].map((n) => `
     <article class="pack ${n === 100 ? 'best' : ''}">
+      <div class="packimg" aria-hidden="true">${pick.map((p) => `<img src="${p.img}" alt="" loading="lazy">`).join('')}</div>
       <div class="n">${n}</div><div style="font-family:var(--display);font-size:20px">fichas</div>
       <div class="price">${mxn(PACKS[n])}</div><div class="per">${mxn(Math.round(PACKS[n] / n * 100) / 100)} por ficha</div>
       <ul><li>✔ Diseños surtidos al azar</li><li>✔ ${state.packRango === 'MIX' ? 'Mezcla de los rangos A, B y C' : 'Solo diseños del Rango ' + state.packRango}</li><li>✔ Ideal para fiestas, rifas y reventa</li></ul>
       <button class="btn ${n === 100 ? 'brand' : 'sun'}" data-pack="${n}">Añadir al carrito</button>
+      <a class="btn wa sm" style="margin-top:10px" target="_blank" rel="noopener" href="${waLink('Hola, me interesa el paquete de ' + n + ' fichas (' + (state.packRango === 'MIX' ? 'surtido A+B+C' : 'Rango ' + state.packRango) + ').')}">${WA_SVG} Preguntar</a>
     </article>`).join('');
 }
 
