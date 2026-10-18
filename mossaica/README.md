@@ -76,9 +76,10 @@ index.ts      quoteShipping · createLabel · trackShipment · cancelLabel
 | Supabase (catálogo, pedidos, admin CRUD) | `NEXT_PUBLIC_SUPABASE_URL`, `..._ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (+ correr `supabase/schema.sql`) | catálogo semilla, admin solo lectura |
 | Mercado Pago / Conekta | ver sección Pagos | checkout demo, no cobra |
 | Envia.com (Estafeta, FedEx, DHL) | `ENVIA_API_TOKEN`, `ENVIA_ORIGIN_*` | tarifas estimadas, sin guías |
-| Admin `/admin` | `ADMIN_PASSWORD` | no se puede entrar |
+| Admin `/admin` | `ADMIN_PASSWORD` (mín. 10 caracteres, distinta de la de ejemplo) | el panel se desactiva (503) |
 
 ## Seguridad
+El panel `/admin` solo funciona con una clave de 10+ caracteres que no sea la del ejemplo, compara en tiempo constante y bloquea 15 min tras 5 intentos fallidos desde la misma IP.
 El servidor recalcula precios, stock y envío en `/api/checkout`; nunca confía en montos del navegador.
 
 ## Pendiente antes de producción

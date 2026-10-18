@@ -13,17 +13,17 @@
 /* Tienda de fichas: cabecera morada de marca, tarjetas con borde grueso y sombra sólida tipo ficha de lotería */
 :root{
   --bg:#f5f3ff; --surface:#ffffff; --fg:#25104f; --muted:#6b5f95; --line:#e4defa;
-  --brand:#6c63c7; --brand-fg:#ffffff; --sun:#ffd23f; --sun-fg:#25104f; --candy:#ff4fa3; --ink:#25104f;
+  --brand:#6c63c7; --brand-fg:#ffffff; --sun:#ffd23f; --sun-fg:#25104f; --candy:#ff4fa3; --ink:#25104f; --art:#25104f;
   --shadow:0 5px 0 0 var(--ink);
   --display:'Fredoka',system-ui,sans-serif; --body:'Nunito',system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#17112e; --surface:#241a47; --fg:#f1edff; --muted:#a79fd0; --line:#3a2e69;
-  --brand:#8b83e0; --brand-fg:#17112e; --sun:#ffd23f; --sun-fg:#25104f; --candy:#ff6db3; --ink:#0d0820;
+  --brand:#8b83e0; --brand-fg:#17112e; --sun:#ffd23f; --sun-fg:#25104f; --candy:#ff6db3; --ink:#0d0820; --art:#d6d0ff;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#17112e; --surface:#241a47; --fg:#f1edff; --muted:#a79fd0; --line:#3a2e69;
-  --brand:#8b83e0; --brand-fg:#17112e; --sun:#ffd23f; --sun-fg:#25104f; --candy:#ff6db3; --ink:#0d0820;
+  --brand:#8b83e0; --brand-fg:#17112e; --sun:#ffd23f; --sun-fg:#25104f; --candy:#ff6db3; --ink:#0d0820; --art:#d6d0ff;
   color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -220,6 +220,8 @@ section.alt{background:var(--surface);border-block:2px solid var(--ink)}
 .wafab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;width:58px;height:58px;border-radius:50%;background:#25d366;color:#06361a;border:2px solid var(--ink);box-shadow:var(--shadow);display:grid;place-items:center;transition:transform .15s}
 .wafab:hover{transform:translateY(-3px)}.wafab .waicon{width:32px;height:32px}
 footer a[data-wa]{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#fff}
+svg [stroke="#25104f"]{stroke:var(--art)}
+svg [fill="#25104f"]{fill:var(--art)}
 </style>
 </head>
 <body>
