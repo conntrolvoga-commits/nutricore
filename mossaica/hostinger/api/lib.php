@@ -88,8 +88,14 @@ function price_cart(array $items): array {
         if ($p['price'] <= 0) throw new RuntimeException('«' . $p['name'] . '» se cotiza por WhatsApp: no se puede pagar en línea.');
         $name = $p['name'];
         if (!empty($it['label'])) $name .= ' · ' . mb_substr(preg_replace('/\s+/u', ' ', (string) $it['label']), 0, 80);
-        $total = round($p['price'] * $qty * (1 - tier_discount($p['tiers'], $qty)), 2);
-        $lines[] = ['name' => $name, 'qty' => $qty, 'unit' => $p['price'], 'total' => $total];
+        $unit = $p['price'];
+        if (!empty($p['sp'])) { // precio por opción (p. ej. número de cubos); el id del carrito es id|color|opción|nota
+            $opt = explode('|', (string) $it['id'])[2] ?? '';
+            if (!isset($p['sp'][$opt])) throw new RuntimeException('Elige una opción válida para «' . $p['name'] . '»');
+            $unit = $p['sp'][$opt];
+        }
+        $total = round($unit * $qty * (1 - tier_discount($p['tiers'], $qty)), 2);
+        $lines[] = ['name' => $name, 'qty' => $qty, 'unit' => $unit, 'total' => $total];
         $subtotal += $total; $weight += $p['w'] * $qty;
     }
     return ['lines' => $lines, 'subtotal' => round($subtotal, 2), 'weight' => $weight];
