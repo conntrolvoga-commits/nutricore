@@ -6,6 +6,7 @@ import { useCart, selectCount } from '@/store/cart';
 
 const links = [
   { href: '/catalogo', label: 'Catálogo' },
+  { href: '/paquetes', label: 'Paquetes' },
   { href: '/catalogo?rango=A', label: 'Rango A' },
   { href: '/catalogo?rango=B', label: 'Rango B' },
   { href: '/catalogo?rango=C', label: 'Rango C' },

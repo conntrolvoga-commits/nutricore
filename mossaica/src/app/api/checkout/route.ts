@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getProducts } from '@/lib/products';
+import { getPack } from '@/lib/packs';
 import { quoteShipping } from '@/lib/services/envia';
 import { createPreference } from '@/lib/services/mercadopago';
 import { getServiceClient } from '@/lib/supabase';
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
   const catalog = await getProducts();
   const lines = [];
   for (const it of body.items) {
-    const p = catalog.find((x) => x.id === it.productId);
+    const p = getPack(String(it.productId)) ?? catalog.find((x) => x.id === it.productId);
     const qty = Math.floor(Number(it.quantity));
     if (!p || qty < 1) return NextResponse.json({ error: 'Producto no válido' }, { status: 400 });
     if (qty > p.stock) return NextResponse.json({ error: `Stock insuficiente de ${p.name}` }, { status: 409 });

@@ -34,6 +34,13 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-6xl px-4 pt-14">
+        <Link href="/paquetes" className="flex flex-col items-center justify-between gap-4 rounded-3xl border-2 border-grape-900 bg-sun p-6 shadow-pop transition hover:-translate-y-1 sm:flex-row">
+          <div><p className="font-display text-3xl font-bold">📦 Paquetes de 25, 50 y 100 fichas</p><p>Hasta 20% de descuento por volumen.</p></div>
+          <span className="btn-dark">Ver paquetes</span>
+        </Link>
+      </section>
+
       <section className="mx-auto max-w-6xl px-4 py-14">
         <h2 className="mb-6 text-3xl font-bold">Colecciones</h2>
         <div className="grid gap-4 md:grid-cols-3">
