@@ -250,6 +250,17 @@ footer .soc{color:#fff}footer .soc.wac{color:#06361a}
 .musgrid figure{margin:0;border:2px solid var(--ink);border-radius:20px;overflow:hidden;box-shadow:0 4px 0 0 var(--ink);background:#fff}
 .musgrid img{width:100%;display:block}
 </style>
+
+<style>
+.ac{position:relative;display:block;min-width:0}
+.ac .input{width:100%}
+.sug{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:60;margin:0;padding:4px;list-style:none;background:var(--surface);color:var(--fg);border:2px solid var(--fg);border-radius:14px;box-shadow:0 4px 0 0 var(--fg);max-height:240px;overflow:auto}
+.sug li{padding:9px 12px;border-radius:10px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:15px}
+.sug li small{opacity:.7;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sug li[aria-selected="true"],.sug li:hover{background:var(--sun);color:var(--sun-fg)}
+.sug.up{top:auto;bottom:calc(100% + 4px)}
+.linkbtn{background:none;border:0;padding:0;color:inherit;text-decoration:underline;font:inherit;cursor:pointer}
+</style>
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -476,6 +487,84 @@ function rates(w) {
   const extra = Math.max(0, Math.ceil(w) - 1) * 25;
   return [{ carrier:'Recolección', service:'Sin costo de envío', price:0, days:null }, { carrier:'Estafeta', service:'Terrestre', price:99 + extra, days:5 }, { carrier:'FedEx', service:'Económico', price:119 + extra, days:4 }, { carrier:'DHL', service:'Express', price:169 + extra, days:2 }];
 }
+const GEO = {"Aguascalientes":["Aguascalientes","Asientos","Calvillo","Cosío","Jesús María","Pabellón de Arteaga","Rincón de Romos","San Francisco de los Romo","San José de Gracia","Tepezalá"],"Baja California":["Ensenada","Mexicali","Playas de Rosarito","San Felipe","San Quintín","Tecate","Tijuana"],"Baja California Sur":["Cabo San Lucas","Ciudad Constitución","Comondú","La Paz","Loreto","Los Cabos","Mulegé","San José del Cabo","Santa Rosalía","Todos Santos"],"Campeche":["Calkiní","Campeche","Candelaria","Champotón","Ciudad del Carmen","Escárcega","Hecelchakán"],"Chiapas":["Arriaga","Chiapa de Corzo","Cintalapa","Comitán de Domínguez","Huixtla","Motozintla","Ocosingo","Palenque","San Cristóbal de las Casas","Tapachula","Tonalá","Tuxtla Gutiérrez","Villaflores"],"Chihuahua":["Camargo","Chihuahua","Ciudad Juárez","Creel","Cuauhtémoc","Delicias","Jiménez","Madera","Meoqui","Nuevo Casas Grandes","Ojinaga","Parral"],"Ciudad de México":["Álvaro Obregón","Azcapotzalco","Benito Juárez","Ciudad de México","Coyoacán","Cuajimalpa de Morelos","Cuauhtémoc","Gustavo A. Madero","Iztacalco","Iztapalapa","La Magdalena Contreras","Miguel Hidalgo","Milpa Alta","Tláhuac","Tlalpan","Venustiano Carranza","Xochimilco"],"Coahuila":["Acuña","Allende","Arteaga","Ciudad Acuña","Cuatro Ciénegas","Frontera","Matamoros","Monclova","Múzquiz","Nueva Rosita","Parras de la Fuente","Piedras Negras","Ramos Arizpe","Sabinas","Saltillo","San Pedro","Torreón"],"Colima":["Armería","Colima","Comala","Coquimatlán","Cuauhtémoc","Ixtlahuacán","Manzanillo","Minatitlán","Tecomán","Villa de Álvarez"],"Durango":["Canatlán","Cuencamé","Durango","El Salto","Gómez Palacio","Guadalupe Victoria","Lerdo","Mapimí","Nombre de Dios","Pueblo Nuevo","Santiago Papasquiaro","Vicente Guerrero"],"Estado de México":["Acolman","Almoloya de Juárez","Amecameca","Atenco","Atizapán de Zaragoza","Chalco","Chimalhuacán","Coacalco de Berriozábal","Cuautitlán","Cuautitlán Izcalli","Ecatepec de Morelos","Huehuetoca","Huixquilucan","Ixtapaluca","Ixtlahuaca","La Paz","Lerma","Metepec","Naucalpan de Juárez","Nezahualcóyotl","Nicolás Romero","Ocoyoacac","San Mateo Atenco","Santiago Tianguistenco","Tecámac","Tenango del Valle","Teotihuacán","Tepotzotlán","Texcoco","Tlalnepantla de Baz","Toluca","Tultepec","Tultitlán","Valle de Bravo","Valle de Chalco Solidaridad","Zinacantepec","Zumpango"],"Guanajuato":["Abasolo","Acámbaro","Apaseo el Alto","Apaseo el Grande","Celaya","Comonfort","Cortazar","Dolores Hidalgo","Guanajuato","Irapuato","Jaral del Progreso","Juventino Rosas","León","Moroleón","Pénjamo","Purísima del Rincón","Romita","Salamanca","Salvatierra","San Francisco del Rincón","San Luis de la Paz","San Miguel de Allende","Santa Cruz de Juventino Rosas","Silao de la Victoria","Uriangato","Valle de Santiago","Villagrán","Yuriria"],"Guerrero":["Acapulco de Juárez","Arcelia","Ayutla de los Libres","Chilapa de Álvarez","Chilpancingo de los Bravo","Coyuca de Benítez","Cuajinicuilapa","Iguala de la Independencia","Ometepec","Petatlán","Taxco de Alarcón","Tecpan de Galeana","Teloloapan","Tlapa de Comonfort","Zihuatanejo"],"Hidalgo":["Actopan","Apan","Atotonilco de Tula","Cuautepec de Hinojosa","Huejutla de Reyes","Huichapan","Ixmiquilpan","Mineral de la Reforma","Molango de Escamilla","Pachuca de Soto","Tepeapulco","Tepeji del Río de Ocampo","Tizayuca","Tlahuelilpan","Tula de Allende","Tulancingo de Bravo","Zempoala","Zimapán"],"Jalisco":["Ameca","Arandas","Atotonilco el Alto","Autlán de Navarro","Chapala","Cihuatlán","Ciudad Guzmán","El Salto","Encarnación de Díaz","Guadalajara","Jocotepec","La Barca","Lagos de Moreno","Mascota","Ocotlán","Puerto Vallarta","San Juan de los Lagos","San Pedro Tlaquepaque","Sayula","Tala","Talpa de Allende","Tepatitlán de Morelos","Tequila","Tlajomulco de Zúñiga","Tomatlán","Tonalá","Yahualica de González Gallo","Zacoalco de Torres","Zapopan","Zapotlán el Grande"],"Michoacán":["Apatzingán de la Constitución","Ario de Rosales","Charo","Cuitzeo","Hidalgo","Huetamo de Núñez","Jacona","Jiquilpan","La Piedad","Lázaro Cárdenas","Los Reyes","Maravatío","Morelia","Paracho","Pátzcuaro","Peribán","Puruándiro","Sahuayo de Morelos","Tacámbaro","Tangancícuaro","Uruapan","Zamora de Hidalgo","Zinapécuaro","Zitácuaro"],"Morelos":["Axochiapan","Ayala","Cuautla","Cuernavaca","Emiliano Zapata","Huitzilac","Jiutepec","Jojutla","Puente de Ixtla","Temixco","Tepoztlán","Tetecala","Tlaltizapán","Tlayacapan","Xochitepec","Yautepec","Zacatepec"],"Nayarit":["Acaponeta","Ahuacatlán","Bahía de Banderas","Compostela","Ixtlán del Río","Las Varas","Nuevo Vallarta","Rosamorada","San Blas","Santiago Ixcuintla","Tecuala","Tepic","Tuxpan","Xalisco"],"Nuevo León":["Agualeguas","Allende","Anáhuac","Apodaca","Aramberri","Bustamante","Cadereyta Jiménez","Cerralvo","China","Ciénega de Flores","Doctor González","Dr. Arroyo","El Carmen","Galeana","García","General Bravo","General Escobedo","General Terán","General Zuazua","Guadalupe","Hidalgo","Higueras","Hualahuises","Iturbide","Juárez","Lampazos de Naranjo","Linares","Los Aldamas","Los Herreras","Los Ramones","Marín","Melchor Ocampo","Mier y Noriega","Mina","Montemorelos","Monterrey","Parás","Pesquería","Rayones","Sabinas","Sabinas Hidalgo","Salinas Victoria","San Nicolás de los Garza","San Pedro Garza García","Santa Catarina","Santiago","Vallecillo","Villaldama"],"Oaxaca":["Etla","Heroica Ciudad de Huajuapan de León","Huatulco","Ixtepec","Juchitán de Zaragoza","Loma Bonita","Matías Romero Avendaño","Miahuatlán de Porfirio Díaz","Mitla","Oaxaca de Juárez","Ocotlán de Morelos","Pinotepa Nacional","Puerto Escondido","Putla Villa de Guerrero","Salina Cruz","San Juan Bautista Tuxtepec","Santa Cruz Xoxocotlán","Santa Lucía del Camino","Santo Domingo Tehuantepec","Tlacolula de Matamoros","Tlaxiaco","Zimatlán de Álvarez"],"Puebla":["Acatlán de Osorio","Acatzingo","Amozoc","Atlixco","Chignahuapan","Ciudad Serdán","Coronango","Cuautlancingo","Cuetzalan del Progreso","Huauchinango","Huejotzingo","Izúcar de Matamoros","Libres","Puebla","San Andrés Cholula","San Martín Texmelucan","San Pedro Cholula","Tecamachalco","Tehuacán","Tepeaca","Tepexi de Rodríguez","Teziutlán","Tlatlauquitepec","Xicotepec","Zacapoaxtla","Zacatlán"],"Querétaro":["Amealco de Bonfil","Arroyo Seco","Cadereyta de Montes","Colón","Corregidora","El Marqués","Ezequiel Montes","Huimilpan","Jalpan de Serra","Landa de Matamoros","Pedro Escobedo","Peñamiller","Pinal de Amoles","Querétaro","San Juan del Río","Santiago de Querétaro","Tequisquiapan","Tolimán"],"Quintana Roo":["Bacalar","Benito Juárez","Cancún","Chetumal","Cozumel","Felipe Carrillo Puerto","Holbox","Isla Mujeres","José María Morelos","Lázaro Cárdenas","Othón P. Blanco","Playa del Carmen","Puerto Morelos","Solidaridad","Tulum"],"San Luis Potosí":["Axtla de Terrazas","Cárdenas","Cedral","Cerro de San Pedro","Charcas","Ciudad Fernández","Ciudad Valles","Ébano","Guadalcázar","Matehuala","Mexquitic de Carmona","Rioverde","Salinas","San Luis Potosí","Santa María del Río","Soledad de Graciano Sánchez","Tamazunchale","Tamuín","Venado","Villa de Arriaga","Villa de Pozos","Villa de Ramos","Villa de Reyes","Villa Hidalgo","Xilitla"],"Sinaloa":["Ahome","Angostura","Badiraguato","Choix","Concordia","Cosalá","Culiacán","El Fuerte","Eldorado","Elota","Escuinapa","Guamúchil","Guasave","Los Mochis","Mazatlán","Mocorito","Navolato","Rosario","Salvador Alvarado","San Ignacio","Sinaloa de Leyva","Topolobampo"],"Sonora":["Agua Prieta","Álamos","Bahía de Kino","Caborca","Cajeme","Cananea","Ciudad Obregón","Empalme","Etchojoa","Guaymas","Hermosillo","Huatabampo","Magdalena de Kino","Moctezuma","Navojoa","Nogales","Puerto Peñasco","San Carlos","San Luis Río Colorado","Santa Ana","Ures"],"Tabasco":["Balancán","Cárdenas","Centro","Comalcalco","Cunduacán","Emiliano Zapata","Frontera","Huimanguillo","Jalapa","Jalpa de Méndez","Jonuta","Macuspana","Nacajuca","Paraíso","Tacotalpa","Teapa","Tenosique","Villahermosa"],"Tamaulipas":["Abasolo","Aldama","Altamira","Camargo","Ciudad Madero","Ciudad Mante","Ciudad Victoria","Díaz Ordaz","El Mante","González","Güémez","Hidalgo","Jaumave","Jiménez","Llera","Matamoros","Mier","Miguel Alemán","Nuevo Laredo","Nuevo Morelos","Padilla","Reynosa","Río Bravo","San Fernando","Soto la Marina","Tampico","Tula","Valle Hermoso","Xicoténcatl"],"Tlaxcala":["Apizaco","Calpulalpan","Chiautempan","Contla de Juan Cuamatzi","Huamantla","Ixtacuixtla","Nanacamilpa","Nativitas","Papalotla de Xicohténcatl","San Pablo del Monte","Santa Ana Chiautempan","Santa Cruz Tlaxcala","Terrenate","Tetla","Tlaxcala","Tlaxco","Tzompantepec","Xaloztoc","Yauhquemehcan","Zacatelco"],"Veracruz":["Acayucan","Agua Dulce","Álamo Temapache","Altotonga","Alvarado","Banderilla","Boca del Río","Catemaco","Cerro Azul","Ciudad Mendoza","Coatepec","Coatzacoalcos","Córdoba","Cosamaloapan","Cosoleacaque","Emiliano Zapata","Fortín","Huatusco","Las Choapas","Martínez de la Torre","Minatitlán","Misantla","Nanchital","Naranjos","Orizaba","Pánuco","Papantla","Perote","Poza Rica de Hidalgo","Río Blanco","San Andrés Tuxtla","Tantoyuca","Tierra Blanca","Tlapacoyan","Tuxpan","Veracruz","Xalapa"],"Yucatán":["Acanceh","Celestún","Chichén Itzá","Dzidzantún","Hunucmá","Izamal","Kanasín","Maxcanú","Mérida","Motul","Oxkutzcab","Peto","Progreso","Río Lagartos","Sisal","Tekax","Ticul","Tizimín","Umán","Valladolid"],"Zacatecas":["Calera de Víctor Rosales","Concepción del Oro","Fresnillo","Guadalupe","Jalpa","Jerez de García Salinas","Juchipila","Loreto","Luis Moya","Miguel Auza","Morelos","Nochistlán de Mejía","Ojocaliente","Pinos","Río Grande","Sombrerete","Tlaltenango de Sánchez Román","Trancoso","Valparaíso","Villa de Cos","Villa González Ortega","Villanueva","Zacatecas"]};
+
+const norm = (t) => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const CKEY = 'mos_contacts_v1';
+const contacts = {
+  all() { try { const a = JSON.parse(localStorage.getItem(CKEY) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } },
+  save(c) {
+    try {
+      const key = norm(c.mail);
+      const list = this.all().filter((x) => norm(x.mail) !== key);
+      list.unshift({ ...c, ts: Date.now() });
+      localStorage.setItem(CKEY, JSON.stringify(list.slice(0, 8)));
+    } catch (e) { /* sin almacenamiento: se omite */ }
+  },
+  clear() { try { localStorage.removeItem(CKEY); } catch (e) { /* nada */ } }
+};
+const CITY_LIST = Object.entries(GEO).flatMap(([st, cs]) => cs.map((c) => ({ city: c, state: st })));
+function rank(items, q, get) {
+  const n = norm(q); if (!n) return items.slice(0, 8);
+  const out = [];
+  items.forEach((it) => { const t = norm(get(it)); const i = t.indexOf(n); if (i < 0) return; out.push([i === 0 ? 0 : t.split(/[\s,.-]+/).some((w) => w.startsWith(n)) ? 1 : 2, t, it]); });
+  return out.sort((a, b) => a[0] - b[0] || a[1].localeCompare(b[1], 'es')).slice(0, 8).map((x) => x[2]);
+}
+/* Autocompletado con sugerencias: getItems(texto) -> [{label, sub, pick()}] */
+function attachSuggest(input, getItems) {
+  const box = document.createElement('ul'); box.className = 'sug'; box.setAttribute('role', 'listbox'); box.hidden = true;
+  input.parentNode.appendChild(box); input.setAttribute('aria-autocomplete', 'list');
+  let items = [], act = -1;
+  const close = () => { box.hidden = true; act = -1; };
+  const paint = () => { [...box.children].forEach((li, i) => li.setAttribute('aria-selected', String(i === act))); };
+  const pick = (i) => { const it = items[i]; if (!it) return; close(); it.pick(); };
+  const open = () => {
+    items = getItems(input.value) || [];
+    if (!items.length) { close(); return; }
+    box.innerHTML = items.map((it, i) => `<li role="option" data-i="${i}" aria-selected="false">${esc(it.label)}${it.sub ? `<small>${esc(it.sub)}</small>` : ''}</li>`).join('');
+    box.hidden = false; act = -1;
+    const sh = input.closest('.sheet') || document.documentElement, r = input.getBoundingClientRect(), lim = sh === document.documentElement ? innerHeight : sh.getBoundingClientRect().bottom;
+    box.classList.toggle('up', r.bottom + box.offsetHeight + 12 > lim && r.top - box.offsetHeight - 12 > 0);
+  };
+  input.addEventListener('input', open);
+  input.addEventListener('focus', open);
+  input.addEventListener('blur', () => setTimeout(close, 120));
+  input.addEventListener('keydown', (e) => {
+    if (box.hidden) { if (e.key === 'ArrowDown') open(); return; }
+    if (e.key === 'ArrowDown') { e.preventDefault(); act = (act + 1) % items.length; paint(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); act = (act - 1 + items.length) % items.length; paint(); }
+    else if (e.key === 'Enter' && act >= 0) { e.preventDefault(); pick(act); }
+    else if (e.key === 'Escape') { e.stopPropagation(); close(); }
+  });
+  box.addEventListener('mousedown', (e) => { const li = e.target.closest('li'); if (!li) return; e.preventDefault(); pick(Number(li.dataset.i)); });
+}
+function fillContact(c) {
+  const set = (id, v) => { const el = $(id); if (el) el.value = v || ''; };
+  set('#f_name', c.name); set('#f_mail', c.mail); set('#f_tel', c.tel); set('#f_street', c.street);
+  set('#f_col', c.col); set('#f_cp', c.cp); set('#f_city', c.city); set('#f_state', c.state);
+  $('#f_cp').dispatchEvent(new Event('input'));
+}
+function setupCheckoutAssist() {
+  const saved = contacts.all();
+  const byContact = (field) => (q) => rank(contacts.all(), q, (c) => c[field] || '').map((c) => ({ label: c[field] || c.name, sub: [c.name, c.mail].filter(Boolean).join(' · '), pick: () => fillContact(c) }));
+  attachSuggest($('#f_name'), byContact('name'));
+  attachSuggest($('#f_mail'), byContact('mail'));
+  attachSuggest($('#f_tel'), byContact('tel'));
+  attachSuggest($('#f_col'), (q) => rank([...new Set(contacts.all().map((c) => c.col).filter(Boolean))], q, (x) => x).map((x) => ({ label: x, pick: () => { $('#f_col').value = x; } })));
+  const stateOf = () => Object.keys(GEO).find((s) => norm(s) === norm($('#f_state').value));
+  attachSuggest($('#f_state'), (q) => rank(Object.keys(GEO), q, (x) => x).map((s) => ({ label: s, pick: () => { $('#f_state').value = s; } })));
+  attachSuggest($('#f_city'), (q) => {
+    const st = stateOf();
+    const pool = st ? GEO[st].map((c) => ({ city: c, state: st })) : CITY_LIST;
+    return rank(pool, q, (x) => x.city).map((x) => ({ label: x.city, sub: x.state, pick: () => { $('#f_city').value = x.city; $('#f_state').value = x.state; } }));
+  });
+  const bar = $('#savedBar');
+  if (saved.length) {
+    fillContact(saved[0]);
+    bar.innerHTML = `Rellenamos tus datos guardados (${esc(saved[0].name)}). <button type="button" class="linkbtn" id="clrC">Borrar mis datos guardados</button>`; bar.hidden = false;
+    $('#clrC').onclick = () => { contacts.clear(); ['#f_name', '#f_mail', '#f_tel', '#f_street', '#f_col', '#f_cp', '#f_city', '#f_state'].forEach((i) => { $(i).value = ''; }); $('#f_cp').dispatchEvent(new Event('input')); bar.textContent = 'Datos guardados borrados de este dispositivo.'; };
+  } else { bar.textContent = 'Guardaremos tus datos solo en este dispositivo para rellenar tu próximo pedido.'; bar.hidden = false; }
+}
 function openCheckout() {
   if (!cart.length) return;
   $('#cartOv').hidden = true;
@@ -483,11 +572,12 @@ function openCheckout() {
   $('#modal').innerHTML = `<div class="sheet"><button class="x" data-close="modal" aria-label="Cerrar">✕</button>
     <form class="co" id="coForm" novalidate>
       <div class="form"><h2 style="font-size:30px">Datos de envío</h2>
-        <input class="input" id="f_name" required placeholder="Nombre completo" autocomplete="name">
-        <div class="two"><input class="input" id="f_mail" type="email" required placeholder="Correo" autocomplete="email"><input class="input" id="f_tel" type="tel" required placeholder="Teléfono" autocomplete="tel"></div>
+        <span class="ac"><input class="input" id="f_name" required placeholder="Nombre completo" autocomplete="off"></span>
+        <div class="two"><span class="ac"><input class="input" id="f_mail" type="email" required placeholder="Correo" autocomplete="off"></span><span class="ac"><input class="input" id="f_tel" type="tel" required placeholder="Teléfono" autocomplete="off"></span></div>
         <input class="input" id="f_street" required placeholder="Calle y número" autocomplete="street-address">
-        <div class="two"><input class="input" id="f_col" required placeholder="Colonia"><input class="input" id="f_cp" required inputmode="numeric" maxlength="5" placeholder="Código postal" autocomplete="postal-code"></div>
-        <div class="two"><input class="input" id="f_city" required placeholder="Ciudad / Municipio"><input class="input" id="f_state" required placeholder="Estado"></div>
+        <div class="two"><span class="ac"><input class="input" id="f_col" required placeholder="Colonia" autocomplete="off"></span><input class="input" id="f_cp" required inputmode="numeric" maxlength="5" placeholder="Código postal" autocomplete="postal-code"></div>
+        <div class="two"><span class="ac"><input class="input" id="f_city" required placeholder="Ciudad / Municipio" autocomplete="off"></span><span class="ac"><input class="input" id="f_state" required placeholder="Estado" autocomplete="off"></span></div>
+        <p class="small" id="savedBar" style="margin:0" hidden></p>
         <h3 style="font-size:22px;margin-top:8px">Paquetería</h3>
         <div id="rates" style="display:grid;gap:8px"><p class="small" style="margin:0">Escribe tu código postal para ver las tarifas.</p></div>
         <p class="small" id="err" role="alert" style="color:var(--candy);margin:0" hidden></p></div>
@@ -511,12 +601,15 @@ function openCheckout() {
       $('#shipTxt').textContent = mxn(sel.price); $('#totTxt').textContent = mxn(subtotal() + sel.price);
     }));
   });
+  setupCheckoutAssist();
   const readForm = () => {
     const v = (id) => $(id).value.trim(); const err = $('#err');
     if (!v('#f_name') || !/^\S+@\S+\.\S+$/.test(v('#f_mail')) || !v('#f_tel') || !v('#f_street') || !v('#f_col') || !/^\d{5}$/.test(v('#f_cp')) || !v('#f_city') || !v('#f_state')) { err.textContent = 'Completa todos los datos con un correo y un código postal válidos.'; err.hidden = false; return null; }
     if (!sel) { err.textContent = 'Elige una paquetería para continuar.'; err.hidden = false; return null; }
     err.hidden = true;
-    return { name:v('#f_name'), mail:v('#f_mail'), tel:v('#f_tel'), street:v('#f_street'), col:v('#f_col'), cp:v('#f_cp'), city:v('#f_city'), state:v('#f_state') };
+    const data = { name:v('#f_name'), mail:v('#f_mail'), tel:v('#f_tel'), street:v('#f_street'), col:v('#f_col'), cp:v('#f_cp'), city:v('#f_city'), state:v('#f_state') };
+    contacts.save(data);
+    return data;
   };
   $('#coForm').addEventListener('submit', (e) => { e.preventDefault(); const a = readForm(); if (a) finishOrder(a, sel); });
 
