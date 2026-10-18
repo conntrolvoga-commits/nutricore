@@ -11,8 +11,9 @@ export async function generateStaticParams() {
   return (await getProducts()).map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const p = await getProduct(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const p = await getProduct(slug);
   if (!p) return {};
   const title = `${p.name} · Rango ${p.rango}`;
   const description = `${p.description} ${mxn(p.price)} MXN. Envíos a todo México.`;
@@ -23,8 +24,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const p = await getProduct(params.slug);
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const p = await getProduct(slug);
   if (!p) notFound();
   const related = await getRelated(p);
 

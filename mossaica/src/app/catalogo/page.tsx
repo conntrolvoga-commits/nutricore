@@ -8,7 +8,8 @@ export const metadata: Metadata = {
   alternates: { canonical: '/catalogo' },
 };
 
-export default async function Catalogo({ searchParams }: { searchParams: { rango?: string } }) {
+export default async function Catalogo(props: { searchParams: Promise<{ rango?: string }> }) {
+  const searchParams = await props.searchParams;
   const products = await getProducts();
   const rango = ['A', 'B', 'C'].includes(searchParams.rango ?? '') ? searchParams.rango : undefined;
   return (

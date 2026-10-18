@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: 'Admin', robots: { index: false, foll
 export const dynamic = 'force-dynamic';
 
 export default async function Admin() {
-  if (!isAdmin()) return <AdminLogin />;
+  if (!(await isAdmin())) return <AdminLogin />;
   const products = await getProducts();
   const { data: orders } = (await getServiceClient()?.from('orders').select('id,status,total,created_at,customer,shipping,tracking_number,label_url').order('created_at', { ascending: false }).limit(50)) ?? { data: null };
   return (

@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = { title: 'Gracias por tu compra', robots: { index: false } };
 
-export default function Gracias({ searchParams }: { searchParams: { order?: string; pending?: string; demo?: string } }) {
+export default async function Gracias(props: { searchParams: Promise<{ order?: string; pending?: string; demo?: string }> }) {
+  const searchParams = await props.searchParams;
   return (
     <div className="mx-auto max-w-lg px-4 py-24 text-center">
       <p className="text-7xl">🎉</p>

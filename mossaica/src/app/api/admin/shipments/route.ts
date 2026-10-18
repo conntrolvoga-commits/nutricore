@@ -3,8 +3,8 @@ import { isAdmin } from '@/lib/admin-auth';
 import { cancelLabel, createLabel } from '@/lib/services/envia';
 import { getServiceClient } from '@/lib/supabase';
 
-function guard() {
-  if (!isAdmin()) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+async function guard() {
+  if (!(await isAdmin())) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   if (!getServiceClient()) return NextResponse.json({ error: 'Supabase no está configurado' }, { status: 503 });
   return null;
 }
@@ -16,7 +16,7 @@ async function loadOrder(id: unknown) {
 
 /** Genera la guía de un pedido ya pagado. Cobra a tu saldo de Envia, por eso es una acción manual. */
 export async function POST(req: Request) {
-  const denied = guard();
+  const denied = await guard();
   if (denied) return denied;
   const { orderId } = await req.json().catch(() => ({}));
   const order = await loadOrder(orderId);
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
 /** Cancela la guía de un pedido (Envia reembolsa a tu saldo según la paquetería). */
 export async function DELETE(req: Request) {
-  const denied = guard();
+  const denied = await guard();
   if (denied) return denied;
   const { orderId } = await req.json().catch(() => ({}));
   const order = await loadOrder(orderId);
