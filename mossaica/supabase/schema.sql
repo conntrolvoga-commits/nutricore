@@ -33,6 +33,12 @@ alter table products enable row level security;
 alter table orders enable row level security;
 create policy "catalogo publico" on products for select using (true);
 
+-- ── Envíos (Envia.com) ──────────────────────────────────────────────────
+alter table orders add column if not exists weight_kg numeric(8,3);
+alter table orders add column if not exists tracking_number text;
+alter table orders add column if not exists label_url text;
+alter table orders add column if not exists shipment_status text;
+
 -- ── Pagos ──────────────────────────────────────────────────────────────
 alter table orders add column if not exists payment_provider text;
 alter table orders add column if not exists payment_id text;

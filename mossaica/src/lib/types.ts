@@ -44,7 +44,8 @@ export interface ShippingAddress {
 
 export interface ShippingRate {
   carrier: string;
-  service: string;
+  service: string; // nombre para mostrar
+  serviceCode?: string; // código de Envia, necesario para generar la guía
   price: number;
   days: number | null;
 }

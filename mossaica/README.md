@@ -14,7 +14,7 @@ npm run dev        # http://localhost:3000
 src/app/                 páginas: / · /catalogo · /producto/[slug] · /checkout · /gracias · /admin
 src/app/api/             shipping (Envia.com) · checkout · payments · webhooks/{mercadopago,conekta} · admin
 src/components/          Header, SideCart, ProductCard, CatalogClient, AdminPanel...
-src/lib/services/        envia.ts
+src/lib/services/envia/  cotizar, guía, rastreo y cancelación (ver Logística)
 src/lib/payments/        Mercado Pago y Conekta (ver Pagos)
 src/lib/products.ts      Supabase si está configurado; si no, src/lib/seed.ts
 src/store/cart.ts        carrito (Zustand + localStorage)
@@ -48,12 +48,34 @@ src/app/api/webhooks/{mercadopago,conekta}/route.ts
 
 **Pruebas:** `node --experimental-strip-types --test scripts/payments.test.mts` (payloads de ambas pasarelas y firma del webhook; no requiere llaves).
 
+## Logística: Envia.com (Estafeta, FedEx, DHL)
+Servicio en `src/lib/services/envia/`:
+
+```
+payloads.ts   cuerpos de cotización/guía y lectores de respuesta (puros, con pruebas); normaliza estados ("Nuevo León" → NL) y calle/número
+client.ts     POST autenticado con timeout y errores legibles
+index.ts      quoteShipping · createLabel · trackShipment · cancelLabel
+```
+
+| Ruta | Quién | Qué hace |
+|---|---|---|
+| `POST /api/shipping` | checkout | cotiza las 3 paqueterías en paralelo (caché de 10 min; si una falla se omite; si fallan todas o no hay token, tarifas estimadas) |
+| `GET /api/tracking?tn=…` o `?order=…&email=…` | cliente | rastreo; por pedido exige el correo del pedido |
+| `POST /api/admin/shipments` | panel `/admin` | genera la guía PDF 4x6 de un pedido **pagado** (cobra a tu saldo de Envia, por eso es manual) |
+| `DELETE /api/admin/shipments` | panel `/admin` | cancela la guía |
+
+**Flujo:** el cliente cotiza por código postal → el pedido guarda la tarifa elegida (con el código de servicio de Envia) y el peso → al confirmarse el pago, en `/admin` → *Pedidos* pulsas **Generar guía** → imprimes el PDF y rastreas con el número.
+
+**Configurar:** `ENVIA_API_TOKEN` (con `ENVIA_ENV=sandbox` usa api-test.envia.com y no cobra guías reales) y la dirección de origen completa `ENVIA_ORIGIN_*` (calle, número, colonia, CP, ciudad, estado, teléfono). Corre `supabase/schema.sql` (columnas de envío).
+
+**Pruebas:** `node --experimental-strip-types --import ./scripts/register.mjs --test scripts/envia.test.mts`
+
 ## Activar servicios
 | Servicio | Variables | Sin configurar |
 |---|---|---|
 | Supabase (catálogo, pedidos, admin CRUD) | `NEXT_PUBLIC_SUPABASE_URL`, `..._ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (+ correr `supabase/schema.sql`) | catálogo semilla, admin solo lectura |
 | Mercado Pago / Conekta | ver sección Pagos | checkout demo, no cobra |
-| Envia.com (Estafeta, FedEx, DHL) | `ENVIA_API_TOKEN`, `ENVIA_ORIGIN_*` | tarifas estimadas |
+| Envia.com (Estafeta, FedEx, DHL) | `ENVIA_API_TOKEN`, `ENVIA_ORIGIN_*` | tarifas estimadas, sin guías |
 | Admin `/admin` | `ADMIN_PASSWORD` | no se puede entrar |
 
 ## Seguridad
@@ -61,5 +83,5 @@ El servidor recalcula precios, stock y envío en `/api/checkout`; nunca confía 
 
 ## Pendiente antes de producción
 - Imágenes reales (subir a Supabase Storage y poner URLs en `images`; hoy se usa arte con emoji).
-- Correos transaccionales y guía de rastreo (generar etiqueta con Envia.com).
+- Correos transaccionales con el número de guía (la guía y el rastreo ya existen; falta enviarlos por correo).
 - PayPal: no incluido; Mercado Pago ya cubre tarjeta, OXXO y SPEI.

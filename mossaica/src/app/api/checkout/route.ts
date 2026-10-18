@@ -45,7 +45,7 @@ export async function POST(req: Request) {
   const db = getServiceClient();
   if (db) {
     const { error } = await db.from('orders').insert({
-      id: orderId, status: 'pendiente', payment_provider: provider?.id ?? 'demo', customer: a, shipping: rate, subtotal, shipping_cost: rate.price, total,
+      id: orderId, status: 'pendiente', payment_provider: provider?.id ?? 'demo', weight_kg: weightKg, customer: a, shipping: rate, subtotal, shipping_cost: rate.price, total,
       items: lines.map((l) => ({ productId: l.p.id, name: l.p.name, price: l.p.price, quantity: l.qty })),
     });
     if (error) return NextResponse.json({ error: 'No se pudo registrar el pedido' }, { status: 500 });
