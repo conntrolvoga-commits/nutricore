@@ -4,3 +4,6 @@ node_modules
 .env
 next-env.d.ts
 *.tsbuildinfo
+hostinger-src/api/config.php
+hostinger-src/api/data/*
+!hostinger-src/api/data/.htaccess

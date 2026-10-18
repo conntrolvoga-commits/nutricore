@@ -86,3 +86,6 @@ El servidor recalcula precios, stock y envío en `/api/checkout`; nunca confía 
 - Imágenes reales (subir a Supabase Storage y poner URLs en `images`; hoy se usa arte con emoji).
 - Correos transaccionales con el número de guía (la guía y el rastreo ya existen; falta enviarlos por correo).
 - PayPal: no incluido; Mercado Pago ya cubre tarjeta, OXXO y SPEI.
+
+## Tienda en HTML + cobro con PHP en Hostinger
+`hostinger-src/api/` es un servidor de cobro en PHP (Mercado Pago y Conekta) que acompaña al HTML estático (`mosaicca-hostinger.zip`, carpeta `hostinger/`). Recalcula precios, descuentos y envío en el servidor desde `api/catalog.php` (generado de los datos de la tienda), rechaza artículos "por cotizar", crea el pago y recibe el webhook, que confirma el pago directo con la pasarela, marca el pedido como pagado y avisa al dueño (correo y `api/data/pedidos-pagados.log`). Las llaves van en `api/config.php` (copiar de `config.sample.php`), que no se versiona ni se sirve por web. Sin `config.php` la tienda sigue funcionando con pedidos por WhatsApp.

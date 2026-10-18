@@ -476,8 +476,9 @@ function openCheckout() {
       <aside><h3 style="font-size:24px">Resumen</h3>
         <ul style="margin:0;padding:0;list-style:none;font-size:14px;display:grid;gap:4px">${cart.map((i) => `<li style="display:flex;justify-content:space-between;gap:8px"><span>${i.qty} × ${esc(i.name)}${i.note ? ' (' + esc(i.note) + ')' : ''}</span><span>${money(i)}</span></li>`).join('')}</ul>
         <div style="border-top:2px solid var(--line);padding-top:8px;display:grid;gap:4px"><div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${mxn(subtotal())}</span></div><div style="display:flex;justify-content:space-between"><span>Envío</span><span id="shipTxt">—</span></div><div class="tot"><span>Total</span><span id="totTxt">${mxn(subtotal())}</span></div></div>
-        <button class="btn sun" type="submit">Generar pedido</button>
-        <p class="note">Esta versión no cobra en línea. Al generar el pedido obtienes el resumen listo para copiar y enviar.</p></aside>
+        <div id="payBox" style="display:grid;gap:8px"></div>
+        <button class="btn sun" type="submit" id="waBtn">Generar pedido para WhatsApp</button>
+        <p class="note" id="payNote">Al generar el pedido obtienes el resumen listo para enviar por WhatsApp.</p></aside>
     </form></div>`;
   $('#modalOv').hidden = false;
   const cp = $('#f_cp');
@@ -492,14 +493,43 @@ function openCheckout() {
       $('#shipTxt').textContent = mxn(sel.price); $('#totTxt').textContent = mxn(subtotal() + sel.price);
     }));
   });
-  $('#coForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const v = (id) => $(id).value.trim();
-    const err = $('#err');
-    if (!v('#f_name') || !/^\S+@\S+\.\S+$/.test(v('#f_mail')) || !v('#f_tel') || !v('#f_street') || !v('#f_col') || !/^\d{5}$/.test(v('#f_cp')) || !v('#f_city') || !v('#f_state')) { err.textContent = 'Completa todos los datos con un correo y un código postal válidos.'; err.hidden = false; return; }
-    if (!sel) { err.textContent = 'Elige una paquetería para continuar.'; err.hidden = false; return; }
-    finishOrder({ name:v('#f_name'), mail:v('#f_mail'), tel:v('#f_tel'), street:v('#f_street'), col:v('#f_col'), cp:v('#f_cp'), city:v('#f_city'), state:v('#f_state') }, sel);
-  });
+  const readForm = () => {
+    const v = (id) => $(id).value.trim(); const err = $('#err');
+    if (!v('#f_name') || !/^\S+@\S+\.\S+$/.test(v('#f_mail')) || !v('#f_tel') || !v('#f_street') || !v('#f_col') || !/^\d{5}$/.test(v('#f_cp')) || !v('#f_city') || !v('#f_state')) { err.textContent = 'Completa todos los datos con un correo y un código postal válidos.'; err.hidden = false; return null; }
+    if (!sel) { err.textContent = 'Elige una paquetería para continuar.'; err.hidden = false; return null; }
+    err.hidden = true;
+    return { name:v('#f_name'), mail:v('#f_mail'), tel:v('#f_tel'), street:v('#f_street'), col:v('#f_col'), cp:v('#f_cp'), city:v('#f_city'), state:v('#f_state') };
+  };
+  $('#coForm').addEventListener('submit', (e) => { e.preventDefault(); const a = readForm(); if (a) finishOrder(a, sel); });
+
+  // ---- Pago en línea (solo si el hosting tiene el servidor de cobro /api y el carrito no tiene artículos por cotizar)
+  const quoteItems = cart.filter((i) => i.quote);
+  if (quoteItems.length) {
+    $('#payNote').textContent = 'Tu pedido incluye artículos por cotizar (' + quoteItems.map((i) => i.name).join(', ') + '). Envíalo por WhatsApp y te confirmamos el precio para pagar.';
+  } else {
+    fetch('/api/providers.php', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => {
+      const provs = (d && d.providers) || [];
+      if (!provs.length || $('#payBox') === null) return;
+      let prov = provs[0].id;
+      $('#payBox').innerHTML = (provs.length > 1 ? '<b style="font-family:var(--display)">Pagar con</b>' + provs.map((p, i) => `<label class="rate"><input type="radio" name="prov" value="${p.id}" ${i === 0 ? 'checked' : ''}><span>${p.label}</span></label>`).join('') : '')
+        + '<button class="btn brand" type="button" id="payBtn">Pagar en línea</button><p class="small" style="margin:0">Tarjeta, OXXO o SPEI. Pago seguro en la página de la pasarela.</p>';
+      $('#payBox').querySelectorAll('input[name=prov]').forEach((r) => r.addEventListener('change', () => { prov = r.value; }));
+      $('#waBtn').className = 'btn'; $('#waBtn').textContent = 'O generar pedido para WhatsApp'; $('#payNote').hidden = true;
+      $('#payBtn').addEventListener('click', async () => {
+        const a = readForm(); if (!a) return;
+        const btn = $('#payBtn'); btn.disabled = true; btn.textContent = 'Procesando…';
+        try {
+          const res = await fetch('/api/checkout.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+            provider: prov, shipping: { carrier: sel.carrier },
+            items: cart.map((i) => ({ id: i.id, qty: i.qty, label: i.id.split('|').slice(1).filter(Boolean).join(' · ') })),
+            customer: { name: a.name, email: a.mail, phone: a.tel, street: a.street, colony: a.col, city: a.city, state: a.state, postalCode: a.cp } }) });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.url) throw new Error(data.error || 'No se pudo iniciar el pago');
+          window.location.href = data.url;
+        } catch (e) { const err = $('#err'); err.textContent = e.message + ' Puedes enviar tu pedido por WhatsApp.'; err.hidden = false; btn.disabled = false; btn.textContent = 'Pagar en línea'; }
+      });
+    }).catch(() => {});
+  }
 }
 function finishOrder(a, rate) {
   const id = 'MOS-' + Date.now().toString(36).toUpperCase();
@@ -801,6 +831,7 @@ document.querySelectorAll('[data-social]').forEach((box) => {
   box.innerHTML = SOCIAL.map((s) => `<a class="soc ${s.cls}" href="${s.url}" target="_blank" rel="noopener noreferrer">${s.svg}<span>${s.name}</span></a>`).join('');
 });
 
+if (new URLSearchParams(location.search).get('pago') === 'error') setTimeout(() => toast('El pago no se completó. Puedes intentar de nuevo o pedir por WhatsApp.'), 600);
 renderFilters(); renderGrid(); renderPacks(); renderCats(); renderDrinks(); renderPrint3d(); renderCart();
 </script>
 
