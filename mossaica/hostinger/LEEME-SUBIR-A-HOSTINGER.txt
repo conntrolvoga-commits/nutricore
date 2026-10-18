@@ -1,0 +1,8 @@
+CÓMO SUBIR MOSAICCA A HOSTINGER
+1. hPanel -> Websites -> mosaicca.mx -> Administrador de archivos -> carpeta public_html.
+2. Borra el contenido de ejemplo (default.php, index.html de bienvenida).
+3. Sube TODOS los archivos de esta carpeta (incluido .htaccess; si no lo ves, activa "mostrar archivos ocultos").
+   Atajo: sube el .zip a public_html y usa "Extraer".
+4. En hPanel -> Seguridad -> SSL: activa el certificado gratuito para mosaicca.mx y www.mosaicca.mx.
+5. Abre https://www.mosaicca.mx y revisa: catalogo, carrito, boton verde de WhatsApp y redes.
+Para actualizar despues: reemplaza solo index.html.
