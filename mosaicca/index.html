@@ -53,7 +53,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .logo i{font-style:normal;color:var(--sun)}
 .top nav{display:flex;gap:22px;font-family:var(--display);font-weight:600}
 .top nav a{color:inherit;text-decoration:none}.top nav a:hover{color:var(--sun)}
-@media(max-width:700px){.top nav{display:none}}
+@media(max-width:1000px){.top nav{display:none}}
 .top .right{display:flex;gap:8px;align-items:center}
 .theme{background:transparent;border:2px solid currentColor;border-radius:999px;width:38px;height:38px;color:inherit}
 
@@ -212,6 +212,14 @@ section.alt{background:var(--surface);border-block:2px solid var(--ink)}
 .steps{counter-reset:s;list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:760px}
 .steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:var(--surface);border:2px solid var(--ink);border-radius:20px;padding:14px 16px;box-shadow:0 4px 0 0 var(--ink)}
 .steps li::before{content:counter(s);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--sun);color:var(--sun-fg);border:2px solid var(--ink);font-family:var(--display);font-weight:700;font-size:20px}
+
+.waicon{width:1.25em;height:1.25em;flex:none}
+.btn.wa,a.btn.wa{background:#25d366;color:#06361a}
+.wa-hd{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#25d366;color:#06361a;border:2px solid var(--ink);text-decoration:none}
+.wa-hd .waicon{width:22px;height:22px}
+.wafab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;width:58px;height:58px;border-radius:50%;background:#25d366;color:#06361a;border:2px solid var(--ink);box-shadow:var(--shadow);display:grid;place-items:center;transition:transform .15s}
+.wafab:hover{transform:translateY(-3px)}.wafab .waicon{width:32px;height:32px}
+footer a[data-wa]{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#fff}
 </style>
 </head>
 <body>
@@ -219,6 +227,7 @@ section.alt{background:var(--surface);border-block:2px solid var(--ink)}
   <a class="logo" href="#inicio" aria-label="Mosaicca"><img class="mark" src="data:image/jpeg;base64,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" alt=""><span>Mosa<i>i</i>cca</span></a>
   <nav aria-label="Principal"><a href="#fichas">Fichas</a><a href="#paquetes">Paquetes</a><a href="#tazas">Drinkware</a><a href="#agendas">Papelería</a><a href="#selmadera">Sellos</a><a href="#pride">Colección Pride</a><a href="#madres">Temporadas</a><a href="#comprar">Cómo comprar</a></nav>
   <div class="right">
+    <a class="wa-hd" data-wa="Hola, quiero información de Mosaicca." target="_blank" rel="noopener" aria-label="Escribir por WhatsApp"><span data-waicon></span></a>
     <button class="theme" id="themeBtn" aria-label="Cambiar tema">◐</button>
     <button class="btn sun sm" id="cartBtn" aria-label="Abrir carrito">🛒 <span id="cartCount">0</span></button>
   </div>
@@ -287,16 +296,20 @@ section.alt{background:var(--surface);border-block:2px solid var(--ink)}
     <li>Haz tu pedido con tiempo: es temporada alta para las paqueterías.</li>
     <li>Ofrecemos descuentos por volumen.</li>
     <li>¿No sabes qué elegir? Pregunta por nuestros paquetes pre-armados.</li></ul></div>
+  <p style="margin-top:20px"><a class="btn wa" data-wa="Hola, quiero hacer un pedido en Mosaicca. Me interesa:" target="_blank" rel="noopener"><span data-waicon></span> Escríbenos por WhatsApp</a></p>
+  <p class="small" style="margin-top:8px">WhatsApp: <b>+52 81 4790 2474</b></p>
 </div></section>
 
 <footer><div class="wrap">
   <div><b>Mosaicca</b>Arte en cada fragmento. Productos personalizados con propósito. mosaicca.mx</div>
   <div><b>Tienda</b><a href="#fichas">Fichas</a><a href="#paquetes">Paquetes</a><a href="#tazas">Tazas</a><a href="#vasos">Vasos</a><a href="#termos">Termos</a><a href="#agendas">Agendas</a><a href="#libretas">Libretas</a><a href="#selmadera">Sellos</a><a href="#pride">Pride</a><a href="#musica">Tu música favorita</a><a href="#madres">Día de las Madres</a><a href="#maestro">Día del Maestro</a><a href="#navidad">Navidad</a></div>
+  <div><b>WhatsApp</b><a data-wa="Hola, quiero información de Mosaicca." target="_blank" rel="noopener"><span data-waicon></span> +52 81 4790 2474</a></div>
   <div><b>Pedidos</b>Envío por Estafeta, FedEx o DHL a todo México, o recolección. Pedidos por WhatsApp o DM. <a href="#comprar" style="text-decoration:underline">Cómo comprar</a></div>
 </div></footer>
 
 <div class="overlay" id="cartOv" hidden role="dialog" aria-modal="true" aria-label="Carrito de compras"><aside class="side" id="cartSide"></aside></div>
 <div class="overlay" id="modalOv" hidden role="dialog" aria-modal="true"><div class="modal" id="modal"></div></div>
+<a class="wafab" data-wa="Hola, quiero información de Mosaicca." target="_blank" rel="noopener" aria-label="Escribir por WhatsApp"><span data-waicon></span></a>
 <div class="toast" id="toast" hidden role="status"></div>
 
 <script>
@@ -306,6 +319,10 @@ const PACKS = {25:70, 50:135, 100:280};
 const RANGOS = [['all','Todos'],['A','Rango A'],['B','Rango B'],['C','Rango C']];
 const PACK_RANGOS = [['A','Rango A'],['B','Rango B'],['C','Rango C'],['MIX','Surtido A+B+C']];
 const PAGE = 12;
+const WA_NUM = '528147902474';
+const WA_TXT = '+52 81 4790 2474';
+const waLink = (t) => `https://wa.me/${WA_NUM}?text=${encodeURIComponent(t)}`;
+const WA_SVG = '<svg class="waicon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const mxn = (n) => n.toLocaleString('es-MX', {style:'currency', currency:'MXN', minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2});
@@ -407,7 +424,7 @@ function openProduct(id) {
       <span class="cat small" style="text-transform:uppercase;font-weight:700;letter-spacing:.08em">${esc(p.category)}</span>
       <div class="big">${mxn(p.price)}</div><p style="margin:0">${esc(p.description)}</p>
       <div class="qty" style="margin-top:8px"><b style="font-family:var(--display)">Cantidad</b><button class="chip" id="pdm" aria-label="Menos">−</button><span id="pdq">1</span><button class="chip" id="pdp" aria-label="Más">+</button></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"><button class="btn sun" id="pdAdd">Añadir al carrito</button></div></div></div></div>`;
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"><button class="btn sun" id="pdAdd">Añadir al carrito</button> <a class="btn wa" target="_blank" rel="noopener" href="${waLink('Hola, me interesa la ficha ' + p.name + ' (Rango ' + p.rango + ').')}">${WA_SVG} Preguntar</a></div></div></div></div>`;
   $('#modalOv').hidden = false;
   let q = 1; const set = (v) => { q = Math.max(1, Math.min(60, v)); $('#pdq').textContent = q; };
   $('#pdm').onclick = () => set(q - 1); $('#pdp').onclick = () => set(q + 1);
@@ -470,9 +487,9 @@ function finishOrder(a, rate) {
     `${a.name} · ${a.tel} · ${a.mail}`, `${a.street}, ${a.col}, ${a.city}, ${a.state}, C.P. ${a.cp}`].join('\n');
   $('#modal').innerHTML = `<div class="sheet"><button class="x" data-close="modal" aria-label="Cerrar">✕</button><div class="form">
     <p style="font-size:56px;margin:0">🎉</p><h2 style="font-size:30px">Pedido ${id}</h2>
-    <p style="margin:0">Copia este resumen y envíalo a Mosaicca por WhatsApp o DM. Después: te mandamos la cotización y la propuesta de diseño, las apruebas, pagas y nos envías la foto de tu comprobante. Tu pedido llega entre 10 y 15 días después de recibir el comprobante.</p>
+    <p style="margin:0">Envía este resumen por WhatsApp (se abre el chat con tu pedido ya escrito) o cópialo y mándalo por DM. Después: te mandamos la cotización y la propuesta de diseño, las apruebas, pagas y nos envías la foto de tu comprobante. Tu pedido llega entre 10 y 15 días después de recibir el comprobante.</p>
     <pre class="order" id="orderTxt">${esc(text)}</pre>
-    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn sun" id="copyBtn">Copiar pedido</button><button class="btn" id="doneBtn">Terminar y vaciar carrito</button></div></div></div>`;
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn wa" id="waSend" target="_blank" rel="noopener" href="${waLink(text)}">${WA_SVG} Enviar por WhatsApp</a><button class="btn sun" id="copyBtn">Copiar pedido</button><button class="btn" id="doneBtn">Terminar y vaciar carrito</button></div></div></div>`;
   $('#copyBtn').onclick = async () => {
     try { await navigator.clipboard.writeText(text); toast('Pedido copiado'); }
     catch (e) { const r = document.createRange(); r.selectNodeContents($('#orderTxt')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Selecciona y copia el texto'); }
@@ -643,15 +660,23 @@ function openDrink(id) {
       <label for="dNote" style="font-family:var(--display);font-weight:600">Notas de personalización</label>
       <textarea class="input" id="dNote" rows="2" maxlength="140" placeholder="Nombre, texto o diseño que quieres (los diseños personalizados tienen costo adicional)"></textarea>
       <div class="qty"><b style="font-family:var(--display)">Cantidad</b><button type="button" class="chip" id="pdm" aria-label="Menos">−</button><span id="pdq">1</span><button type="button" class="chip" id="pdp" aria-label="Más">+</button></div>
-      <div style="margin-top:6px"><button class="btn sun" id="pdAdd">Añadir al carrito</button></div></div></div></div>`;
+      <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn sun" id="pdAdd">Añadir al carrito</button> <a class="btn wa" id="waAsk" target="_blank" rel="noopener">${WA_SVG} Preguntar</a></div></div></div></div>`;
   $('#modalOv').hidden = false;
-  const set = (v) => { q = Math.max(1, Math.min(99, v)); $('#pdq').textContent = q; };
+  const waUpd = () => {
+    const parts = [d.name];
+    if (d.sizes) parts.push(`${d.sizeLabel || 'Medida'}: ${d.sizes[si]}`);
+    if (names) parts.push(`Color: ${names[ci]}`);
+    const note = $('#dNote').value.trim();
+    $('#waAsk').href = waLink(`Hola, me interesa: ${parts.join(' · ')} · Cantidad: ${q}${note ? ' · Notas: ' + note : ''}`);
+  };
+  const set = (v) => { q = Math.max(1, Math.min(99, v)); $('#pdq').textContent = q; waUpd(); };
   $('#pdm').onclick = () => set(q - 1); $('#pdp').onclick = () => set(q + 1);
+  $('#dNote').addEventListener('input', waUpd);
   if (names) $('#sw').addEventListener('click', (e) => {
     const b = e.target.closest('.sw'); if (!b) return;
     ci = Number(b.dataset.i);
     $('#sw').querySelectorAll('.sw').forEach((s) => s.setAttribute('aria-pressed', String(s === b)));
-    $('#cName').textContent = names[ci]; $('#dArt').innerHTML = drinkSVG(d.kind, hexOf(names[ci]), d.tex);
+    $('#cName').textContent = names[ci]; $('#dArt').innerHTML = drinkSVG(d.kind, hexOf(names[ci]), d.tex); waUpd();
   });
   if (d.photos && !d.poster) $('#vw').addEventListener('click', (e) => {
     const bt = e.target.closest('.chip'); if (!bt) return;
@@ -662,8 +687,9 @@ function openDrink(id) {
     const bt = e.target.closest('.chip'); if (!bt) return;
     si = Number(bt.dataset.i);
     $('#szs').querySelectorAll('.chip').forEach((s) => s.setAttribute('aria-pressed', String(s === bt)));
-    $('#sName').textContent = d.sizes[si];
+    $('#sName').textContent = d.sizes[si]; waUpd();
   });
+  waUpd();
   $('#pdAdd').onclick = () => {
     const color = names ? names[ci] : '';
     const sz = d.sizes ? d.sizes[si] : '';
@@ -739,6 +765,8 @@ $('#themeBtn').onclick = () => {
 };
 
 $('#heroImg').src = HERO;
+document.querySelectorAll('[data-waicon]').forEach((e) => { e.outerHTML = WA_SVG; });
+document.querySelectorAll('a[data-wa]').forEach((a) => { a.href = waLink(a.dataset.wa); });
 renderFilters(); renderGrid(); renderPacks(); renderCats(); renderDrinks(); renderPrint3d(); renderCart();
 </script>
 
