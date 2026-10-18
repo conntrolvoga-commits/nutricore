@@ -23,7 +23,7 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b-2 border-grape-900 bg-grape-600 text-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <Link href="/" className="font-display text-2xl font-bold tracking-tight">
-          Mossa<span className="text-sun">i</span>ca
+          Mosa<span className="text-sun">i</span>cca
         </Link>
         <nav className="hidden gap-6 font-display font-semibold md:flex" aria-label="Principal">
           {links.map((l) => <Link key={l.href} href={l.href} className="transition hover:text-sun">{l.label}</Link>)}

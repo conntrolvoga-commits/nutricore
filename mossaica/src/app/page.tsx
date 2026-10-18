@@ -28,7 +28,7 @@ export default async function Home() {
             </div>
           </div>
           <div className="relative mx-auto aspect-square w-full max-w-md rotate-2 overflow-hidden rounded-3xl border-2 border-grape-900 shadow-pop">
-            <Image src="/hero-loteria.jpg" alt="Fichas de Mossaica sobre un tablero de lotería" fill priority sizes="(max-width:768px) 90vw, 450px" className="object-cover" />
+            <Image src="/hero-loteria.jpg" alt="Fichas de Mosaicca sobre un tablero de lotería" fill priority sizes="(max-width:768px) 90vw, 450px" className="object-cover" />
           </div>
         </div>
       </section>

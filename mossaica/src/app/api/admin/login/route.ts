@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { createHash } from 'crypto';
 
 const adminToken = () =>
-  createHash('sha256').update(`mossaica:${process.env.ADMIN_PASSWORD ?? ''}`).digest('hex');
+  createHash('sha256').update(`mosaicca:${process.env.ADMIN_PASSWORD ?? ''}`).digest('hex');
 
 export async function POST(req: Request) {
   const { password } = await req.json().catch(() => ({}));

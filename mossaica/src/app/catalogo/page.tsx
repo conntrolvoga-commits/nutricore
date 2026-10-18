@@ -4,7 +4,7 @@ import CatalogClient from '@/components/CatalogClient';
 
 export const metadata: Metadata = {
   title: 'Catálogo',
-  description: 'Todas las fichas de lotería, miniaturas y coleccionables mexicanos de Mossaica. Filtra por rango y tipo de figura.',
+  description: 'Todas las fichas de lotería, miniaturas y coleccionables mexicanos de Mosaicca. Filtra por rango y tipo de figura.',
   alternates: { canonical: '/catalogo' },
 };
 

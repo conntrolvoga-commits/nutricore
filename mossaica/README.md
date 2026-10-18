@@ -1,4 +1,4 @@
-# Mossaica — tienda en línea (mossaica.mx)
+# Mosaicca — tienda en línea (mosaicca.mx)
 
 Next.js 14 (App Router) + Tailwind + Zustand. Funciona **sin configurar nada** (catálogo semilla,
 envíos estimados, checkout demo) y se activa por servicio al llenar `.env`.

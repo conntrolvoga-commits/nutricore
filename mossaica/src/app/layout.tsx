@@ -11,9 +11,9 @@ const body = Nunito({ subsets: ['latin'], variable: '--font-body', display: 'swa
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: 'Mossaica | Fichas de lotería y miniaturas mexicanas', template: '%s | Mossaica' },
+  title: { default: 'Mosaicca | Fichas de lotería y miniaturas mexicanas', template: '%s | Mosaicca' },
   description: 'Fichas de lotería coleccionables, miniaturas y artículos temáticos mexicanos y pop. Envíos a todo México.',
-  openGraph: { type: 'website', locale: 'es_MX', siteName: 'Mossaica' },
+  openGraph: { type: 'website', locale: 'es_MX', siteName: 'Mosaicca' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -12,7 +12,7 @@ export default function AdminLogin() {
   }
   return (
     <form onSubmit={submit} className="mx-auto max-w-sm space-y-4 px-4 py-24">
-      <h1 className="text-3xl font-bold">Panel Mossaica</h1>
+      <h1 className="text-3xl font-bold">Panel Mosaicca</h1>
       <input className="input" type="password" placeholder="Clave de administrador" value={pw} onChange={(e) => setPw(e.target.value)} autoFocus />
       {err && <p role="alert" className="text-red-600">{err}</p>}
       <button className="btn-primary w-full">Entrar</button>

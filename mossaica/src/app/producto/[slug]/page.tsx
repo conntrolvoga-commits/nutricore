@@ -36,7 +36,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
     image: p.images,
     category: p.category,
     sku: p.id,
-    brand: { '@type': 'Brand', name: 'Mossaica' },
+    brand: { '@type': 'Brand', name: 'Mosaicca' },
     offers: {
       '@type': 'Offer',
       url: `${SITE_URL}/producto/${p.slug}`,

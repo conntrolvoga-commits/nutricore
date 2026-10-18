@@ -42,7 +42,7 @@ export const useCart = create<CartState>()(
       clear: () => set({ items: [] }),
       setOpen: (open) => set({ open }),
     }),
-    { name: 'mossaica-cart', partialize: (s) => ({ items: s.items }) },
+    { name: 'mosaicca-cart', partialize: (s) => ({ items: s.items }) },
   ),
 );
 
