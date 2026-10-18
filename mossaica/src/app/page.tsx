@@ -3,9 +3,9 @@ import { getProducts } from '@/lib/products';
 import ProductCard from '@/components/ProductCard';
 
 const rangos = [
-  { r: 'A', title: 'Rango A', text: 'Los clásicos de la tiendita: pan, antojitos y refrescos.', bg: 'bg-sun' },
-  { r: 'B', title: 'Rango B', text: 'Pop, alebrijes, luchadores y alienígenas.', bg: 'bg-candy text-white' },
-  { r: 'C', title: 'Rango C', text: 'Piezas de colección y ediciones limitadas.', bg: 'bg-sky-500 text-white' },
+  { r: 'A', title: 'Rango A', text: '9 diseños: bolillo, bota, empanada, chocolate Abuelita y más.', bg: 'bg-sun' },
+  { r: 'B', title: 'Rango B', text: '27 diseños: ajolotito, pokebola, conchas, alien, queso y más.', bg: 'bg-candy text-white' },
+  { r: 'C', title: 'Rango C', text: '9 diseños: Dr. Simi, Grinch, Gengar, papitas y caguama.', bg: 'bg-sky-500 text-white' },
 ];
 
 export default async function Home() {
@@ -20,14 +20,14 @@ export default async function Home() {
           <div>
             <p className="chip inline-block bg-sun text-grape-900">Fichas de lotería y miniaturas</p>
             <h1 className="mt-4 text-5xl font-bold leading-[1.05] sm:text-6xl">Colecciona lo <span className="text-sun">más chido</span> de México</h1>
-            <p className="mt-4 max-w-md text-lg text-grape-100">Bolillos, conchas, elotes, jarritos, alienígenas y pokebolas en resina. Elige tu rango y arma tu colección.</p>
+            <p className="mt-4 max-w-md text-lg text-grape-100">Bolillos, conchas, elotes, ajolotitos, alienígenas y pokebolas en 45 diseños. Elige tu rango y arma tu colección.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/catalogo" className="btn-primary">Ver catálogo</Link>
-              <Link href="/catalogo?rango=C" className="btn-ghost">Piezas de colección</Link>
+              <Link href="/catalogo?rango=C" className="btn-ghost">Rango C</Link>
             </div>
           </div>
           <div className="relative mx-auto grid h-72 w-72 grid-cols-3 place-items-center gap-2 text-6xl sm:h-96 sm:w-96 sm:text-7xl" aria-hidden>
-            {['🥖', '🌽', '👽', '🐚', '🔴', '🏺', '💀', '🌮', '🪅'].map((e, i) => (
+            {['🥖', '🌽', '👽', '🐚', '🔴', '🦎', '🍟', '🧀', '🎃'].map((e, i) => (
               <span key={i} className="animate-float" style={{ animationDelay: `${i * 0.35}s` }}>{e}</span>
             ))}
           </div>

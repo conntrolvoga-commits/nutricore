@@ -5,7 +5,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        grape: { 50: '#f6f1ff', 100: '#ebe0ff', 400: '#9b6bff', 500: '#7c3aed', 600: '#6528d4', 700: '#4c1d9e', 900: '#25104f' },
+        grape: { 50: '#f6f1ff', 100: '#ebe0ff', 400: '#9b6bff', 500: '#7f77d6', 600: '#6c63c7', 700: '#4c1d9e', 900: '#25104f' },
         sky: { 400: '#38bdf8', 500: '#2563eb' },
         sun: '#ffd23f',
         candy: '#ff4fa3',
