@@ -114,7 +114,8 @@ section.block>.wrap>h2{font-size:clamp(28px,4vw,38px);margin-bottom:8px}
 .empty{text-align:center;padding:48px 0;font-family:var(--display);font-size:22px}
 
 footer{margin-top:48px;background:#25104f;color:#d9d2f5;border-top:2px solid var(--ink)}
-footer .wrap{padding-block:36px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;font-size:14px}
+footer .wrap{padding-block:36px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:28px 32px;font-size:14px;align-items:start}
+footer .shop-links{display:grid;grid-template-columns:repeat(2,auto);gap:2px 24px;justify-content:start}
 @media(max-width:700px){footer .wrap{grid-template-columns:1fr}}
 footer b{font-family:var(--display);font-size:22px;color:#fff;display:block;margin-bottom:6px}
 footer a{color:inherit;display:block;text-decoration:none;margin:2px 0}
@@ -222,6 +223,12 @@ section.alt{background:var(--surface);border-block:2px solid var(--ink)}
 footer a[data-wa]{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:#fff}
 svg [stroke="#25104f"]{stroke:var(--art)}
 svg [fill="#25104f"]{fill:var(--art)}
+.social{display:flex;gap:10px;flex-wrap:wrap}
+.soc{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 16px 8px 12px;font-weight:700;font-size:15px;border:2px solid var(--ink);color:#fff;text-decoration:none;transition:transform .15s}
+.soc:hover{transform:translateY(-2px)}
+.soc.wac{background:#25d366;color:#06361a}.soc.ig{background:linear-gradient(45deg,#f09433,#dc2743 55%,#bc1888)}.soc.tt{background:#111}.soc.fb{background:#1877f2}
+@media(max-width:700px){footer .shop-links{grid-template-columns:1fr 1fr}}
+footer .soc{color:#fff}footer .soc.wac{color:#06361a}
 </style>
 </head>
 <body>
@@ -300,12 +307,15 @@ svg [fill="#25104f"]{fill:var(--art)}
     <li>¿No sabes qué elegir? Pregunta por nuestros paquetes pre-armados.</li></ul></div>
   <p style="margin-top:20px"><a class="btn wa" data-wa="Hola, quiero hacer un pedido en Mosaicca. Me interesa:" target="_blank" rel="noopener"><span data-waicon></span> Escríbenos por WhatsApp</a></p>
   <p class="small" style="margin-top:8px">WhatsApp: <b>+52 81 4790 2474</b></p>
+  <h3 style="font-size:22px;margin:24px 0 10px">Síguenos</h3>
+  <div class="social" data-social></div>
 </div></section>
 
 <footer><div class="wrap">
   <div><b>Mosaicca</b>Arte en cada fragmento. Productos personalizados con propósito. mosaicca.mx</div>
-  <div><b>Tienda</b><a href="#fichas">Fichas</a><a href="#paquetes">Paquetes</a><a href="#tazas">Tazas</a><a href="#vasos">Vasos</a><a href="#termos">Termos</a><a href="#agendas">Agendas</a><a href="#libretas">Libretas</a><a href="#selmadera">Sellos</a><a href="#pride">Pride</a><a href="#musica">Tu música favorita</a><a href="#madres">Día de las Madres</a><a href="#maestro">Día del Maestro</a><a href="#navidad">Navidad</a></div>
+  <div><b>Tienda</b><div class="shop-links"><a href="#fichas">Fichas</a><a href="#paquetes">Paquetes</a><a href="#tazas">Tazas</a><a href="#vasos">Vasos</a><a href="#termos">Termos</a><a href="#agendas">Agendas</a><a href="#libretas">Libretas</a><a href="#selmadera">Sellos</a><a href="#pride">Pride</a><a href="#musica">Tu música favorita</a><a href="#madres">Día de las Madres</a><a href="#maestro">Día del Maestro</a><a href="#navidad">Navidad</a></div></div>
   <div><b>WhatsApp</b><a data-wa="Hola, quiero información de Mosaicca." target="_blank" rel="noopener"><span data-waicon></span> +52 81 4790 2474</a></div>
+    <div class="social-col"><b>Síguenos</b><div class="social" data-social></div></div>
   <div><b>Pedidos</b>Envío por Estafeta, FedEx o DHL a todo México, o recolección. Pedidos por WhatsApp o DM. <a href="#comprar" style="text-decoration:underline">Cómo comprar</a></div>
 </div></footer>
 
@@ -769,6 +779,17 @@ $('#themeBtn').onclick = () => {
 $('#heroImg').src = HERO;
 document.querySelectorAll('[data-waicon]').forEach((e) => { e.outerHTML = WA_SVG; });
 document.querySelectorAll('a[data-wa]').forEach((a) => { a.href = waLink(a.dataset.wa); });
+/* ---------- redes sociales ---------- */
+const SOCIAL = [
+  { cls: 'wac', name: 'Catálogo en WhatsApp', url: 'https://wa.me/c/5218147902474', svg: WA_SVG },
+  { cls: 'ig', name: 'Instagram', url: 'https://www.instagram.com/mosaicca.mx', svg: '<svg class="waicon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg>' },
+  { cls: 'tt', name: 'TikTok', url: 'https://www.tiktok.com/@mosaicca.mx', svg: '<svg class="waicon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg>' },
+  { cls: 'fb', name: 'Facebook', url: 'https://www.facebook.com/share/1EDGYwRAWh/', svg: '<svg class="waicon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>' }
+];
+document.querySelectorAll('[data-social]').forEach((box) => {
+  box.innerHTML = SOCIAL.map((s) => `<a class="soc ${s.cls}" href="${s.url}" target="_blank" rel="noopener noreferrer">${s.svg}<span>${s.name}</span></a>`).join('');
+});
+
 renderFilters(); renderGrid(); renderPacks(); renderCats(); renderDrinks(); renderPrint3d(); renderCart();
 </script>
 
