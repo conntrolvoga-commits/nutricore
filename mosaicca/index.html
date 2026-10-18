@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Mosaicca</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Fichas de lotería coleccionables y miniaturas mexicanas. Paquetes de 25, 50 y 100 piezas.">
+<meta name="description" content="Mosaicca: arte en cada fragmento. Fichas de lotería coleccionables, tazas, vasos y termos personalizados.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -164,12 +164,35 @@ pre.order{background:var(--bg);border:2px solid var(--line);border-radius:14px;p
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:999px;font-weight:700;z-index:70;animation:pop .2s}
 @keyframes fade{from{opacity:0}}@keyframes slide{from{transform:translateX(100%)}}@keyframes pop{from{opacity:0;transform:scale(.96)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.logo{display:inline-flex;align-items:center;gap:10px}
+.logo .mark{width:44px;height:44px;border-radius:50%;background:#fff;border:2px solid var(--ink);object-fit:cover}
+.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+@media(max-width:900px){.cats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.cats{grid-template-columns:repeat(2,1fr);gap:10px}}
+.cat-tile{display:flex;flex-direction:column;gap:2px;background:var(--surface);border:2px solid var(--ink);border-radius:22px;padding:12px;box-shadow:0 4px 0 0 var(--ink);color:var(--fg);text-decoration:none;transition:transform .15s;min-width:0}
+.cat-tile:hover{transform:translateY(-3px)}
+.cat-tile b{font-family:var(--display);font-size:19px;line-height:1.15}
+.cat-tile span:last-child{font-size:13px;color:var(--muted)}
+.cat-art{aspect-ratio:1;border-radius:14px;background:linear-gradient(160deg,var(--bg),var(--surface));display:grid;place-items:center;overflow:hidden;margin-bottom:8px;border:2px solid var(--line)}
+.cat-art img{width:100%;height:100%;object-fit:cover}.cat-art svg{width:78%;height:78%}
+section.alt{background:var(--surface);border-block:2px solid var(--ink)}
+.ph.art{display:grid;place-items:center;background:linear-gradient(160deg,var(--bg),var(--surface));padding:12%}
+.ph.art svg,.pd .img.art svg{width:100%;height:100%;transition:transform .3s}
+.card:hover .ph.art svg{transform:scale(1.06) rotate(-3deg)}
+.pd .img.art{background:linear-gradient(160deg,var(--bg),var(--surface));padding:12%}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 6px}
+.sw{width:34px;height:34px;border-radius:50%;border:2px solid var(--ink);padding:0}
+.sw[aria-pressed="true"]{outline:3px solid var(--candy);outline-offset:2px}
+.infobox{background:var(--surface);border:2px solid var(--ink);border-radius:24px;padding:22px 24px;box-shadow:var(--shadow)}
+.infobox h3{font-size:22px;margin-bottom:8px}.infobox ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.line .th svg{width:100%;height:100%;padding:4px}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="logo" href="#inicio" aria-label="Mosaicca">Mosa<i>i</i>cca</a>
-  <nav aria-label="Principal"><a href="#paquetes">Paquetes</a><a href="#catalogo" data-rango="A">Rango A</a><a href="#catalogo" data-rango="B">Rango B</a><a href="#catalogo" data-rango="C">Rango C</a></nav>
+  <a class="logo" href="#inicio" aria-label="Mosaicca"><img class="mark" src="data:image/jpeg;base64,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" alt=""><span>Mosa<i>i</i>cca</span></a>
+  <nav aria-label="Principal"><a href="#fichas">Fichas</a><a href="#paquetes">Paquetes</a><a href="#tazas">Tazas</a><a href="#vasos">Vasos</a><a href="#termos">Termos</a></nav>
   <div class="right">
     <button class="theme" id="themeBtn" aria-label="Cambiar tema">◐</button>
     <button class="btn sun sm" id="cartBtn" aria-label="Abrir carrito">🛒 <span id="cartCount">0</span></button>
@@ -178,16 +201,18 @@ pre.order{background:var(--bg);border:2px solid var(--line);border-radius:14px;p
 
 <section class="hero" id="inicio"><div class="wrap">
   <div>
-    <span class="tag">Fichas de lotería y miniaturas</span>
-    <h1>Colecciona lo <em>más chido</em> de México</h1>
-    <p>Bolillos, conchas, elotes, ajolotitos, alienígenas y pokebolas en 45 diseños. Elige tu rango, arma tu colección y llévate un paquete.</p>
-    <div class="cta"><a class="btn sun" href="#catalogo">Ver catálogo</a><a class="btn" href="#paquetes">Paquetes desde $70</a></div>
+    <span class="tag">Artículos personalizados para toda ocasión</span>
+    <h1>Arte en cada <em>fragmento</em></h1>
+    <p>Fichas de lotería coleccionables en 45 diseños, y tazas, vasos y termos personalizados con tu diseño.</p>
+    <div class="cta"><a class="btn sun" href="#fichas">Ver fichas</a><a class="btn" href="#tazas">Tazas, vasos y termos</a></div>
   </div>
   <div class="photo"><img id="heroImg" alt="Fichas de Mosaicca sobre un tablero de lotería"></div>
 </div></section>
 
-<section class="block"><div class="wrap">
-  <h2>Colecciones</h2><p class="sub">Tres rangos de diseños. Todas las fichas cuestan $5.</p>
+<section class="block" style="padding-block:32px 8px"><div class="wrap"><h2>¿Qué buscas?</h2><p class="sub">Elige un apartado.</p><div class="cats" id="cats"></div></div></section>
+
+<section class="block" id="fichas"><div class="wrap">
+  <h2>Fichas de lotería</h2><p class="sub">Tres rangos de diseños. Todas las fichas cuestan $5.</p>
   <div class="rangos">
     <button class="rango r-A" data-rango="A"><b>A</b><h3>Rango A</h3><span>9 diseños: bolillo, bota, empanada, chocolate Abuelita…</span></button>
     <button class="rango r-B" data-rango="B"><b>B</b><h3>Rango B</h3><span>27 diseños: ajolotito, pokebola, conchas, alien, queso…</span></button>
@@ -195,14 +220,8 @@ pre.order{background:var(--bg);border:2px solid var(--line);border-radius:14px;p
   </div>
 </div></section>
 
-<section class="block" id="paquetes" style="background:var(--surface);border-block:2px solid var(--ink)"><div class="wrap">
-  <h2>Paquetes de fichas</h2><p class="sub">Diseños surtidos al azar. Ideal para fiestas, rifas y reventa.</p>
-  <div class="packs-tools" role="group" aria-label="Rango del paquete" id="packRangos"></div>
-  <div class="packs" id="packs"></div>
-</div></section>
-
 <section class="block" id="catalogo"><div class="wrap">
-  <h2>Catálogo</h2><p class="sub">Busca por nombre o filtra por rango y tipo de figura.</p>
+  <h2>Catálogo de fichas</h2><p class="sub">Busca por nombre o filtra por rango y tipo de figura.</p>
   <div class="filters">
     <input class="input" id="q" type="search" placeholder="Buscar: concha, elote, alien…" aria-label="Buscar productos">
     <div class="row" id="rangoChips" role="group" aria-label="Filtrar por rango"></div>
@@ -213,9 +232,17 @@ pre.order{background:var(--bg);border:2px solid var(--line);border-radius:14px;p
   <nav class="pager" id="pager" aria-label="Paginación"></nav>
 </div></section>
 
+<section class="block" id="paquetes" style="background:var(--surface);border-block:2px solid var(--ink)"><div class="wrap">
+  <h2>Paquetes de fichas</h2><p class="sub">Diseños surtidos al azar. Ideal para fiestas, rifas y reventa.</p>
+  <div class="packs-tools" role="group" aria-label="Rango del paquete" id="packRangos"></div>
+  <div class="packs" id="packs"></div>
+</div></section>
+
+<div id="drinkSections"></div>
+
 <footer><div class="wrap">
-  <div><b>Mosaicca</b>Coleccionables mexicanos con mucho color. mosaicca.mx</div>
-  <div><b>Tienda</b><a href="#catalogo">Catálogo</a><a href="#paquetes">Paquetes</a></div>
+  <div><b>Mosaicca</b>Arte en cada fragmento. Artículos personalizados para toda ocasión. mosaicca.mx</div>
+  <div><b>Tienda</b><a href="#fichas">Fichas</a><a href="#paquetes">Paquetes</a><a href="#tazas">Tazas</a><a href="#vasos">Vasos</a><a href="#termos">Termos</a></div>
   <div><b>Pedidos</b>Envío por Estafeta, FedEx o DHL a todo México.</div>
 </div></footer>
 
@@ -310,8 +337,8 @@ function renderCart() {
     return;
   }
   side.innerHTML = `<header><h2>Tu carrito</h2><button class="x" data-close="cart" aria-label="Cerrar carrito">✕</button></header>
-    <ul class="lines">${cart.map((i) => `<li class="line"><div class="th">${i.img ? `<img src="${i.img}" alt="">` : i.emoji}</div>
-      <div><h4>${esc(i.name)}</h4><span class="small">${mxn(i.price)} c/u</span>
+    <ul class="lines">${cart.map((i) => `<li class="line"><div class="th">${i.img ? `<img src="${i.img}" alt="">` : (i.art || i.emoji)}</div>
+      <div><h4>${esc(i.name)}</h4><span class="small">${mxn(i.price)} c/u${i.note ? ' · ' + esc(i.note) : ''}</span>
         <div class="qty"><button class="chip" data-q="${i.id}" data-d="-1" aria-label="Quitar uno">−</button><span aria-live="polite">${i.qty}</span><button class="chip" data-q="${i.id}" data-d="1" ${i.qty >= i.stock ? 'disabled' : ''} aria-label="Añadir uno">+</button><button class="link" data-rm="${i.id}">Eliminar</button></div></div>
       <b style="font-family:var(--display)">${mxn(i.price * i.qty)}</b></li>`).join('')}</ul>
     <div class="foot"><div class="tot"><span>Subtotal</span><span>${mxn(subtotal())}</span></div><p class="small" style="margin:0">El envío se calcula al pagar con tu código postal.</p><button class="btn sun" data-checkout>Hacer pedido</button></div>`;
@@ -356,7 +383,7 @@ function openCheckout() {
         <div id="rates" style="display:grid;gap:8px"><p class="small" style="margin:0">Escribe tu código postal para ver las tarifas.</p></div>
         <p class="small" id="err" role="alert" style="color:var(--candy);margin:0" hidden></p></div>
       <aside><h3 style="font-size:24px">Resumen</h3>
-        <ul style="margin:0;padding:0;list-style:none;font-size:14px;display:grid;gap:4px">${cart.map((i) => `<li style="display:flex;justify-content:space-between;gap:8px"><span>${i.qty} × ${esc(i.name)}</span><span>${mxn(i.price * i.qty)}</span></li>`).join('')}</ul>
+        <ul style="margin:0;padding:0;list-style:none;font-size:14px;display:grid;gap:4px">${cart.map((i) => `<li style="display:flex;justify-content:space-between;gap:8px"><span>${i.qty} × ${esc(i.name)}${i.note ? ' (' + esc(i.note) + ')' : ''}</span><span>${mxn(i.price * i.qty)}</span></li>`).join('')}</ul>
         <div style="border-top:2px solid var(--line);padding-top:8px;display:grid;gap:4px"><div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${mxn(subtotal())}</span></div><div style="display:flex;justify-content:space-between"><span>Envío</span><span id="shipTxt">—</span></div><div class="tot"><span>Total</span><span id="totTxt">${mxn(subtotal())}</span></div></div>
         <button class="btn sun" type="submit">Generar pedido</button>
         <p class="note">Esta versión no cobra en línea. Al generar el pedido obtienes el resumen listo para copiar y enviar.</p></aside>
@@ -386,7 +413,7 @@ function openCheckout() {
 function finishOrder(a, rate) {
   const id = 'MOS-' + Date.now().toString(36).toUpperCase();
   const total = subtotal() + rate.price;
-  const text = [`PEDIDO ${id} · Mosaicca`, '', ...cart.map((i) => `${i.qty} × ${i.name} — ${mxn(i.price * i.qty)}`), '',
+  const text = [`PEDIDO ${id} · Mosaicca`, '', ...cart.map((i) => `${i.qty} × ${i.name}${i.note ? ' (' + i.note + ')' : ''} — ${mxn(i.price * i.qty)}`), '',
     `Subtotal: ${mxn(subtotal())}`, `Envío (${rate.carrier} ${rate.service}): ${mxn(rate.price)}`, `TOTAL: ${mxn(total)}`, '',
     `${a.name} · ${a.tel} · ${a.mail}`, `${a.street}, ${a.col}, ${a.city}, ${a.state}, C.P. ${a.cp}`].join('\n');
   $('#modal').innerHTML = `<div class="sheet"><button class="x" data-close="modal" aria-label="Cerrar">✕</button><div class="form">
@@ -401,13 +428,116 @@ function finishOrder(a, rate) {
   $('#doneBtn').onclick = () => { cart = []; save(); renderCart(); closeAll(); };
 }
 
+/* ---------- tazas, vasos y termos ---------- */
+const HEX = {'Blanco':'#f2f2f2','Gris':'#707070','Negro':'#141414','Rojo':'#b3262d','Rosa Pastel':'#e5b4b8','Rosa Vivo':'#ee6a8c','Morado':'#6b4aa0','Azul Obscuro':'#2b3050','Azul Rey':'#1d3a8a','Verde':'#3f9a4a','Verde Militar':'#5b6b58','Naranja':'#ee9a45','Amarillo':'#f7e04a','Turquesa':'#7be3d2','Azul Claro':'#6fb1ea'};
+const COLORS = {
+  c18: ['Blanco','Gris','Negro','Rojo','Rosa Pastel','Rosa Vivo','Morado','Azul Obscuro','Azul Rey','Verde'],
+  c36: ['Blanco','Verde Militar','Negro','Rojo','Rosa Pastel','Rosa Vivo','Morado','Azul Rey'],
+  c30: ['Blanco','Gris','Negro','Rojo','Naranja','Amarillo','Rosa Pastel','Rosa Vivo','Morado','Azul Obscuro','Turquesa','Verde'],
+  c20: ['Blanco','Gris','Negro','Rojo','Naranja','Amarillo','Rosa Pastel','Rosa Vivo','Morado','Azul Obscuro','Turquesa','Verde'],
+  cs20: ['Blanco','Gris','Negro','Rojo','Naranja','Amarillo','Rosa Pastel','Azul Obscuro','Azul Rey','Azul Claro']
+};
+const DEF = { mug:'#f4f1ff', acrylic:'#c9d9ff', glass:'#dff0ff', bottleasa:'#2b3050' };
+const GROUPS = [
+  { id:'tazas', title:'Tazas', sub:'Tazas de 11 oz con tu diseño. Elige sublimación o UV DTF.' },
+  { id:'vasos', title:'Vasos', sub:'Vasos de acrílico, cristal y acero tipo Yeti, con diseño UV DTF o grabado láser.', alt:true },
+  { id:'termos', title:'Termos', sub:'Termos de acero inoxidable con grabado láser, en varios tamaños y colores.' }
+];
+const DRINKS = [
+  { id:'taza-sub', group:'tazas', name:'Taza 11 oz sublimación', price:150, kind:'mug', w:0.4, desc:'Taza de 11 oz con tu diseño en sublimación.' },
+  { id:'taza-uv', group:'tazas', name:'Taza 11 oz UV DTF', price:245, kind:'mug', w:0.4, desc:'Taza de 11 oz con tu diseño en UV DTF, con relieve y mayor durabilidad.' },
+  { id:'ac16', group:'vasos', name:'Vaso acrílico 16 oz UV DTF', price:360, kind:'acrylic', w:0.3, desc:'Vaso de acrílico de 16 oz con tapa y popote, diseño en UV DTF.' },
+  { id:'ac24', group:'vasos', name:'Vaso acrílico 24 oz UV DTF', price:420, kind:'acrylic', w:0.35, desc:'Vaso de acrílico de 24 oz con tapa y popote, diseño en UV DTF.' },
+  { id:'cr16', group:'vasos', name:'Vaso cristal 16 oz UV DTF', price:450, kind:'glass', w:0.5, desc:'Vaso de cristal de 16 oz con tapa y popote, diseño en UV DTF.' },
+  { id:'cr20', group:'vasos', name:'Vaso cristal 20 oz UV DTF', price:450, kind:'glass', w:0.55, desc:'Vaso de cristal de 20 oz con tapa y popote, diseño en UV DTF.' },
+  { id:'y30', group:'vasos', name:'Vaso tipo Yeti 30 oz grabado láser', price:450, kind:'tumbler', colors:'c30', size:'20 x 10 cm', w:0.7, desc:'Vaso de acero tipo Yeti de 30 oz con tapa y popote, grabado láser.' },
+  { id:'y20', group:'vasos', name:'Vaso tipo Yeti 20 oz grabado láser', price:420, kind:'tumbler', colors:'c20', size:'17 x 9 cm', w:0.55, desc:'Vaso de acero tipo Yeti de 20 oz con tapa y popote, grabado láser.' },
+  { id:'sk20', group:'vasos', name:'Vaso Skinny 20 oz grabado láser', price:420, kind:'skinny', colors:'cs20', size:'22 x 8 cm', w:0.5, desc:'Vaso Skinny de acero de 20 oz con tapa y popote, grabado láser.' },
+  { id:'t18', group:'termos', name:'Termo 18 oz grabado láser', price:600, kind:'bottle', colors:'c18', size:'26 x 7.6 cm', w:0.5, desc:'Termo de acero de 18 oz con tapa, grabado láser.' },
+  { id:'t36', group:'termos', name:'Termo 36 oz grabado láser', price:700, kind:'bottle', colors:'c36', size:'30 x 10 cm', w:0.8, desc:'Termo de acero de 36 oz con tapa, grabado láser.' },
+  { id:'t40', group:'termos', name:'Termo 40 oz con asa grabado láser', price:700, kind:'bottleasa', w:0.9, desc:'Termo de acero de 40 oz con asa y tapa, grabado láser.' }
+];
+const hexOf = (n) => HEX[n] || '#6c63c7';
+function drinkSVG(kind, color) {
+  const L = 'stroke="#25104f" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+  const shine = (x, y, h) => `<rect x="${x}" y="${y}" width="5" height="${h}" rx="2.5" fill="#fff" opacity=".35"/>`;
+  let body = '';
+  if (kind === 'mug') body = `<path d="M30 36h52v46a14 14 0 0 1-14 14H44a14 14 0 0 1-14-14z" fill="${color}" ${L}/><path d="M82 46h7a12 12 0 0 1 0 28h-7" fill="none" ${L}/>${shine(37, 44, 34)}`;
+  else if (kind === 'acrylic' || kind === 'glass') body = `<path d="M62 14l8 24" fill="none" ${L}/><path d="M32 34h56l-5 64a6 6 0 0 1-6 5H43a6 6 0 0 1-6-5z" fill="${color}" fill-opacity="${kind === 'glass' ? '.7' : '.9'}" ${L}/><rect x="29" y="28" width="62" height="9" rx="4.5" fill="#25104f"/>${shine(41, 46, 40)}`;
+  else if (kind === 'tumbler') body = `<path d="M33 30h54l-6 70a6 6 0 0 1-6 5H45a6 6 0 0 1-6-5z" fill="${color}" ${L}/><rect x="30" y="23" width="60" height="9" rx="4.5" fill="#d9d9e3" ${L}/>${shine(43, 42, 44)}`;
+  else if (kind === 'skinny') body = `<path d="M44 20h32l-3 84a5 5 0 0 1-5 4H52a5 5 0 0 1-5-4z" fill="${color}" ${L}/><rect x="41" y="13" width="38" height="9" rx="4.5" fill="#d9d9e3" ${L}/>${shine(52, 30, 58)}`;
+  else body = `<path d="M44 40h32v62a8 8 0 0 1-8 8H52a8 8 0 0 1-8-8z" fill="${color}" ${L}/><rect x="42" y="32" width="36" height="10" rx="3" fill="#141414" ${L}/><path d="M52 32V20h16v12" fill="none" ${L}/>${shine(50, 50, 46)}${kind === 'bottleasa' ? `<path d="M76 56h10a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6H76" fill="none" ${L}/>` : ''}`;
+  return `<svg viewBox="0 0 120 120" role="img" aria-hidden="true">${body}</svg>`;
+}
+const drinkDefault = (d) => d.colors ? hexOf(COLORS[d.colors][0]) : (DEF[d.kind] || '#f4f1ff');
+const drinkWeightFix = (d) => d.w;
+
+function renderCats() {
+  const price = (g) => Math.min(...DRINKS.filter((d) => d.group === g).map((d) => d.price));
+  const num = (g) => DRINKS.filter((d) => d.group === g).length;
+  const fich = PRODUCTS.find((p) => p.slug === 'ajolotito');
+  const pack = PRODUCTS.find((p) => p.slug === 'concha-de-fresa');
+  $('#cats').innerHTML = [
+    ['#fichas', `<img src="${fich.img}" alt="">`, 'Fichas de lotería', `${PRODUCTS.length} diseños · $5 c/u`],
+    ['#paquetes', `<img src="${pack.img}" alt="">`, 'Paquetes de fichas', '25, 50 y 100 piezas'],
+    ['#tazas', drinkSVG('mug', '#f4f1ff'), 'Tazas', `${num('tazas')} modelos · desde ${mxn(price('tazas'))}`],
+    ['#vasos', drinkSVG('tumbler', '#6b4aa0'), 'Vasos', `${num('vasos')} modelos · desde ${mxn(price('vasos'))}`],
+    ['#termos', drinkSVG('bottle', '#1d3a8a'), 'Termos', `${num('termos')} modelos · desde ${mxn(price('termos'))}`]
+  ].map(([href, art, t, s]) => `<a class="cat-tile" href="${href}"><span class="cat-art">${art}</span><b>${t}</b><span>${s}</span></a>`).join('');
+}
+
+function renderDrinks() {
+  const card = (d) => `<article class="card">
+      <button class="ph art" data-drink="${d.id}" aria-label="Personalizar ${esc(d.name)}">${drinkSVG(d.kind, drinkDefault(d))}</button>
+      <div class="info"><span class="cat">${d.size ? esc(d.size) : 'Personalizable'}</span><h3>${esc(d.name)}</h3>
+        <div class="bar"><span class="p">${mxn(d.price)}</span><button class="btn sun sm" data-drink="${d.id}">Elegir</button></div></div></article>`;
+  $('#drinkSections').innerHTML = GROUPS.map((g) => `<section class="block ${g.alt ? 'alt' : ''}" id="${g.id}"><div class="wrap"><h2>${g.title}</h2><p class="sub">${g.sub}</p>
+      <div class="grid">${DRINKS.filter((d) => d.group === g.id).map(card).join('')}</div></div></section>`).join('')
+    + `<section class="block"><div class="wrap"><div class="infobox"><h3>Antes de pedir</h3><ul>
+      <li>Todos los termos y vasos incluyen tapa y popote.</li>
+      <li>Descuentos por volumen a partir de 5 piezas y mayoreo a partir de 20. Indícalo en tu pedido y te cotizamos.</li>
+      <li>Los diseños personalizados tienen un costo adicional.</li>
+      <li>Precios por unidad 2025, sujetos a cambios. No incluyen envío.</li></ul></div></div></section>`;
+}
+
+function openDrink(id) {
+  const d = DRINKS.find((x) => x.id === id); if (!d) return;
+  const names = d.colors ? COLORS[d.colors] : null;
+  let ci = 0, q = 1;
+  $('#modal').innerHTML = `<div class="sheet"><button class="x" data-close="modal" aria-label="Cerrar">✕</button>
+    <div class="pd"><div class="img art" id="dArt">${drinkSVG(d.kind, drinkDefault(d))}</div>
+    <div class="txt"><span class="chip" style="align-self:start;background:var(--sun);color:var(--sun-fg)">${GROUPS.find((g) => g.id === d.group).title}</span><h2>${esc(d.name)}</h2>
+      <div class="big">${mxn(d.price)}</div><p style="margin:0">${esc(d.desc)}</p>
+      ${names ? `<div><b style="font-family:var(--display)">Color: <span id="cName">${names[0]}</span></b><div class="swatches" id="sw" role="group" aria-label="Color">${names.map((n, i) => `<button type="button" class="sw" data-i="${i}" aria-label="${n}" aria-pressed="${i === 0}" style="background:${hexOf(n)}"></button>`).join('')}</div>${d.size ? `<span class="small">Medidas aproximadas: ${d.size}</span>` : ''}</div>` : '<p class="small" style="margin:0">Escribe en las notas el diseño o color que quieres.</p>'}
+      <label for="dNote" style="font-family:var(--display);font-weight:600">Notas de personalización</label>
+      <textarea class="input" id="dNote" rows="2" maxlength="140" placeholder="Nombre, texto o diseño que quieres (los diseños personalizados tienen costo adicional)"></textarea>
+      <div class="qty"><b style="font-family:var(--display)">Cantidad</b><button type="button" class="chip" id="pdm" aria-label="Menos">−</button><span id="pdq">1</span><button type="button" class="chip" id="pdp" aria-label="Más">+</button></div>
+      <div style="margin-top:6px"><button class="btn sun" id="pdAdd">Añadir al carrito</button></div></div></div></div>`;
+  $('#modalOv').hidden = false;
+  const set = (v) => { q = Math.max(1, Math.min(99, v)); $('#pdq').textContent = q; };
+  $('#pdm').onclick = () => set(q - 1); $('#pdp').onclick = () => set(q + 1);
+  if (names) $('#sw').addEventListener('click', (e) => {
+    const b = e.target.closest('.sw'); if (!b) return;
+    ci = Number(b.dataset.i);
+    $('#sw').querySelectorAll('.sw').forEach((s) => s.setAttribute('aria-pressed', String(s === b)));
+    $('#cName').textContent = names[ci]; $('#dArt').innerHTML = drinkSVG(d.kind, hexOf(names[ci]));
+  });
+  $('#pdAdd').onclick = () => {
+    const color = names ? names[ci] : '';
+    const note = $('#dNote').value.trim();
+    addItem({ id:`${d.id}|${color}|${note}`, name:d.name + (color ? ' · ' + color : ''), note, price:d.price, art:drinkSVG(d.kind, color ? hexOf(color) : drinkDefault(d)), emoji:'🥤', img:'', weight:d.w, stock:99 }, q);
+    closeAll();
+  };
+}
+
 /* ---------- eventos ---------- */
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-add],[data-open],[data-rango],[data-f],[data-page],[data-pr],[data-pack],[data-q],[data-rm],[data-close],[data-checkout]');
+  const t = e.target.closest('[data-add],[data-open],[data-drink],[data-rango],[data-f],[data-page],[data-pr],[data-pack],[data-q],[data-rm],[data-close],[data-checkout]');
   if (!t) { if (e.target.classList && (e.target.id === 'cartOv' || e.target.id === 'modalOv' || e.target.id === 'modal')) closeAll(); return; }
   const d = t.dataset;
   if (d.add) addItem(productItem(PRODUCTS.find((p) => p.id === d.add)), 1);
   else if (d.open) openProduct(d.open);
+  else if (d.drink) openDrink(d.drink);
   else if (d.rango) { state.rango = d.rango; state.page = 1; renderGrid(); if (t.tagName === 'BUTTON') $('#catalogo').scrollIntoView({behavior:'smooth'}); }
   else if (d.f) { state.rango = d.f; state.page = 1; renderGrid(); }
   else if (d.page) { state.page = Number(d.page); renderGrid(); $('#catalogo').scrollIntoView({behavior:'smooth'}); }
@@ -429,7 +559,7 @@ $('#themeBtn').onclick = () => {
 };
 
 $('#heroImg').src = HERO;
-renderFilters(); renderGrid(); renderPacks(); renderCart();
+renderFilters(); renderGrid(); renderPacks(); renderCats(); renderDrinks(); renderCart();
 </script>
 
 </body>
