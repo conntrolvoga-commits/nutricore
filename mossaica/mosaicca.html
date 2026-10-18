@@ -196,6 +196,15 @@ section.alt{background:var(--surface);border-block:2px solid var(--ink)}
 .promo{display:block;border:2px solid var(--ink);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);aspect-ratio:4/5;background:var(--brand);transition:transform .15s}
 .promo:hover{transform:translateY(-3px)}
 .promo img{width:100%;height:100%;object-fit:cover;object-position:top}
+
+.dots{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:60%}
+.dots i{aspect-ratio:1;border-radius:50%;border:2px solid var(--ink)}
+.fils{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px 16px}
+.fils.wide{grid-template-columns:repeat(2,1fr)}
+@media(max-width:800px){.fils{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.fils.wide{grid-template-columns:1fr}}
+.fils li{display:flex;align-items:center;gap:10px;font-size:15px;min-width:0}
+.fil{flex:none;width:34px;height:34px;border-radius:50%;border:2px solid var(--ink)}
 </style>
 </head>
 <body>
@@ -254,6 +263,7 @@ section.alt{background:var(--surface);border-block:2px solid var(--ink)}
 </div></section>
 
 <div id="drinkSections"></div>
+<div id="print3d"></div>
 
 <footer><div class="wrap">
   <div><b>Mosaicca</b>Arte en cada fragmento. Artículos personalizados para toda ocasión. mosaicca.mx</div>
@@ -282,6 +292,7 @@ const save = () => { try { localStorage.setItem('mosaicca-cart', JSON.stringify(
 const state = { q:'', rango:'all', cat:'all', page:1, packRango:'MIX' };
 
 const discOf = (i) => { let p = 0; (i.tiers || []).forEach(([min, pct]) => { if (i.qty >= min) p = pct; }); return p; };
+const money = (i) => i.quote ? 'Por cotizar' : mxn(lineTotal(i));
 const lineTotal = (i) => Math.round(i.price * i.qty * (1 - discOf(i)) * 100) / 100;
 const subtotal = () => cart.reduce((n, i) => n + lineTotal(i), 0);
 const weight = () => cart.reduce((n, i) => n + i.weight * i.qty, 0);
@@ -355,9 +366,9 @@ function renderCart() {
   }
   side.innerHTML = `<header><h2>Tu carrito</h2><button class="x" data-close="cart" aria-label="Cerrar carrito">✕</button></header>
     <ul class="lines">${cart.map((i) => `<li class="line"><div class="th">${i.img ? `<img src="${i.img}" alt="">` : (i.art || i.emoji)}</div>
-      <div><h4>${esc(i.name)}</h4><span class="small">${mxn(i.price)} c/u${discOf(i) ? ' · descuento ' + Math.round(discOf(i) * 100) + '%' : ''}${i.note ? ' · ' + esc(i.note) : ''}</span>
+      <div><h4>${esc(i.name)}</h4><span class="small">${i.quote ? 'Precio por cotizar' : mxn(i.price) + ' c/u'}${discOf(i) ? ' · descuento ' + Math.round(discOf(i) * 100) + '%' : ''}${i.note ? ' · ' + esc(i.note) : ''}</span>
         <div class="qty"><button class="chip" data-q="${i.id}" data-d="-1" aria-label="Quitar uno">−</button><span aria-live="polite">${i.qty}</span><button class="chip" data-q="${i.id}" data-d="1" ${i.qty >= i.stock ? 'disabled' : ''} aria-label="Añadir uno">+</button><button class="link" data-rm="${i.id}">Eliminar</button></div></div>
-      <b style="font-family:var(--display)">${mxn(lineTotal(i))}</b></li>`).join('')}</ul>
+      <b style="font-family:var(--display)">${money(i)}</b></li>`).join('')}</ul>
     <div class="foot"><div class="tot"><span>Subtotal</span><span>${mxn(subtotal())}</span></div><p class="small" style="margin:0">El envío se calcula al pagar con tu código postal.</p><button class="btn sun" data-checkout>Hacer pedido</button></div>`;
 }
 function openCart() { $('#cartOv').hidden = false; renderCart(); }
@@ -400,7 +411,7 @@ function openCheckout() {
         <div id="rates" style="display:grid;gap:8px"><p class="small" style="margin:0">Escribe tu código postal para ver las tarifas.</p></div>
         <p class="small" id="err" role="alert" style="color:var(--candy);margin:0" hidden></p></div>
       <aside><h3 style="font-size:24px">Resumen</h3>
-        <ul style="margin:0;padding:0;list-style:none;font-size:14px;display:grid;gap:4px">${cart.map((i) => `<li style="display:flex;justify-content:space-between;gap:8px"><span>${i.qty} × ${esc(i.name)}${i.note ? ' (' + esc(i.note) + ')' : ''}</span><span>${mxn(lineTotal(i))}</span></li>`).join('')}</ul>
+        <ul style="margin:0;padding:0;list-style:none;font-size:14px;display:grid;gap:4px">${cart.map((i) => `<li style="display:flex;justify-content:space-between;gap:8px"><span>${i.qty} × ${esc(i.name)}${i.note ? ' (' + esc(i.note) + ')' : ''}</span><span>${money(i)}</span></li>`).join('')}</ul>
         <div style="border-top:2px solid var(--line);padding-top:8px;display:grid;gap:4px"><div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${mxn(subtotal())}</span></div><div style="display:flex;justify-content:space-between"><span>Envío</span><span id="shipTxt">—</span></div><div class="tot"><span>Total</span><span id="totTxt">${mxn(subtotal())}</span></div></div>
         <button class="btn sun" type="submit">Generar pedido</button>
         <p class="note">Esta versión no cobra en línea. Al generar el pedido obtienes el resumen listo para copiar y enviar.</p></aside>
@@ -430,7 +441,7 @@ function openCheckout() {
 function finishOrder(a, rate) {
   const id = 'MOS-' + Date.now().toString(36).toUpperCase();
   const total = subtotal() + rate.price;
-  const text = [`PEDIDO ${id} · Mosaicca`, '', ...cart.map((i) => `${i.qty} × ${i.name}${i.note ? ' (' + i.note + ')' : ''} ${discOf(i) ? ' [desc. ' + Math.round(discOf(i) * 100) + '%]' : ''} — ${mxn(lineTotal(i))}`), '',
+  const text = [`PEDIDO ${id} · Mosaicca`, '', ...cart.map((i) => `${i.qty} × ${i.name}${i.note ? ' (' + i.note + ')' : ''} ${discOf(i) ? ' [desc. ' + Math.round(discOf(i) * 100) + '%]' : ''} — ${money(i)}`), '',
     `Subtotal: ${mxn(subtotal())}`, `Envío (${rate.carrier} ${rate.service}): ${mxn(rate.price)}`, `TOTAL: ${mxn(total)}`, '',
     `${a.name} · ${a.tel} · ${a.mail}`, `${a.street}, ${a.col}, ${a.city}, ${a.state}, C.P. ${a.cp}`].join('\n');
   $('#modal').innerHTML = `<div class="sheet"><button class="x" data-close="modal" aria-label="Cerrar">✕</button><div class="form">
@@ -544,7 +555,8 @@ function renderCats() {
   $('#cats').innerHTML = [
     ['#fichas', `<img src="${fich.img}" alt="">`, 'Fichas de lotería', `${PRODUCTS.length} diseños · $5 c/u`],
     ['#paquetes', `<img src="${pack.img}" alt="">`, 'Paquetes de fichas', '25, 50 y 100 piezas'],
-    ...GROUPS.map((g) => ['#' + g.id, drinkSVG(sample[g.id][0], sample[g.id][1]), g.title, `${num(g.id)} modelos · desde ${mxn(price(g.id))}`])
+    ...GROUPS.map((g) => ['#' + g.id, drinkSVG(sample[g.id][0], sample[g.id][1]), g.title, `${num(g.id)} modelos · desde ${mxn(price(g.id))}`]),
+    ['#impresion3d', '<span class="dots"><i style="background:#c0392b"></i><i style="background:#2257b8"></i><i style="background:#eeee45"></i><i style="background:#3c9a63"></i></span>', 'Impresión 3D', 'Por cotización']
   ].map(([href, art, t, s]) => `<a class="cat-tile" href="${href}"><span class="cat-art">${art}</span><b>${t}</b><span>${s}</span></a>`).join('');
 }
 
@@ -597,14 +609,51 @@ function openDrink(id) {
   };
 }
 
+/* ---------- impresión 3D: acabados y filamentos ---------- */
+const FIL_BASIC = [['Rojo vivo','#c0392b'],['Rojo cherry','#ef4056'],['Verde césped','#3c9a63'],['Verde bosque','#3d5230'],['Transparente','#e8e8e8'],['Chocolate','#4a1d0a'],['Amarillo','#eeee45'],['Piel','#efc2a5'],['Azul Rey','#2257b8'],['Azul Metálico','#2a3c6e'],['Rosa','#e093b0'],['Lila','#d3bdee'],['Negro','#1a1a1a'],['Blanco','#ffffff'],['Gris','#777777'],['Light Beige','#efe8d6']];
+const tri = (a, b, c) => `conic-gradient(${a} 0 33.3%, ${b} 0 66.6%, ${c} 0 100%)`;
+const FIL_PREMIUM = [['Glow in the Dark Verde','#7ee05a'],['Glow in the Dark Naranja','#f5902e'],['Glow in the Dark Rojo/Rosa','#e83a2a'],['Cambia de color con calor Blanco/Rosa','linear-gradient(90deg,#f6f1f3 50%,#dfa0b4 50%)'],['Acabado seda naranja','linear-gradient(135deg,#f2a03a,#d9701c)'],['Acabado seda Cobre','linear-gradient(135deg,#d98a52,#8e3b1f)'],['Acabado seda bicolor verde/negro','linear-gradient(90deg,#141414 50%,#3d8a74 50%)'],['Acabado seda tricolor morado, rojo y dorado',tri('#5b2a8f','#e83a55','#d9a441')],['Acabado seda tricolor verde, azul y dorado',tri('#4fa77e','#2442a8','#e9b83a')],['Acabado seda tricolor rosa, verde y dorado',tri('#c24a7a','#3d9a63','#d9a441')]];
+function renderPrint3d() {
+  const sw = ([n, c]) => `<li><span class="fil" style="background:${c}"></span><span>${esc(n)}</span></li>`;
+  $('#print3d').innerHTML = `<section class="block alt" id="impresion3d"><div class="wrap"><h2>Impresión 3D</h2>
+    <p class="sub">Acabados y filamentos disponibles para tus piezas personalizadas. El precio depende del diseño y el tamaño: pide tu cotización.</p>
+    <h3 style="font-size:22px;margin-bottom:10px">Filamentos básicos</h3><ul class="fils">${FIL_BASIC.map(sw).join('')}</ul>
+    <h3 style="font-size:22px;margin:24px 0 10px">Filamentos premium</h3><ul class="fils wide">${FIL_PREMIUM.map(sw).join('')}</ul>
+    <div style="margin-top:24px"><button class="btn sun" data-quote>Pedir cotización</button></div></div></section>`;
+}
+function openQuote() {
+  let name = FIL_BASIC[0][0];
+  const all = [...FIL_BASIC, ...FIL_PREMIUM];
+  $('#modal').innerHTML = `<div class="sheet"><button class="x" data-close="modal" aria-label="Cerrar">✕</button><div class="form">
+    <h2 style="font-size:30px">Cotización de impresión 3D</h2>
+    <p style="margin:0">Elige el filamento y cuéntanos qué pieza quieres. Te respondemos con el precio.</p>
+    <div><b style="font-family:var(--display)">Filamento: <span id="qName">${name}</span></b><div class="swatches" id="qSw" role="group" aria-label="Filamento">${all.map(([n, c], i) => `<button type="button" class="sw" data-i="${i}" aria-label="${esc(n)}" aria-pressed="${i === 0}" style="background:${c}"></button>`).join('')}</div></div>
+    <label for="qNote" style="font-family:var(--display);font-weight:600">Describe tu pieza</label>
+    <textarea class="input" id="qNote" rows="3" maxlength="200" placeholder="Qué quieres imprimir, medidas aproximadas y cantidad"></textarea>
+    <div><button class="btn sun" id="qAdd">Añadir al pedido</button></div></div></div>`;
+  $('#modalOv').hidden = false;
+  $('#qSw').addEventListener('click', (e) => {
+    const bt = e.target.closest('.sw'); if (!bt) return;
+    name = all[Number(bt.dataset.i)][0];
+    $('#qSw').querySelectorAll('.sw').forEach((s) => s.setAttribute('aria-pressed', String(s === bt)));
+    $('#qName').textContent = name;
+  });
+  $('#qAdd').onclick = () => {
+    const note = $('#qNote').value.trim();
+    addItem({ id:`cot3d|${name}|${note}`, name:'Cotización impresión 3D · ' + name, note, price:0, quote:true, art:'', emoji:'🧩', img:'', weight:0.2, stock:1 }, 1);
+    closeAll();
+  };
+}
+
 /* ---------- eventos ---------- */
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-add],[data-open],[data-drink],[data-rango],[data-f],[data-page],[data-pr],[data-pack],[data-q],[data-rm],[data-close],[data-checkout]');
+  const t = e.target.closest('[data-add],[data-open],[data-drink],[data-quote],[data-rango],[data-f],[data-page],[data-pr],[data-pack],[data-q],[data-rm],[data-close],[data-checkout]');
   if (!t) { if (e.target.classList && (e.target.id === 'cartOv' || e.target.id === 'modalOv' || e.target.id === 'modal')) closeAll(); return; }
   const d = t.dataset;
   if (d.add) addItem(productItem(PRODUCTS.find((p) => p.id === d.add)), 1);
   else if (d.open) openProduct(d.open);
   else if (d.drink) openDrink(d.drink);
+  else if (d.quote !== undefined) openQuote();
   else if (d.rango) { state.rango = d.rango; state.page = 1; renderGrid(); if (t.tagName === 'BUTTON') $('#catalogo').scrollIntoView({behavior:'smooth'}); }
   else if (d.f) { state.rango = d.f; state.page = 1; renderGrid(); }
   else if (d.page) { state.page = Number(d.page); renderGrid(); $('#catalogo').scrollIntoView({behavior:'smooth'}); }
@@ -626,7 +675,7 @@ $('#themeBtn').onclick = () => {
 };
 
 $('#heroImg').src = HERO;
-renderFilters(); renderGrid(); renderPacks(); renderCats(); renderDrinks(); renderCart();
+renderFilters(); renderGrid(); renderPacks(); renderCats(); renderDrinks(); renderPrint3d(); renderCart();
 </script>
 
 </body>
