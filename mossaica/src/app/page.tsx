@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts } from '@/lib/products';
 import ProductCard from '@/components/ProductCard';
@@ -26,10 +27,8 @@ export default async function Home() {
               <Link href="/catalogo?rango=C" className="btn-ghost">Rango C</Link>
             </div>
           </div>
-          <div className="relative mx-auto grid h-72 w-72 grid-cols-3 place-items-center gap-2 text-6xl sm:h-96 sm:w-96 sm:text-7xl" aria-hidden>
-            {['🥖', '🌽', '👽', '🐚', '🔴', '🦎', '🍟', '🧀', '🎃'].map((e, i) => (
-              <span key={i} className="animate-float" style={{ animationDelay: `${i * 0.35}s` }}>{e}</span>
-            ))}
+          <div className="relative mx-auto aspect-square w-full max-w-md rotate-2 overflow-hidden rounded-3xl border-2 border-grape-900 shadow-pop">
+            <Image src="/hero-loteria.jpg" alt="Fichas de Mossaica sobre un tablero de lotería" fill priority sizes="(max-width:768px) 90vw, 450px" className="object-cover" />
           </div>
         </div>
       </section>
