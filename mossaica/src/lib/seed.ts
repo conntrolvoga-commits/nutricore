@@ -1,6 +1,6 @@
 import type { Product, Rango } from './types';
 
-// Catálogo real de fichas (Rango A: 10 · Rango B: 27 · Rango C: 22).
+// Catálogo real de fichas (Rango A: 10 · Rango B: 28 · Rango C: 22).
 // Precio por ficha: $5 MXN en los tres rangos (editable aquí o en el panel /admin).
 type Row = [slug: string, name: string, rango: Rango, category: string, price: number, emoji: string, flags: string];
 
@@ -66,6 +66,7 @@ const rows: Row[] = [
   ["lata-pepsi", "Lata Pepsi", 'C', "Bebidas", 5, '🥫', 'n'],
   ["lata-coca-cola", "Lata Coca-Cola", 'C', "Bebidas", 5, '🥫', 'n'],
   ["pan-de-muerto", "Pan de muerto", 'A', "Pan", 5, '🍞', 'n'],
+  ["barril-de-obra", "Barril de obra", 'B', "Hogar", 5, '🚧', 'n'],
 ];
 
 export const seedProducts: Product[] = rows.map(([slug, name, rango, category, price, emoji, flags], i) => ({
