@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') out(['error' => 'Método no permitido
 
 // Freno básico: 12 pedidos por hora por IP.
 $ip = preg_replace('/[^0-9a-f:.]/i', '', explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'x')[0]);
-$rf = DATA_DIR . '/rate-' . md5($ip) . '.json'; @mkdir(DATA_DIR, 0750, true);
+$rf = data_dir() . '/rate-' . md5($ip) . '.json';
 $hits = array_filter((array) json_decode((string) @file_get_contents($rf), true), fn($t) => $t > time() - 3600);
 if (count($hits) >= 12) out(['error' => 'Demasiados intentos. Intenta más tarde o escríbenos por WhatsApp.'], 429);
 $hits[] = time(); file_put_contents($rf, json_encode(array_values($hits)), LOCK_EX);
@@ -24,7 +24,7 @@ try {
 } catch (RuntimeException $e) { out(['error' => $e->getMessage()], 400); }
 
 $total = round($cart['subtotal'] + $ship['price'], 2);
-$id = 'MOS-' . strtoupper(base_convert((string) time(), 10, 36)) . strtoupper(bin2hex(random_bytes(2)));
+$id = 'MOS-' . strtoupper(base_convert((string) time(), 10, 36)) . strtoupper(bin2hex(random_bytes(5)));
 $site = rtrim(cfg()['site_url'], '/');
 order_save(['id' => $id, 'status' => 'pendiente', 'provider' => $prov, 'created_at' => date('c'), 'customer' => $c, 'lines' => $cart['lines'], 'subtotal' => $cart['subtotal'], 'shipping' => $ship, 'total' => $total]);
 

@@ -14,6 +14,6 @@ B. Edita config.php y llena: owner_email y las llaves de la pasarela que uses
 C. Webhooks (para que el pedido se marque pagado y te llegue el aviso):
    Mercado Pago -> https://www.mosaicca.mx/api/webhook-mercadopago.php  (evento: Pagos)
    Conekta      -> https://www.mosaicca.mx/api/webhook-conekta.php
-D. Haz una compra de prueba. Los pedidos pagados quedan en api/data/pedidos-pagados.log y te llegan por correo.
+D. Haz una compra de prueba. Los pedidos pagados quedan en la carpeta mosaicca-data (junto a public_html, fuera de la web) y te llegan por correo.
 E. Cuando todo funcione, cambia a las llaves de PRODUCCION en config.php.
 Si config.php esta vacio, la tienda sigue funcionando con pedidos por WhatsApp.

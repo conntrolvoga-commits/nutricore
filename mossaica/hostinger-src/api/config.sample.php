@@ -14,6 +14,9 @@ return [
     // Conekta (tarjeta, OXXO, SPEI): Llave privada
     'conekta_private_key' => '',
 
+    // Dónde se guardan los pedidos. Vacío = automático (fuera de public_html, lo más seguro). No lo cambies si no sabes.
+    'data_dir' => '',
+
     // Envío que se cobra (MXN): base + 25 por cada kg adicional al primero.
     'shipping' => [
         'Estafeta' => ['service' => 'Terrestre', 'base' => 99],
