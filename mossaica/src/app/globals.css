@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-grape-50 font-body text-grape-900 antialiased; }
+  h1, h2, h3 { @apply font-display; }
+}
+
+@layer components {
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-grape-900 px-5 py-2.5 font-display font-semibold transition active:translate-y-1 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-sun text-grape-900 shadow-pop hover:-translate-y-0.5 hover:bg-yellow-300; }
+  .btn-dark { @apply btn bg-grape-600 text-white shadow-pop hover:-translate-y-0.5 hover:bg-grape-500; }
+  .btn-ghost { @apply btn bg-white text-grape-900 hover:bg-grape-100; }
+  .input { @apply w-full rounded-2xl border-2 border-grape-100 bg-white px-4 py-2.5 outline-none transition focus:border-grape-500; }
+  .chip { @apply rounded-full border-2 border-grape-900 px-3 py-1 text-sm font-semibold transition; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,19 @@
+CÓMO SUBIR MOSAICCA A HOSTINGER
+1. hPanel -> Websites -> mosaicca.mx -> Administrador de archivos -> carpeta public_html.
+2. Borra el contenido de ejemplo (default.php, index.html de bienvenida).
+3. Sube TODOS los archivos y carpetas (incluida la carpeta api/) (incluido .htaccess; si no lo ves, activa "mostrar archivos ocultos").
+   Atajo: sube el .zip a public_html y usa "Extraer".
+4. En hPanel -> Seguridad -> SSL: activa el certificado gratuito para mosaicca.mx y www.mosaicca.mx.
+5. Abre https://www.mosaicca.mx y revisa: catalogo, carrito, boton verde de WhatsApp y redes.
+Para actualizar despues: reemplaza solo index.html (si cambian precios, tambien api/catalog.php).
+
+PARA COBRAR EN LINEA (PHP, ya incluido en Hostinger)
+A. En public_html/api/ copia config.sample.php como config.php (Administrador de archivos -> copiar -> renombrar).
+B. Edita config.php y llena: owner_email y las llaves de la pasarela que uses
+   (Mercado Pago: mp_access_token / Conekta: conekta_private_key). Empieza con las llaves de PRUEBAS.
+C. Webhooks (para que el pedido se marque pagado y te llegue el aviso):
+   Mercado Pago -> https://www.mosaicca.mx/api/webhook-mercadopago.php  (evento: Pagos)
+   Conekta      -> https://www.mosaicca.mx/api/webhook-conekta.php
+D. Haz una compra de prueba. Los pedidos pagados quedan en la carpeta mosaicca-data (junto a public_html, fuera de la web) y te llegan por correo.
+E. Cuando todo funcione, cambia a las llaves de PRODUCCION en config.php.
+Si config.php esta vacio, la tienda sigue funcionando con pedidos por WhatsApp.
