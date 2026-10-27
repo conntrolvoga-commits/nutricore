@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Mar Vital: biblioteca educativa sobre agua de mar, protocolos de uso externo seguro y directorio MarVerif.com. 5 USD/mes o 20 USD/año.">
+<title>Mar Vital · Agua de mar, con rigor</title>
+<style>
+:root{--ab:#0B2A3C;--ma:#1F6F8B;--es:#F4F8F7;--ar:#E8DFD0;--ve:#1E7F5C;--gr:#5B6B73;--bd:#d5e1e8}
+@media (prefers-color-scheme:dark){:root{--es:#0B2A3C;--ab:#F4F8F7;--ar:#18323f;--gr:#a9bbc5;--bd:#2b3b45;--ma:#4fb6d3}}
+*{box-sizing:border-box}body{margin:0;background:var(--es);color:var(--ab);font:16px/1.55 Inter,system-ui,sans-serif;padding-bottom:96px}
+.w{max-width:720px;margin:0 auto;padding:0 16px}h1,h2{font-family:"Source Serif 4",Georgia,serif;line-height:1.2}
+h1{font-size:2rem;margin:.4em 0}h2{font-size:1.4rem}
+.hero{padding:40px 0 24px}.mu{color:var(--gr)}
+.btn{display:inline-block;background:#1F6F8B;color:#fff;padding:14px 22px;border-radius:999px;font-weight:600;text-decoration:none;min-height:44px}
+.plans{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:16px 0}@media(max-width:520px){.plans{grid-template-columns:1fr}}
+.plan{background:var(--ar);border:1px solid var(--bd);border-radius:12px;padding:16px}.plan.rec{border:2px solid #1F6F8B}
+.plan b{font-size:1.8rem;display:block}.tag{font-size:.85rem;color:var(--ve);font-weight:600}
+.seal{border:1px solid var(--ve);border-radius:12px;padding:14px;margin:16px 0}
+li{margin:.3em 0}#notice{background:var(--ar);padding:10px 16px;text-align:center;font-weight:600}
+#disc{position:fixed;left:0;right:0;bottom:0;background:var(--es);border-top:2px solid var(--ma);padding:10px 16px;font-size:.85rem;text-align:center;font-weight:500}
+</style></head><body>
+<div id="notice" hidden></div>
+<div class="w">
+<section class="hero"><p class="mu">🌊 Mar Vital</p>
+<h1>Agua de mar, con rigor.</h1>
+<p>Evidencia, protocolos de uso seguro y proveedores verificados. Información con fuentes, no promesas.</p>
+<a class="btn" href="../" id="cta">Suscribirme</a></section>
+
+<h2>Elige tu plan</h2>
+<div class="plans">
+<div class="plan"><b>5 USD</b>/mes<p>Cancela cuando quieras.</p></div>
+<div class="plan rec"><span class="tag">Ahorras 40 USD frente al mensual</span><b>20 USD</b>/año<p>Equivale a 1,67 USD al mes.</p></div>
+</div>
+<p class="mu">Sin cargos ocultos. Acceso hasta el final del periodo pagado. Renovación automática; te avisamos 3 días antes. No guardamos datos de tarjeta.</p>
+
+<h2>Qué incluye</h2>
+<ul>
+<li>Biblioteca educativa con fichas de evidencia y límites claros.</li>
+<li>Protocolos de uso externo seguro, y una lista de lo que NO se hace.</li>
+<li>Modo «sin agua de mar» con fórmulas de sal marina para uso externo.</li>
+<li>Buscador multilingüe.</li>
+<li>Actualizaciones y avisos de seguridad.</li>
+</ul>
+
+<div class="seal"><h2>MarVerif.com</h2>
+<p>Solo listamos proveedores con fuente verificable (mínimo 3 de 5 criterios documentados). Lo que no podemos comprobar, no aparece. El directorio está en proceso de verificación.</p></div>
+
+<p class="mu">Mar Vital es una app de bienestar educativa. No promete curas ni recomienda beber agua de mar.</p>
+</div>
+<div id="disc">No es un dispositivo médico. No diagnostica, trata ni cura. No sustituye atención médica profesional.</div>
+<script>
+// Rellena con la fecha real (AAAA-MM-DD) solo si la promoción termina de verdad. Vacío = sin aviso de urgencia.
+const DEADLINE="";
+if(DEADLINE){const d=new Date(DEADLINE+"T23:59:59");if(d>new Date()){const n=document.getElementById("notice");n.hidden=false;n.textContent="Precios de la promoción hasta el "+d.toLocaleDateString("es")}}
+</script></body></html>
