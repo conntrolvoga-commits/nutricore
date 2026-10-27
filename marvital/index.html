@@ -66,7 +66,7 @@ scanT:"Escáner de etiquetas (lista manual)",scan:["Sin aditivos ni antiapelmaza
 booksT:"Biblioteca de libros",booksIntro:"Biblioteca educativa sobre agua de mar y talasoterapia. Recursos históricos y divulgativos para entender la tradición, la evidencia disponible y los límites de uso seguro.",
 booksW:"Estos libros son recursos educativos e históricos. Ninguno sustituye diagnóstico ni tratamiento médico. La app no promete curas.",
 bookC:"Este libro se ofrece como recurso educativo. No es una recomendación médica ni una promesa de cura.",pend:"enlace pendiente de verificación",verif:"Verificar",
-stmT:"Declaraciones públicas de profesionales",stmN:"No se han encontrado declaraciones públicas verificables de la Dra. María Teresa Ilari sobre el consumo o aplicación de agua de mar. La app no atribuye opiniones no documentadas.",
+stmT:"Declaraciones públicas de profesionales",stmN:"Existen declaraciones públicas de la Dra. María Teresa Ilari sobre agua de mar. Según las fuentes enlazadas, defiende su ingesta. Mar Vital NO recomienda beber agua de mar y no avala esas declaraciones. No se transcribe ninguna cita: solo se enlazan las fuentes, cuya fecha y texto exacto están pendientes de verificación.",stmL:"Testimonio personal de la Dra. Ilari. No constituye evidencia científica ni recomendación médica de la app. No es un dispositivo médico.",
 dirT:"Lista de proveedores de agua de mar original",dirCount:(n,c)=>`${n} proveedores verificados en ${c} países`,dirEmpty:"Aún no hay proveedores que hayan superado la verificación (mínimo 3 de 5 criterios con fuente). No se listan proveedores sin fuente verificable.",
 dirCrit:["Domicilio comercial verificable (dirección y teléfono)","Sitio web o canal de venta oficial activo","Registro fiscal o comercial público","Trazabilidad del punto de captación","Historial de exportación o distribución documentado"],
 diaryT:"Diario",diaryPh:"¿Cómo te sientes hoy? (se guarda solo en este dispositivo)",save:"Guardar",diaryWarn:"Si anotas algún síntoma de las banderas rojas, busca atención médica.",
@@ -102,7 +102,7 @@ scanT:"Label checker (manual list)",scan:["No additives or anti-caking agents","
 booksT:"Book library",booksIntro:"Educational library on seawater and thalassotherapy. Historical and popular resources to understand the tradition, the available evidence and the limits of safe use.",
 booksW:"These books are educational and historical resources. None replaces medical diagnosis or treatment. The app does not promise cures.",
 bookC:"This book is offered as an educational resource. It is not medical advice or a promise of cure.",pend:"link pending verification",verif:"To verify",
-stmT:"Public statements by professionals",stmN:"No verifiable public statements by Dr. María Teresa Ilari on the consumption or application of seawater have been found. The app does not attribute undocumented opinions.",
+stmT:"Public statements by professionals",stmN:"Public statements by Dr. María Teresa Ilari on seawater exist. According to the linked sources, she advocates drinking it. Mar Vital does NOT recommend drinking seawater and does not endorse those statements. No quotes are transcribed: sources are only linked, and their date and exact text are pending verification.",stmL:"Personal testimony of Dr. Ilari. It is not scientific evidence nor a medical recommendation of the app. Not a medical device.",
 dirT:"List of original seawater providers",dirCount:(n,c)=>`${n} verified providers in ${c} countries`,dirEmpty:"No providers have passed verification yet (minimum 3 of 5 sourced criteria). Providers without a verifiable source are not listed.",
 dirCrit:["Verifiable business address (address and phone)","Active official website or sales channel","Public tax or commercial registration","Declared water intake point (traceability)","Documented export or distribution history"],
 diaryT:"Diary",diaryPh:"How do you feel today? (stored only on this device)",save:"Save",diaryWarn:"If you note any red-flag symptom, seek medical care.",
@@ -122,6 +122,7 @@ const BOOKS=[
 ["Cómo cura el mar","Manuel Núñez y Paulina Navarro","https://www.rbalibros.com/libro/como-cura-el-mar_9788479017507","Divulgativo"],
 ["El mar cura cuerpo, mente y alma: Talasoterapia","Marianela Peña Romero y Alberto Cerrada","https://www.abebooks.co.uk/9788418784170/Mar-cura-cuerpo-mente-alma-8418784171/plp","Divulgativo"]];
 // Solo entran proveedores con ≥3 de 5 criterios respaldados por fuente. No se inventan fichas.
+const STATEMENTS=[["María Teresa Ilari: la doctora del mar (Fronterad)","https://www.fronterad.com/maria-teresa-ilari-la-doctora-del-mar/"],["Entrevista a la Dra. María Teresa Ilari (La magia de la medicina natural)","https://lamagiadelamedicinanatural.blogspot.com/2013/11/entrevista-la-dra-maria-teresa-ilari.html"],["Beneficios de tomar agua de mar, Dra. María Teresa Ilari (YouTube)","https://www.youtube.com/watch?v=l6jJxgjV70Y"]];
 const PROVIDERS=[];
 const CRIT=["address","web","registry","traceability","exports"];
 const isPersonal=p=>!!p.personalBrand;
@@ -155,7 +156,7 @@ function views(t){
   <p><strong>${t.calcR} <span id="cr"></span> g</strong></p></div>
   <div class="card"><h3>${t.scanT}</h3>${t.scan.map((s,i)=>`<label><input type="checkbox" class="sc" data-i="${i}"> ${s}</label>`).join("")}<p id="sr" class="mu"></p></div>`,
  books:()=>!active()?lock(t):`<div class="card"><h2>${t.booksT}</h2><p>${t.booksIntro}</p></div><div class="warn">${t.booksW}</div>`+BOOKS.map(b=>`<div class="card"><h3>${esc(b[0])}</h3><p class="mu">${esc(b[1])} · ${esc(b[3])} · ISBN/${t.verif} · ${t.verif}</p><p>${t.bookC}</p><p class="mu">⚠ ${t.pend}: <a href="${esc(b[2])}" rel="noopener noreferrer" target="_blank">${esc(new URL(b[2]).hostname)}</a></p></div>`).join(""),
- stm:()=>!active()?lock(t):`<div class="card"><h2>${t.stmT}</h2><p>${t.stmN}</p></div>`,
+ stm:()=>!active()?lock(t):`<div class="card"><h2>${t.stmT}</h2><p>${t.stmN}</p><p><strong>${t.stmL}</strong></p><ul>${STATEMENTS.map(x=>`<li><a href="${esc(x[0]===""?"":x[1])}" rel="noopener noreferrer" target="_blank">${esc(x[0])}</a></li>`).join("")}</ul></div><div class="warn">🔴 ${t.no[0]}</div>`,
  dir:()=>{const v=PROVIDERS.filter(verified),c=new Set(v.map(p=>p.country)).size;
   const head=`<div class="card"><h2>MarVerif.com</h2><p><strong>${t.dirCount(v.length,c)}</strong></p>`;
   const list=!v.length?`<p>${t.dirEmpty}</p>`:(active()?v.map(p=>`<div class="card"><h3>${esc(p.name)}</h3><p>${esc(p.city||"")} ${esc(p.country)}</p><p class="mu">${esc(p.web||"")} ${esc(p.phone||"")} ${esc(p.email||"")}</p><p class="mu">${esc(p.product||"")} · ${esc(p.intake||"")} · ${esc(p.source)}</p></div>`).join(""):v.map(p=>`<p>${esc(p.name)} — ${esc(p.country)}</p>`).join("")+lock(t));
