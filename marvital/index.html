@@ -74,7 +74,7 @@ searchPh:"Buscar proveedor, país, tipo de agua, libro o protocolo…",searchTru
 payT:"Desbloquea Mar Vital completo",payL:["Directorio verificado de proveedores de agua de mar original","Biblioteca educativa con fichas de evidencia y protocolos de uso seguro","Modo «sin agua de mar» con fórmulas de sal marina para uso externo","Declaraciones públicas verificadas de profesionales, siempre etiquetadas como testimonio personal","Buscador multilingüe","Actualizaciones continuas y avisos de seguridad"],
 monthly:"5 USD/mes",yearly:"20 USD/año",cancel:"Cancela cuando quieras. Sin cargos ocultos. Acceso hasta fin del periodo pagado.",banner:"Suscríbete para ver el directorio completo y la biblioteca",
 noApi:"La pasarela de pago aún no está conectada. El desbloqueo solo ocurre tras validar el recibo en el backend.",
-badge:"Mar Vital no almacena datos de tarjeta; el pago se tokeniza en la pasarela."},
+manage:"Gestionar o cancelar suscripción",badge:"Mar Vital no almacena datos de tarjeta; el pago se tokeniza en la pasarela."},
 en:{disc:"Not a medical device. It does not diagnose, treat or cure. It does not replace professional medical care.",
 sub:"Subscribe",subActive:"Subscription active",
 nav:{home:"Home",sea:"Seawater",evid:"Evidence",proto:"Protocols",salt:"Sea salt",books:"Books",stm:"Statements",dir:"MarVerif",diary:"Diary",search:"Search",pay:"Plans"},
@@ -110,7 +110,7 @@ searchPh:"Search provider, country, water type, book or protocol…",searchTrunc
 payT:"Unlock the full Mar Vital",payL:["Verified directory of original seawater providers","Educational library with evidence sheets and safe-use protocols","“No seawater” mode with external-use sea-salt formulas","Verified public statements by professionals, always labelled as personal testimony","Multilingual search","Continuous updates and safety notices"],
 monthly:"5 USD/month",yearly:"20 USD/year",cancel:"Cancel anytime. No hidden fees. Access until the end of the paid period.",banner:"Subscribe to see the full directory and library",
 noApi:"The payment gateway is not connected yet. Unlocking only happens after receipt validation on the backend.",
-badge:"Mar Vital never stores card data; payment is tokenised by the gateway."}};
+manage:"Manage or cancel subscription",badge:"Mar Vital never stores card data; payment is tokenised by the gateway."}};
 const tr=()=>{const l=document.getElementById("lang").value;return Object.assign({},T.en,T[l]||{})};
 
 /* ===== Datos ===== */
@@ -165,7 +165,7 @@ function views(t){
  search:()=>`<div class="card"><input id="q" style="width:100%" placeholder="${esc(t.searchPh)}"><div id="qr"></div></div>`,
  pay:()=>`<div class="card"><h2>${t.payT}</h2><ul>${t.payL.map(x=>`<li>${x}</li>`).join("")}</ul>
   <p><button class="pri" onclick="buy('monthly')">${t.monthly}</button> <button class="pri" onclick="buy('yearly')">${t.yearly}</button></p>
-  <p class="mu">${t.cancel}</p><p class="mu">${t.badge}</p><p id="pm" class="mu"></p></div>`};
+  ${active()?`<p><button onclick="manage()">${t.manage}</button></p>`:""}<p class="mu">${t.cancel}</p><p class="mu">${t.badge}</p><p id="pm" class="mu"></p></div>`};
 }
 
 function render(){
@@ -188,19 +188,27 @@ function bind(t){
    const shown=active()?out:out.slice(0,2);
    $("#qr").innerHTML=q?(shown.length?shown.map(x=>`<p>${esc(x)}</p>`).join("")+(!active()&&out.length>2?`<p class="mu">${t.searchTrunc}</p>`:""):`<p>${t.none}</p>`):""}}
 }
-async function buy(plan){
+async function api(path,body){const r=await fetch(API_BASE+path,body?{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body)}:undefined);return r.json()}
+async function buy(plan){ // Stripe Checkout: la tarjeta se introduce en la página de Stripe, nunca en la app
  const t=tr(),m=$("#pm");
  if(!API_BASE){m.textContent=t.noApi;return}
- try{ // 1) pasarela tokeniza y devuelve recibo; 2) el backend lo valida y responde con {validated,until}
-  const r=await fetch(API_BASE+"/subscriptions/validate",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({plan,price:PRICES[plan]})});
-  const j=await r.json();if(!j.validated)throw 0;sub={validated:true,until:j.until,plan};store.set("mv_sub",sub);render()
- }catch(e){m.textContent=t.noApi}
+ try{const j=await api("/api/checkout",{plan});if(!j.url)throw 0;location.href=j.url}catch(e){m.textContent=t.noApi}
+}
+async function manage(){try{const j=await api("/api/portal",{token:sub.token});if(j.url)location.href=j.url}catch(e){}}
+// Al volver de Checkout o al abrir la app, el acceso se concede solo si el backend confirma el pago.
+async function syncSub(){
+ if(!API_BASE)return;
+ try{const sid=new URLSearchParams(location.search).get("session_id");
+  if(sid){const j=await api("/api/status?session_id="+encodeURIComponent(sid));history.replaceState(null,"",location.pathname);
+   if(j.validated){sub={validated:true,until:j.until,plan:j.plan,token:j.token};store.set("mv_sub",sub)}}
+  else if(sub&&sub.token){const j=await api("/api/verify",{token:sub.token});sub=j.validated?{...sub,validated:true,until:j.until,plan:j.plan}:null;store.set("mv_sub",sub)}
+  render()}catch(e){}
 }
 
 /* ===== Arranque ===== */
 const ls=$("#lang");ls.innerHTML=Object.entries(LANGS).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
 ls.value=store.get("mv_lang",(navigator.language||"es").slice(0,2) in LANGS?(navigator.language||"es").slice(0,2):"es");
 ls.onchange=()=>{store.set("mv_lang",ls.value);document.documentElement.lang=ls.value;document.documentElement.dir=ls.value==="ar"?"rtl":"ltr";render()};
-ls.onchange();
+ls.onchange();syncSub();
 if(!store.get("mv_consent",false)){const t=tr();$("#cT").textContent=t.consentT;$("#cB").textContent=t.consentB;$("#cOk").textContent=t.accept;$("#consent").showModal();$("#cOk").onclick=()=>{store.set("mv_consent",true);$("#consent").close()}}
 </script></body></html>
