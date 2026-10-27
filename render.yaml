@@ -1,0 +1,22 @@
+# Despliegue gratuito en Render (plan free). Las variables con sync:false se rellenan en el panel de Render.
+services:
+  - type: web
+    name: marvital-api
+    runtime: docker
+    dockerContext: ./marvital/server
+    dockerfilePath: ./marvital/server/Dockerfile
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - {key: STRIPE_SECRET_KEY, sync: false}
+      - {key: STRIPE_WEBHOOK_SECRET, sync: false}
+      - {key: STRIPE_PRICE_MONTHLY, sync: false}
+      - {key: STRIPE_PRICE_YEARLY, sync: false}
+      - {key: APP_URL, sync: false}
+      - {key: ALLOWED_ORIGIN, sync: false}
+      - {key: TOKEN_SECRET, generateValue: true}
+      - {key: PAYPAL_CLIENT_ID, sync: false}
+      - {key: PAYPAL_SECRET, sync: false}
+      - {key: PAYPAL_PLAN_MONTHLY, sync: false}
+      - {key: PAYPAL_PLAN_YEARLY, sync: false}
+      - {key: PAYPAL_API_BASE, sync: false}
