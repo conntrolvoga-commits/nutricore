@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Mar Vital</title>
+<style>
+:root{--bg:#f4f8fa;--card:#fff;--tx:#14232e;--mu:#5a6b78;--ac:#0b6e8a;--ac2:#e3f2f7;--bd:#d5e1e8;--g:#1b8a4b;--a:#c98a00;--r:#c0392b}
+@media (prefers-color-scheme:dark){:root{--bg:#10181d;--card:#18232a;--tx:#e8f0f4;--mu:#9fb2be;--ac:#4fb6d3;--ac2:#1d3440;--bd:#2b3b45}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif;padding-bottom:132px}
+header{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+header h1{font-size:1.1rem;margin:0}select,input,button,textarea{font:inherit}
+select,input,textarea{padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);max-width:100%}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px 16px}nav button{white-space:nowrap}
+button{padding:8px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
+button.on,button.pri{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{padding:0 16px 16px;max-width:760px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0}
+.card h2,.card h3{margin:.1em 0 .4em}.mu{color:var(--mu);font-size:.9rem}
+.dot{display:inline-block;width:.8em;height:.8em;border-radius:50%;margin-right:6px}.G{background:var(--g)}.A{background:var(--a)}.R{background:var(--r)}
+.lock{background:var(--ac2);border:1px dashed var(--ac);border-radius:12px;padding:14px;margin:12px 0}
+.warn{border-left:4px solid var(--r);padding:8px 12px;background:var(--card);border-radius:8px;margin:12px 0}
+#disc{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:2px solid var(--ac);padding:8px 16px;font-size:.8rem;z-index:9;text-align:center}
+#disc button{margin-top:4px;font-size:.85rem}
+dialog{border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);max-width:520px}
+table{width:100%;border-collapse:collapse}td,th{padding:6px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+label{display:block;margin:8px 0}li{margin:.2em 0}
+</style></head><body>
+<header><h1>🌊 Mar Vital</h1>
+<select id="lang" aria-label="Idioma"></select></header>
+<nav id="nav"></nav>
+<main id="view"></main>
+<div id="disc"><span id="discTx"></span><br><button id="subBtn" class="pri"></button></div>
+<dialog id="consent"><h2 id="cT"></h2><p id="cB"></p><button id="cOk" class="pri"></button></dialog>
+
+<script>
+"use strict";
+/* ===== Configuración ===== */
+const API_BASE=""; // Backend de suscripción (validación de recibos). Vacío = no conectado.
+const PRICES={monthly:5,yearly:20};
+const LANGS={es:"Español",en:"English",zh:"简体中文","zh-TW":"繁體中文",ja:"日本語",ko:"한국어",fr:"Français",de:"Deutsch",pt:"Português",it:"Italiano",ru:"Русский",ar:"العربية",hi:"हिन्दी"};
+
+/* ===== Textos (es completo; en completo; resto cae a en hasta traducción revisada) ===== */
+const T={
+es:{disc:"No es un dispositivo médico. No diagnostica, trata ni cura. No sustituye atención médica profesional.",
+sub:"Suscribirse",subActive:"Suscripción activa",
+nav:{home:"Inicio",sea:"Agua de Mar",evid:"Evidencia",proto:"Protocolos",salt:"Sal marina",books:"Libros",stm:"Declaraciones",dir:"MarVerif",diary:"Diario",search:"Buscar",pay:"Planes"},
+consentT:"Consentimiento informado",consentB:"Mar Vital ofrece contenido educativo e histórico. No es un dispositivo médico, no diagnostica, trata ni cura, y no sustituye atención médica profesional. Consulta a un profesional sanitario antes de aplicar cualquier práctica, sobre todo si estás embarazada, eres menor, o tienes enfermedad renal o cardíaca. Tus anotaciones se guardan solo en este dispositivo.",accept:"Entiendo y acepto",
+homeT:"Bienvenido/a a Mar Vital",homeB:"Contenido educativo sobre agua de mar y talasoterapia, con evidencia, tradición y seguridad claramente separadas, y un directorio de proveedores verificados.",
+locked:"Contenido premium. Suscríbete para acceder.",
+flagsT:"Banderas rojas: busca atención médica",flags:["Dolor torácico","Fiebre alta","Sangrado","Déficit neurológico","Pérdida de peso inexplicada","Bulto nuevo","Embarazo","Menores","Enfermedad renal o cardíaca","Ideación suicida (llama a emergencias o a tu línea local de crisis)"],
+evidT:"Fichas de evidencia",evidIntro:"Semáforo por uso. La tradición histórica no equivale a evidencia clínica.",
+cols:{use:"Uso",sem:"Semáforo",why:"Motivo"},
+uses:[["Irrigación nasal con solución salina estéril 0,9 %","G","Práctica establecida con solución estéril"],["Baño/compresa externa con agua de mar","A","Bienestar; precaución en piel lesionada"],["Aerosol marino con producto sanitario autorizado","G","Solo producto autorizado"],["Ejercicio acuático con supervisión","G","Según patología y supervisión"],["Enjuague de heridas","A","Solo con solución estéril; heridas profundas, derivar"],["Beber agua de mar","R","No recomendado"],["Inyección casera","R","Prohibido"],["Nebulización casera","R","Prohibido"],["Uso ocular con agua de mar no estéril","R","Prohibido"]],
+evNote:"Niveles de evidencia (alto/moderado/bajo/no probado) y fuentes clínicas por ficha: pendientes de revisión por profesional sanitario antes de publicar. Fuente: pendiente de verificación.",
+protoT:"Protocolos paso a paso",protoNote:"Pendiente de revisión por profesional sanitario antes de publicación definitiva.",
+protos:[
+{t:"Irrigación nasal con solución salina estéril 0,9 %",m:"Solución estéril comercial, o NaCl puro con agua estéril; jeringa o dispositivo nasal limpio.",s:"Lavado de manos; cabeza inclinada; irrigación suave; limpieza del dispositivo.",d:"Según indicación; no prolongar sin control.",c:"24 h si es casera; seguir al fabricante si es comercial.",a:"Dolor intenso, sangrado, fiebre, empeoramiento.",r:"Derivar a profesional sanitario."},
+{t:"Baño/compresa externa con agua de mar",m:"Agua de mar de origen verificado o agua de mar artificial para uso externo; compresa limpia.",s:"Tiempo limitado; enjuague con agua dulce; secado; hidratación.",d:"Sesiones cortas; evitar piel lesionada.",c:"No reutilizar la solución preparada tras 24 h.",a:"Irritación, picor intenso, lesiones.",r:"Suspender y derivar."},
+{t:"Aerosol marino con producto sanitario autorizado",m:"Solo producto con registro sanitario.",s:"Seguir las instrucciones del fabricante. No usar agua de mar casera.",d:"Según fabricante.",c:"Según fabricante.",a:"Molestias, empeoramiento.",r:"Consultar a profesional sanitario."},
+{t:"Ejercicio acuático con supervisión según patología",m:"Instalación segura y profesional supervisor.",s:"Adaptar la actividad a la condición de la persona.",d:"Según indicación profesional.",c:"—",a:"Dolor torácico, disnea, mareo.",r:"Parar y buscar atención urgente."}],
+lbl:{m:"Materiales",s:"Pasos",d:"Duración",c:"Caducidad",a:"Señales de alarma",r:"Derivación"},
+noT:"Qué NO hacer",no:["Beber agua de mar.","Inyectar agua de mar.","Nebulizar agua de mar casera.","Uso ocular con agua de mar no estéril.","Aplicar en heridas profundas."],
+saltT:"Modo «sin agua de mar» (sal marina)",saltI:"«Activar» la sal marina es disolverla por completo y, si procede, esterilizar. No hay activación mágica. La sal marina puede contener contaminantes, magnesio, calcio y trazas.",
+sol:[["Agua de mar artificial (SOLO uso externo)",35,"35 g de sal marina sin aditivos + 1 L de agua destilada o hervida y enfriada. Disolver, refrigerar y desechar en 24 h. No para beber, ojos, nariz, heridas abiertas, nebulizar ni inyectar."],["Solución nasal isotónica",9,"9 g de NaCl puro sin yodo ni aditivos + 1 L de agua estéril/destilada/hervida 5 min y enfriada. Uso 24 h en envase limpio; idealmente solución estéril comercial."]],
+hyper:"Solución hipertónica nasal (20–30 g/L): solo bajo prescripción médica.",
+calcT:"Calculadora g/L",calcV:"Volumen (L)",calcG:"Concentración (g/L)",calcR:"Sal necesaria:",
+scanT:"Escáner de etiquetas (lista manual)",scan:["Sin aditivos ni antiapelmazantes","Sin yodo (para uso nasal)","Ingredientes: solo sal marina o NaCl puro","Lote y fecha visibles","Fabricante con dirección y contacto","Sin promesas de curación"],scanOk:"Etiqueta compatible con los criterios básicos.",scanBad:"Faltan criterios: no la uses para estas preparaciones.",
+booksT:"Biblioteca de libros",booksIntro:"Biblioteca educativa sobre agua de mar y talasoterapia. Recursos históricos y divulgativos para entender la tradición, la evidencia disponible y los límites de uso seguro.",
+booksW:"Estos libros son recursos educativos e históricos. Ninguno sustituye diagnóstico ni tratamiento médico. La app no promete curas.",
+bookC:"Este libro se ofrece como recurso educativo. No es una recomendación médica ni una promesa de cura.",pend:"enlace pendiente de verificación",verif:"Verificar",
+stmT:"Declaraciones públicas de profesionales",stmN:"No se han encontrado declaraciones públicas verificables de la Dra. María Teresa Ilari sobre el consumo o aplicación de agua de mar. La app no atribuye opiniones no documentadas.",
+dirT:"Lista de proveedores de agua de mar original",dirCount:(n,c)=>`${n} proveedores verificados en ${c} países`,dirEmpty:"Aún no hay proveedores que hayan superado la verificación (mínimo 3 de 5 criterios con fuente). No se listan proveedores sin fuente verificable.",
+dirCrit:["Domicilio comercial verificable (dirección y teléfono)","Sitio web o canal de venta oficial activo","Registro fiscal o comercial público","Trazabilidad del punto de captación","Historial de exportación o distribución documentado"],
+diaryT:"Diario",diaryPh:"¿Cómo te sientes hoy? (se guarda solo en este dispositivo)",save:"Guardar",diaryWarn:"Si anotas algún síntoma de las banderas rojas, busca atención médica.",
+searchPh:"Buscar proveedor, país, tipo de agua, libro o protocolo…",searchTrunc:"Resultados truncados. Suscríbete para ver todo.",none:"Sin resultados.",
+payT:"Desbloquea Mar Vital completo",payL:["Directorio verificado de proveedores de agua de mar original","Biblioteca educativa con fichas de evidencia y protocolos de uso seguro","Modo «sin agua de mar» con fórmulas de sal marina para uso externo","Declaraciones públicas verificadas de profesionales, siempre etiquetadas como testimonio personal","Buscador multilingüe","Actualizaciones continuas y avisos de seguridad"],
+monthly:"5 USD/mes",yearly:"20 USD/año",cancel:"Cancela cuando quieras. Sin cargos ocultos. Acceso hasta fin del periodo pagado.",banner:"Suscríbete para ver el directorio completo y la biblioteca",
+noApi:"La pasarela de pago aún no está conectada. El desbloqueo solo ocurre tras validar el recibo en el backend.",
+badge:"Mar Vital no almacena datos de tarjeta; el pago se tokeniza en la pasarela."},
+en:{disc:"Not a medical device. It does not diagnose, treat or cure. It does not replace professional medical care.",
+sub:"Subscribe",subActive:"Subscription active",
+nav:{home:"Home",sea:"Seawater",evid:"Evidence",proto:"Protocols",salt:"Sea salt",books:"Books",stm:"Statements",dir:"MarVerif",diary:"Diary",search:"Search",pay:"Plans"},
+consentT:"Informed consent",consentB:"Mar Vital offers educational and historical content. It is not a medical device, does not diagnose, treat or cure, and does not replace professional medical care. Consult a healthcare professional before any practice, especially if pregnant, a minor, or with kidney or heart disease. Your notes are stored only on this device.",accept:"I understand and accept",
+homeT:"Welcome to Mar Vital",homeB:"Educational content on seawater and thalassotherapy, keeping evidence, tradition and safety clearly separate, plus a directory of verified providers.",
+locked:"Premium content. Subscribe to access.",
+flagsT:"Red flags: seek medical care",flags:["Chest pain","High fever","Bleeding","Neurological deficit","Unexplained weight loss","New lump","Pregnancy","Minors","Kidney or heart disease","Suicidal ideation (call emergency services or your local crisis line)"],
+evidT:"Evidence sheets",evidIntro:"Traffic light per use. Historical tradition is not clinical evidence.",
+cols:{use:"Use",sem:"Light",why:"Reason"},
+uses:[["Nasal irrigation with sterile 0.9% saline","G","Established practice with sterile solution"],["External seawater bath/compress","A","Wellness; caution on damaged skin"],["Marine spray as an authorised health product","G","Authorised product only"],["Supervised aquatic exercise","G","Depends on condition and supervision"],["Wound rinsing","A","Sterile solution only; refer deep wounds"],["Drinking seawater","R","Not recommended"],["Home injection","R","Prohibited"],["Home nebulisation","R","Prohibited"],["Eye use with non-sterile seawater","R","Prohibited"]],
+evNote:"Evidence levels (high/moderate/low/unproven) and clinical sources per sheet: pending review by a health professional before publication. Source: pending verification.",
+protoT:"Step-by-step protocols",protoNote:"Pending health-professional review before final publication.",
+protos:[
+{t:"Nasal irrigation with sterile 0.9% saline",m:"Commercial sterile solution, or pure NaCl with sterile water; clean syringe or nasal device.",s:"Wash hands; tilt head; gentle irrigation; clean the device.",d:"As directed; do not extend without supervision.",c:"24 h if homemade; follow manufacturer if commercial.",a:"Severe pain, bleeding, fever, worsening.",r:"Refer to a health professional."},
+{t:"External seawater bath/compress",m:"Seawater of verified origin or artificial seawater for external use; clean compress.",s:"Limited time; rinse with fresh water; dry; moisturise.",d:"Short sessions; avoid damaged skin.",c:"Discard prepared solution after 24 h.",a:"Irritation, intense itching, lesions.",r:"Stop and refer."},
+{t:"Marine spray as an authorised health product",m:"Only products with health registration.",s:"Follow manufacturer instructions. Never use homemade seawater.",d:"Per manufacturer.",c:"Per manufacturer.",a:"Discomfort, worsening.",r:"Consult a health professional."},
+{t:"Supervised aquatic exercise",m:"Safe facility and professional supervisor.",s:"Adapt the activity to the person's condition.",d:"Per professional advice.",c:"—",a:"Chest pain, shortness of breath, dizziness.",r:"Stop and seek urgent care."}],
+lbl:{m:"Materials",s:"Steps",d:"Duration",c:"Expiry",a:"Warning signs",r:"Referral"},
+noT:"What NOT to do",no:["Drink seawater.","Inject seawater.","Nebulise homemade seawater.","Use non-sterile seawater in the eyes.","Apply to deep wounds."],
+saltT:"“No seawater” mode (sea salt)",saltI:"“Activating” sea salt just means dissolving it fully and, if applicable, sterilising. There is no magic activation. Sea salt may contain contaminants, magnesium, calcium and trace elements.",
+sol:[["Artificial seawater (EXTERNAL use ONLY)",35,"35 g additive-free sea salt + 1 L distilled or boiled-and-cooled water. Dissolve, refrigerate, discard in 24 h. Not for drinking, eyes, nose, open wounds, nebulising or injecting."],["Isotonic nasal solution",9,"9 g pure NaCl with no iodine or additives + 1 L sterile/distilled/boiled-5-min-and-cooled water. Use within 24 h in a clean container; a sterile commercial solution is preferable."]],
+hyper:"Hypertonic nasal solution (20–30 g/L): only under medical prescription.",
+calcT:"g/L calculator",calcV:"Volume (L)",calcG:"Concentration (g/L)",calcR:"Salt needed:",
+scanT:"Label checker (manual list)",scan:["No additives or anti-caking agents","No iodine (for nasal use)","Ingredients: sea salt or pure NaCl only","Batch and date visible","Manufacturer with address and contact","No healing claims"],scanOk:"Label meets the basic criteria.",scanBad:"Criteria missing: do not use it for these preparations.",
+booksT:"Book library",booksIntro:"Educational library on seawater and thalassotherapy. Historical and popular resources to understand the tradition, the available evidence and the limits of safe use.",
+booksW:"These books are educational and historical resources. None replaces medical diagnosis or treatment. The app does not promise cures.",
+bookC:"This book is offered as an educational resource. It is not medical advice or a promise of cure.",pend:"link pending verification",verif:"To verify",
+stmT:"Public statements by professionals",stmN:"No verifiable public statements by Dr. María Teresa Ilari on the consumption or application of seawater have been found. The app does not attribute undocumented opinions.",
+dirT:"List of original seawater providers",dirCount:(n,c)=>`${n} verified providers in ${c} countries`,dirEmpty:"No providers have passed verification yet (minimum 3 of 5 sourced criteria). Providers without a verifiable source are not listed.",
+dirCrit:["Verifiable business address (address and phone)","Active official website or sales channel","Public tax or commercial registration","Declared water intake point (traceability)","Documented export or distribution history"],
+diaryT:"Diary",diaryPh:"How do you feel today? (stored only on this device)",save:"Save",diaryWarn:"If you note any red-flag symptom, seek medical care.",
+searchPh:"Search provider, country, water type, book or protocol…",searchTrunc:"Truncated results. Subscribe to see everything.",none:"No results.",
+payT:"Unlock the full Mar Vital",payL:["Verified directory of original seawater providers","Educational library with evidence sheets and safe-use protocols","“No seawater” mode with external-use sea-salt formulas","Verified public statements by professionals, always labelled as personal testimony","Multilingual search","Continuous updates and safety notices"],
+monthly:"5 USD/month",yearly:"20 USD/year",cancel:"Cancel anytime. No hidden fees. Access until the end of the paid period.",banner:"Subscribe to see the full directory and library",
+noApi:"The payment gateway is not connected yet. Unlocking only happens after receipt validation on the backend.",
+badge:"Mar Vital never stores card data; payment is tokenised by the gateway."}};
+const tr=()=>{const l=document.getElementById("lang").value;return Object.assign({},T.en,T[l]||{})};
+
+/* ===== Datos ===== */
+const BOOKS=[
+["El Plasma de Quinton: El Agua de Mar, Nuestro Medio Interno","André Mahé","https://www.buscalibre.ec/libro-el-plasma-de-quinton-el-agua-de-mar-nuestro-medio-interno/9788474264494/p/3303687","Histórico/divulgativo"],
+["Quinton: La Cura de Agua de Mar","Jean-Claude Secondé","https://www.buscalibre.us/libro-quinton-la-cura-de-agua-de-mar-quinton/9788497778534/p/7533159","Divulgativo"],
+["Talasoterapia: Agua de Mar para Consumo Humano 24/7","Cristina González Jaramillo","https://www.abebooks.com/Talasoterapia-Agua-Mar-Consumo-Humano-Aplicaciones/32450684469/bd","Divulgativo"],
+["Talasoterapia: Renueva tu cuerpo con la fuerza del océano","Luis Navarro","https://www.goodreads.com/book/show/58454123-talasoterapia","Divulgativo"],
+["Cómo cura el mar","Manuel Núñez y Paulina Navarro","https://www.rbalibros.com/libro/como-cura-el-mar_9788479017507","Divulgativo"],
+["El mar cura cuerpo, mente y alma: Talasoterapia","Marianela Peña Romero y Alberto Cerrada","https://www.abebooks.co.uk/9788418784170/Mar-cura-cuerpo-mente-alma-8418784171/plp","Divulgativo"]];
+// Solo entran proveedores con ≥3 de 5 criterios respaldados por fuente. No se inventan fichas.
+const PROVIDERS=[];
+const CRIT=["address","web","registry","traceability","exports"];
+const isPersonal=p=>!!p.personalBrand;
+const verified=p=>!isPersonal(p)&&p.source&&CRIT.filter(k=>p.criteria&&p.criteria[k]&&p.criteria[k].source).length>=3;
+
+/* ===== Estado ===== */
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+// La suscripción solo se activa con un token devuelto por el backend tras validar el recibo.
+let sub=store.get("mv_sub",null);
+const active=()=>!!(sub&&sub.validated&&sub.until>Date.now());
+let tab="home";
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const TABS=["home","evid","proto","salt","books","stm","dir","diary","search","pay"];
+const PREMIUM=new Set(["proto","salt","books","stm","dir"]);
+const lock=t=>`<div class="lock"><strong>🔒 ${t.locked}</strong><p><button class="pri" onclick="go('pay')">${t.sub}</button></p></div>`;
+const grams=(v,g)=>(Math.round(v*g*100)/100).toString();
+
+function views(t){
+ return {
+ home:()=>`<div class="card"><h2>${t.homeT}</h2><p>${t.homeB}</p></div>
+  <div class="warn"><strong>${t.flagsT}</strong><ul>${t.flags.map(f=>`<li>${f}</li>`).join("")}</ul></div>
+  <div class="card"><h3>${t.noT}</h3><ul>${t.no.map(f=>`<li>🔴 ${f}</li>`).join("")}</ul></div>
+  ${active()?"":`<div class="lock">${t.banner} <button class="pri" onclick="go('pay')">${t.sub}</button></div>`}`,
+ evid:()=>`<div class="card"><h2>${t.evidT}</h2><p class="mu">${t.evidIntro}</p><table><tr><th>${t.cols.use}</th><th>${t.cols.sem}</th><th>${t.cols.why}</th></tr>${t.uses.map(u=>`<tr><td>${u[0]}</td><td><span class="dot ${u[1]}"></span></td><td>${u[2]}</td></tr>`).join("")}</table><p class="mu">${t.evNote}</p></div>`,
+ proto:()=>!active()?lock(t):`<div class="card"><h2>${t.protoT}</h2><p class="mu">${t.protoNote}</p></div>`+t.protos.map(p=>`<div class="card"><h3>${p.t}</h3>${Object.keys(t.lbl).map(k=>`<p><strong>${t.lbl[k]}:</strong> ${p[k]}</p>`).join("")}</div>`).join("")+`<div class="card"><h3>${t.noT}</h3><ul>${t.no.map(f=>`<li>${f}</li>`).join("")}</ul></div>`,
+ salt:()=>!active()?lock(t):`<div class="card"><h2>${t.saltT}</h2><p>${t.saltI}</p></div>`+t.sol.map(s=>`<div class="card"><h3>${s[0]}</h3><p>${s[2]}</p></div>`).join("")+
+  `<div class="warn">${t.hyper}</div>
+  <div class="card"><h3>${t.calcT}</h3><label>${t.calcV} <input id="cv" type="number" min="0" step="0.1" value="1"></label>
+  <label>${t.calcG} <select id="cg">${t.sol.map(s=>`<option value="${s[1]}">${s[1]} g/L — ${s[0]}</option>`).join("")}</select></label>
+  <p><strong>${t.calcR} <span id="cr"></span> g</strong></p></div>
+  <div class="card"><h3>${t.scanT}</h3>${t.scan.map((s,i)=>`<label><input type="checkbox" class="sc" data-i="${i}"> ${s}</label>`).join("")}<p id="sr" class="mu"></p></div>`,
+ books:()=>!active()?lock(t):`<div class="card"><h2>${t.booksT}</h2><p>${t.booksIntro}</p></div><div class="warn">${t.booksW}</div>`+BOOKS.map(b=>`<div class="card"><h3>${esc(b[0])}</h3><p class="mu">${esc(b[1])} · ${esc(b[3])} · ISBN/${t.verif} · ${t.verif}</p><p>${t.bookC}</p><p class="mu">⚠ ${t.pend}: <a href="${esc(b[2])}" rel="noopener noreferrer" target="_blank">${esc(new URL(b[2]).hostname)}</a></p></div>`).join(""),
+ stm:()=>!active()?lock(t):`<div class="card"><h2>${t.stmT}</h2><p>${t.stmN}</p></div>`,
+ dir:()=>{const v=PROVIDERS.filter(verified),c=new Set(v.map(p=>p.country)).size;
+  const head=`<div class="card"><h2>MarVerif.com</h2><p><strong>${t.dirCount(v.length,c)}</strong></p>`;
+  const list=!v.length?`<p>${t.dirEmpty}</p>`:(active()?v.map(p=>`<div class="card"><h3>${esc(p.name)}</h3><p>${esc(p.city||"")} ${esc(p.country)}</p><p class="mu">${esc(p.web||"")} ${esc(p.phone||"")} ${esc(p.email||"")}</p><p class="mu">${esc(p.product||"")} · ${esc(p.intake||"")} · ${esc(p.source)}</p></div>`).join(""):v.map(p=>`<p>${esc(p.name)} — ${esc(p.country)}</p>`).join("")+lock(t));
+  return head+`<ul>${t.dirCrit.map(x=>`<li>${x}</li>`).join("")}</ul></div>`+list},
+ diary:()=>`<div class="card"><h2>${t.diaryT}</h2><p class="mu">${t.diaryWarn}</p><textarea id="dn" rows="3" style="width:100%" placeholder="${esc(t.diaryPh)}"></textarea><p><button class="pri" id="ds">${t.save}</button></p><div id="dl"></div></div>`,
+ search:()=>`<div class="card"><input id="q" style="width:100%" placeholder="${esc(t.searchPh)}"><div id="qr"></div></div>`,
+ pay:()=>`<div class="card"><h2>${t.payT}</h2><ul>${t.payL.map(x=>`<li>${x}</li>`).join("")}</ul>
+  <p><button class="pri" onclick="buy('monthly')">${t.monthly}</button> <button class="pri" onclick="buy('yearly')">${t.yearly}</button></p>
+  <p class="mu">${t.cancel}</p><p class="mu">${t.badge}</p><p id="pm" class="mu"></p></div>`};
+}
+
+function render(){
+ const t=tr();
+ $("#discTx").textContent=t.disc;$("#subBtn").textContent=active()?t.subActive:t.sub;$("#subBtn").onclick=()=>go("pay");
+ $("#nav").innerHTML=TABS.map(k=>`<button class="${k===tab?"on":""}" onclick="go('${k}')">${t.nav[k]}${PREMIUM.has(k)&&!active()?" 🔒":""}</button>`).join("");
+ $("#view").innerHTML=views(t)[tab]();
+ bind(t);
+}
+function go(k){tab=k;render();scrollTo(0,0)}
+function bind(t){
+ if(tab==="salt"&&active()){const u=()=>$("#cr").textContent=grams(+$("#cv").value||0,+$("#cg").value);$("#cv").oninput=$("#cg").onchange=u;u();
+  document.querySelectorAll(".sc").forEach(c=>c.onchange=()=>{const all=[...document.querySelectorAll(".sc")].every(x=>x.checked);$("#sr").textContent=all?t.scanOk:t.scanBad});$("#sr").textContent=t.scanBad}
+ if(tab==="diary"){const draw=()=>{$("#dl").innerHTML=store.get("mv_diary",[]).slice().reverse().map(e=>`<p class="mu">${esc(e.d)}<br><span style="color:var(--tx)">${esc(e.n)}</span></p>`).join("")};draw();
+  $("#ds").onclick=()=>{const n=$("#dn").value.trim();if(!n)return;const a=store.get("mv_diary",[]);a.push({d:new Date().toLocaleString(),n});store.set("mv_diary",a);$("#dn").value="";draw()}}
+ if(tab==="search"){$("#q").oninput=()=>{const q=$("#q").value.toLowerCase().trim(),out=[];if(q){
+   BOOKS.forEach(b=>{if((b[0]+b[1]).toLowerCase().includes(q))out.push("📖 "+b[0])});
+   t.protos.forEach(p=>{if(p.t.toLowerCase().includes(q))out.push("📋 "+p.t)});
+   PROVIDERS.filter(verified).forEach(p=>{if([p.name,p.country,p.city,p.product,p.intake].join(" ").toLowerCase().includes(q))out.push("🏢 "+p.name+" — "+p.country)})}
+   const shown=active()?out:out.slice(0,2);
+   $("#qr").innerHTML=q?(shown.length?shown.map(x=>`<p>${esc(x)}</p>`).join("")+(!active()&&out.length>2?`<p class="mu">${t.searchTrunc}</p>`:""):`<p>${t.none}</p>`):""}}
+}
+async function buy(plan){
+ const t=tr(),m=$("#pm");
+ if(!API_BASE){m.textContent=t.noApi;return}
+ try{ // 1) pasarela tokeniza y devuelve recibo; 2) el backend lo valida y responde con {validated,until}
+  const r=await fetch(API_BASE+"/subscriptions/validate",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({plan,price:PRICES[plan]})});
+  const j=await r.json();if(!j.validated)throw 0;sub={validated:true,until:j.until,plan};store.set("mv_sub",sub);render()
+ }catch(e){m.textContent=t.noApi}
+}
+
+/* ===== Arranque ===== */
+const ls=$("#lang");ls.innerHTML=Object.entries(LANGS).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+ls.value=store.get("mv_lang",(navigator.language||"es").slice(0,2) in LANGS?(navigator.language||"es").slice(0,2):"es");
+ls.onchange=()=>{store.set("mv_lang",ls.value);document.documentElement.lang=ls.value;document.documentElement.dir=ls.value==="ar"?"rtl":"ltr";render()};
+ls.onchange();
+if(!store.get("mv_consent",false)){const t=tr();$("#cT").textContent=t.consentT;$("#cB").textContent=t.consentB;$("#cOk").textContent=t.accept;$("#consent").showModal();$("#cOk").onclick=()=>{store.set("mv_consent",true);$("#consent").close()}}
+</script></body></html>
