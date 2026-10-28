@@ -39,9 +39,9 @@ const LANGS={es:"Español",en:"English",zh:"简体中文","zh-TW":"繁體中文"
 
 /* ===== Textos (es completo; en completo; resto cae a en hasta traducción revisada) ===== */
 const T={
-es:{disc:"No es un dispositivo médico. No diagnostica, trata ni cura. No sustituye atención médica profesional.",
+es:{disc:"La información de esta app no sustituye una consulta médica.",
 sub:"Suscribirse",subActive:"Suscripción activa",
-nav:{home:"Inicio",sea:"Agua de Mar",evid:"Evidencia",proto:"Protocolos",salt:"Sal marina",books:"Libros",stm:"Declaraciones",dir:"MarVerif",diary:"Diario",search:"Buscar",pay:"Planes"},
+nav:{quinton:"René Quinton",home:"Inicio",sea:"Agua de Mar",evid:"Evidencia",proto:"Protocolos",salt:"Sal marina",books:"Libros",stm:"Declaraciones",dir:"MarVerif",diary:"Diario",search:"Buscar",pay:"Planes"},
 consentT:"Consentimiento informado",consentB:"Mar Vital ofrece contenido educativo e histórico. No es un dispositivo médico, no diagnostica, trata ni cura, y no sustituye atención médica profesional. Consulta a un profesional sanitario antes de aplicar cualquier práctica, sobre todo si estás embarazada, eres menor, o tienes enfermedad renal o cardíaca. Tus anotaciones se guardan solo en este dispositivo.",accept:"Entiendo y acepto",
 homeT:"Bienvenido/a a Mar Vital",homeB:"Contenido educativo sobre agua de mar y talasoterapia, con evidencia, tradición y seguridad claramente separadas, y un directorio de proveedores verificados.",
 locked:"Contenido premium. Suscríbete para acceder.",
@@ -75,9 +75,9 @@ payT:"Desbloquea Mar Vital completo",payL:["Directorio verificado de proveedores
 monthly:"5 USD/mes",yearly:"20 USD/año",cancel:"Cancela cuando quieras. Sin cargos ocultos. Acceso hasta fin del periodo pagado.",banner:"Suscríbete para ver el directorio completo y la biblioteca",
 noApi:"La pasarela de pago aún no está conectada. El desbloqueo solo ocurre tras validar el recibo en el backend.",
 manage:"Gestionar o cancelar suscripción",badge:"Mar Vital no almacena datos de tarjeta; el pago se tokeniza en la pasarela."},
-en:{disc:"Not a medical device. It does not diagnose, treat or cure. It does not replace professional medical care.",
+en:{disc:"The information in this app does not replace a medical consultation.",
 sub:"Subscribe",subActive:"Subscription active",
-nav:{home:"Home",sea:"Seawater",evid:"Evidence",proto:"Protocols",salt:"Sea salt",books:"Books",stm:"Statements",dir:"MarVerif",diary:"Diary",search:"Search",pay:"Plans"},
+nav:{quinton:"René Quinton",home:"Home",sea:"Seawater",evid:"Evidence",proto:"Protocols",salt:"Sea salt",books:"Books",stm:"Statements",dir:"MarVerif",diary:"Diary",search:"Search",pay:"Plans"},
 consentT:"Informed consent",consentB:"Mar Vital offers educational and historical content. It is not a medical device, does not diagnose, treat or cure, and does not replace professional medical care. Consult a healthcare professional before any practice, especially if pregnant, a minor, or with kidney or heart disease. Your notes are stored only on this device.",accept:"I understand and accept",
 homeT:"Welcome to Mar Vital",homeB:"Educational content on seawater and thalassotherapy, keeping evidence, tradition and safety clearly separate, plus a directory of verified providers.",
 locked:"Premium content. Subscribe to access.",
@@ -122,6 +122,11 @@ const BOOKS=[
 ["Cómo cura el mar","Manuel Núñez y Paulina Navarro","https://www.rbalibros.com/libro/como-cura-el-mar_9788479017507","Divulgativo"],
 ["El mar cura cuerpo, mente y alma: Talasoterapia","Marianela Peña Romero y Alberto Cerrada","https://www.abebooks.co.uk/9788418784170/Mar-cura-cuerpo-mente-alma-8418784171/plp","Divulgativo"]];
 // Solo entran proveedores con ≥3 de 5 criterios respaldados por fuente. No se inventan fichas.
+const QUINTON={
+ bio:[["15 dic. 1866","Nace en Chaumes-en-Brie (Francia)."],["1904","Publica «L'eau de mer, milieu organique» (Masson, París)."],["1908","Funda y preside la Ligue Nationale Aérienne, impulsora de la primera escuela de vuelo, en Juvisy."],["1912","Segunda edición de «L'eau de mer, milieu organique» (503 pp.)."],["1914–1918","Movilizado como oficial de artillería de reserva en la Primera Guerra Mundial; según fuentes, herido varias veces."],["9 jul. 1925","Fallece. Las fuentes consultadas discrepan sobre el lugar (París o Grasse): sin confirmar."]],
+ works:[["L'eau de mer, milieu organique: constance du milieu marin originel, comme milieu vital des cellules, à travers la série animale","El agua de mar, medio orgánico: constancia del medio marino original como medio vital de las células a lo largo de la serie animal","1904 (2.ª ed. 1912)","Masson, París","https://archive.org/details/leaudemermilieuo00quin","https://gallica.bnf.fr/ark:/12148/bpt6k746094.texteImage"],
+  ["Publicación sobre el agua de mar en ingestiones para las dispepsias (título exacto, año y formato: pendientes de verificación; la cita aparece en la Fundación René Quinton)","—","Pendiente","Pendiente","https://www.fundacionrenequinton.org/en/studies-publications-books/",""]],
+ refs:[["Wikipedia: René Quinton","https://en.wikipedia.org/wiki/Ren%C3%A9_Quinton"],["Open Library: L'eau de mer milieu organique","https://openlibrary.org/books/OL24240755M/L'eau_de_mer_milieu_organique"],["Google Libros: L'eau de mer, milieu organique","https://books.google.com/books/about/L_eau_de_mer_milieu_organique.html?hl=fr&id=-xIPAAAAYAAJ"],["Dialnet: «René Quinton: centenario de L'eau de mer, milieu organique»","https://dialnet.unirioja.es/servlet/articulo?codigo=4384632"],["Fundación René Quinton: estudios, publicaciones y libros","https://www.fundacionrenequinton.org/en/studies-publications-books/"],["Theatrum Belli: in memoriam René Quinton","https://theatrum-belli.com/in-memoriam-rene-quinton-decede-le-9-juillet-1925/"]]};
 const STATEMENTS=[["María Teresa Ilari: la doctora del mar (Fronterad)","https://www.fronterad.com/maria-teresa-ilari-la-doctora-del-mar/"],["Entrevista a la Dra. María Teresa Ilari (La magia de la medicina natural)","https://lamagiadelamedicinanatural.blogspot.com/2013/11/entrevista-la-dra-maria-teresa-ilari.html"],["Beneficios de tomar agua de mar, Dra. María Teresa Ilari (YouTube)","https://www.youtube.com/watch?v=l6jJxgjV70Y"]];
 const PROVIDERS=[];
 const CRIT=["address","web","registry","traceability","exports"];
@@ -136,7 +141,7 @@ const active=()=>!!(sub&&sub.validated&&sub.until>Date.now());
 let tab="home";
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-const TABS=["home","evid","proto","salt","books","stm","dir","diary","search","pay"];
+const TABS=["home","quinton","evid","proto","salt","books","stm","dir","diary","search","pay"];
 const PREMIUM=new Set(["proto","salt","books","stm","dir"]);
 const lock=t=>`<div class="lock"><strong>🔒 ${t.locked}</strong><p><button class="pri" onclick="go('pay')">${t.sub}</button></p></div>`;
 const grams=(v,g)=>(Math.round(v*g*100)/100).toString();
@@ -147,6 +152,13 @@ function views(t){
   <div class="warn"><strong>${t.flagsT}</strong><ul>${t.flags.map(f=>`<li>${f}</li>`).join("")}</ul></div>
   <div class="card"><h3>${t.noT}</h3><ul>${t.no.map(f=>`<li>🔴 ${f}</li>`).join("")}</ul></div>
   ${active()?"":`<div class="lock">${t.banner} <button class="pri" onclick="go('pay')">${t.sub}</button></div>`}`,
+
+ quinton:()=>{const q=QUINTON;return `<div class="card"><h2>René Quinton (1866–1925)</h2><p>Biólogo y fisiólogo francés. Su tesis, expuesta en 1904, sostiene que el agua de mar fue el medio original de la vida y que los líquidos del organismo conservan una composición salina comparable a la del mar. Es una teoría histórica de principios del siglo XX, no evidencia clínica actual. Fue también un destacado impulsor de la aviación francesa.</p></div>
+ <div class="card"><h3>Vida: cronología</h3><table>${q.bio.map(b=>`<tr><td><strong>${b[0]}</strong></td><td>${b[1]}</td></tr>`).join("")}</table></div>
+ <div class="card"><h3>Obras</h3>${q.works.map(w=>`<p><strong>${esc(w[0])}</strong><br>Traducción: <em>${esc(w[1])}</em><br><span class="mu">${esc(w[2])} · ${esc(w[3])}</span><br><a href="${esc(w[4])}" rel="noopener noreferrer" target="_blank">Fuente 1</a>${w[5]?` · <a href="${esc(w[5])}" rel="noopener noreferrer" target="_blank">Fuente 2 (Gallica, texto original)</a>`:""}</p>`).join("")}
+ <p class="mu">No se ha localizado una bibliografía completa de Quinton en las fuentes consultadas; la lista se amplía solo con títulos verificables. Las traducciones de títulos son del equipo; no se transcriben pasajes del original sin cotejarlos con la edición.</p></div>
+ <div class="card"><h3>Precursores y continuadores</h3><p class="mu">Pendiente de documentar con fuentes verificables.</p></div>
+ <div class="card"><h3>Fuentes</h3><ul>${q.refs.map(r=>`<li><a href="${esc(r[1])}" rel="noopener noreferrer" target="_blank">${esc(r[0])}</a></li>`).join("")}</ul></div>`},
  evid:()=>`<div class="card"><h2>${t.evidT}</h2><p class="mu">${t.evidIntro}</p><table><tr><th>${t.cols.use}</th><th>${t.cols.sem}</th><th>${t.cols.why}</th></tr>${t.uses.map(u=>`<tr><td>${u[0]}</td><td><span class="dot ${u[1]}"></span></td><td>${u[2]}</td></tr>`).join("")}</table><p class="mu">${t.evNote}</p></div>`,
  proto:()=>!active()?lock(t):`<div class="card"><h2>${t.protoT}</h2><p class="mu">${t.protoNote}</p></div>`+t.protos.map(p=>`<div class="card"><h3>${p.t}</h3>${Object.keys(t.lbl).map(k=>`<p><strong>${t.lbl[k]}:</strong> ${p[k]}</p>`).join("")}</div>`).join("")+`<div class="card"><h3>${t.noT}</h3><ul>${t.no.map(f=>`<li>${f}</li>`).join("")}</ul></div>`,
  salt:()=>!active()?lock(t):`<div class="card"><h2>${t.saltT}</h2><p>${t.saltI}</p></div>`+t.sol.map(s=>`<div class="card"><h3>${s[0]}</h3><p>${s[2]}</p></div>`).join("")+
