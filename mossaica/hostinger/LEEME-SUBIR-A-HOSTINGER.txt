@@ -17,3 +17,9 @@ C. Webhooks (para que el pedido se marque pagado y te llegue el aviso):
 D. Haz una compra de prueba. Los pedidos pagados quedan en la carpeta mosaicca-data (junto a public_html, fuera de la web) y te llegan por correo.
 E. Cuando todo funcione, cambia a las llaves de PRODUCCION en config.php.
 Si config.php esta vacio, la tienda sigue funcionando con pedidos por WhatsApp.
+
+PEDIDOS DE MAYOREO (pagina /mayoreo.html)
+F. En config.php, dentro de 'mayoreo': pon 'enabled' => true SOLO cuando hayas confirmado que los descuentos dejan margen
+   sobre tu costo. Llena banco, clabe y titular para que el cliente reciba los datos de pago por correo.
+G. Cada pedido de mayoreo te llega por correo (owner_email) y queda en mosaicca-data/mayoreo/. Con 'enabled' => false la pagina
+   invita a escribir por WhatsApp.

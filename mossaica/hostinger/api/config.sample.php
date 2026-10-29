@@ -24,4 +24,13 @@ return [
         'DHL'      => ['service' => 'Express',   'base' => 169],
     ],
     'shipping_extra_per_kg' => 25,
+
+    // Pedido de mayoreo en línea (/mayoreo.html). Apagado hasta que confirmes que los descuentos dejan margen sobre tu costo.
+    'mayoreo' => [
+        'enabled'   => false,
+        'min_order' => 1500,                                   // pedido mínimo, a precio público (MXN)
+        'tiers'     => [[1500, 0.40], [5000, 0.45], [10000, 0.50]],   // [monto a precio público, descuento]
+        'banco' => '', 'clabe' => '', 'titular' => '',         // datos para el pago por transferencia SPEI
+        'terms' => 'Primer pedido con pago del 100% por transferencia. Envío por cotizar.',
+    ],
 ];
