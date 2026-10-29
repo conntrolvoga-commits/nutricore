@@ -34,7 +34,7 @@
 
 | Tema | Decisión | Efecto en la arquitectura |
 |------|----------|---------------------------|
-| Envío | **Lo paga la clienta.** En renta se cobra ida y retorno `[SUPUESTO: ambos tramos a cargo de la clienta]` | Checkout muestra el envío como línea aparte con la cotización más barata; no entra en la base de comisiones de afiliadas ni en el precio del vestido |
+| Envío | **Lo paga la clienta, ida y retorno** (confirmado) | Checkout muestra el envío como línea aparte con la cotización más barata; no entra en la base de comisiones de afiliadas ni en el precio del vestido |
 | Inventario | **≈500 vestidos**; algunos modelos tienen **varias piezas** | Modelo `product → variant (talla) → unit (pieza física)`; la disponibilidad se calcula por unidad, y un modelo está disponible si **alguna** unidad libre cubre las fechas. 500 modelos caben holgadamente en un Postgres pequeño y en un catálogo estático/ISR |
 | Depósito en garantía | **Se incluye.** Se **cobra** en el checkout y se **reembolsa** tras la inspección de devolución (no se usa retención de tarjeta, que caduca ~7 días) | Entidad `deposit` por pedido (monto configurable por vestido o categoría `[SUPUESTO]`), estados `cobrado → liberado / retenido parcial / retenido total`, reembolso automático a las 48 h de inspección sin daños `[SUPUESTO]`, y evidencia fotográfica en la inspección |
 | Repositorio | Repositorio **nuevo, privado y gratuito** (plan gratuito de GitHub) | Este documento migra al repo `voga`; CI con GitHub Actions dentro del cupo gratuito |
@@ -272,7 +272,30 @@ CREATE TABLE unit_block (
 - **Stripe Checkout / Payment Element**: el PCI queda en Stripe (alcance SAQ-A).
 - Métodos relevantes para el segmento `[VERIFICAR disponibilidad y comisiones vigentes en la cuenta]`: **tarjeta (con MSI)**, **OXXO** (voucher con vencimiento), **transferencia SPEI**. Incluir efectivo/transferencia es decisivo para clientas sin tarjeta.
 - Flujo asíncrono para OXXO/SPEI: pedido en `pendiente_pago` → webhook `payment_intent.succeeded` → confirma reserva.
-- **Depósito en garantía:** la autorización de tarjeta de Stripe caduca en unos 7 días, menor al ciclo de renta `[VERIFICAR]`. Opciones: cobrar el depósito y reembolsarlo tras la inspección, o definir cargo por daño en términos. Se propone **cobro + reembolso** (ver sección 13).
+- **Depósito en garantía:** la autorización de tarjeta de Stripe caduca en unos 7 días, menor al ciclo de renta `[VERIFICAR]`. Opciones: cobrar el depósito y reembolsarlo tras la inspección, o definir cargo por daño en términos. Se adopta **cobro + reembolso** con la política de la sección 7.2.1.
+
+#### 7.2.1 Política de depósito y daños (propuesta, a calibrar con tus costos reales)
+El negocio delegó el monto en el diseño y confirmó que el depósito cubre daños. Valores iniciales `[SUPUESTO]`, ajustables desde el panel sin cambiar código:
+
+| Nivel | Valor de reposición del vestido | Depósito |
+|---|---|---|
+| A | hasta $1,500 MXN | $300 |
+| B | $1,501 – $3,500 | $600 |
+| C | más de $3,500 | $1,000 |
+
+Regla: depósito ≈ 20–30 % del valor de reposición, con mínimo $300; cada vestido guarda su `replacement_value` y su nivel.
+
+| Resultado de la inspección | Descuento del depósito |
+|---|---|
+| Uso normal (limpieza y arreglos menores de rutina) | $0 — reembolso completo |
+| Daño leve (mancha removible, botón/cierre, descosido pequeño) | Tarifa fija por tipo, de una lista de precios (ej. $100–$300) |
+| Daño mayor (rotura, quemadura, mancha permanente, alteración no autorizada) | Costo de reparación documentado, hasta el 100 % del depósito |
+| Pérdida o no devolución (a los 5 días de retraso `[SUPUESTO]`) | 100 % del depósito; el excedente hasta el valor de reposición solo si los términos aceptados lo prevén `[VERIFICAR con abogado]` |
+| Retraso en la devolución | Cargo diario fijo por día de retraso, descontado del depósito |
+
+Flujo: devolución recibida → inspección con **fotos obligatorias** (salida y regreso) → liquidación en el panel → reembolso automático a las 48 h si no hay descuentos, o notificación con evidencia si los hay (la clienta puede disputar desde el chat).
+Reembolso por método de pago: tarjeta → reverso a la misma tarjeta; **OXXO/SPEI → no se puede devolver al mismo medio**, por lo que en el checkout se pide la **CLABE** (o se acredita por SPEI manual/lote) `[VERIFICAR con Stripe]`.
+Términos y condiciones: la clienta acepta esta tabla antes de pagar (aceptación registrada con fecha, IP y versión del texto).
 - Reembolsos y disputas: gestionados desde el panel con trazabilidad en `audit_log`.
 
 ### 7.3 Envíos — "desde los más baratos"
@@ -472,8 +495,8 @@ sequenceDiagram
 
 1. ¿Cuántos vestidos y cuántas tallas tiene hoy? ¿Cada vestido es único o hay varias piezas del mismo modelo?
 2. ¿Plazos de renta típicos (1 noche, 3 días, fin de semana)? ¿Días de colchón para envío y limpieza?
-3. ~~Depósito~~ Resuelto: se cobra y se reembolsa tras inspección. Pendiente: monto por categoría y qué daños se descuentan.
-4. ~~Envío~~ Resuelto: lo paga la clienta. Pendiente: confirmar si paga ambos tramos en renta.
+3. ~~Depósito~~ Resuelto: se cobra y se reembolsa tras inspección; montos y descuentos por daños propuestos en 7.2.1. Pendiente: validar los valores con tus costos reales de reparación y reposición.
+4. ~~Envío~~ Resuelto: lo paga la clienta, ida y retorno.
 5. ¿Ciudad(es) de la bodega y zona de entrega local? ¿Se ofrece recolección en tienda?
 6. ¿Cuenta de Stripe México ya creada y verificada? ¿Qué métodos (OXXO, SPEI, MSI) están habilitados?
 7. ¿Porcentaje de comisión de afiliadas, ventana de pago, monto mínimo y régimen fiscal de las afiliadas?
