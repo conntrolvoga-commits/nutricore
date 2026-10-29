@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1d4ed8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Arquitectura">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="styles.css">
+<title>Arquitectura de Software</title>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/home"><small>Curso</small>Arquitectura de Software</a>
+  <div class="streak" id="streak" title="Racha de días estudiando"></div>
+</header>
+<main id="view" tabindex="-1"></main>
+<nav class="tabs" aria-label="Navegación principal">
+  <a href="#/home" data-tab="home"><i>🏠</i><span>Inicio</span></a>
+  <a href="#/course" data-tab="course"><i>📘</i><span>Temario</span></a>
+  <a href="#/review" data-tab="review"><i>🗂️</i><span>Repaso</span></a>
+  <a href="#/notes" data-tab="notes"><i>📝</i><span>Notas</span></a>
+</nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="course1.js"></script>
+<script src="course2.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
