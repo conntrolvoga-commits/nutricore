@@ -30,6 +30,15 @@
 - Idioma único: español (México). Moneda: MXN.
 - "Carro de Stryper" se interpreta como **checkout con Stripe**; "carro de paqueterías" como **módulo de envíos**.
 
+### 1.1 Decisiones confirmadas por el negocio (2026-10-29)
+
+| Tema | Decisión | Efecto en la arquitectura |
+|------|----------|---------------------------|
+| Envío | **Lo paga la clienta.** En renta se cobra ida y retorno `[SUPUESTO: ambos tramos a cargo de la clienta]` | Checkout muestra el envío como línea aparte con la cotización más barata; no entra en la base de comisiones de afiliadas ni en el precio del vestido |
+| Inventario | **≈500 vestidos**; algunos modelos tienen **varias piezas** | Modelo `product → variant (talla) → unit (pieza física)`; la disponibilidad se calcula por unidad, y un modelo está disponible si **alguna** unidad libre cubre las fechas. 500 modelos caben holgadamente en un Postgres pequeño y en un catálogo estático/ISR |
+| Depósito en garantía | **Se incluye.** Se **cobra** en el checkout y se **reembolsa** tras la inspección de devolución (no se usa retención de tarjeta, que caduca ~7 días) | Entidad `deposit` por pedido (monto configurable por vestido o categoría `[SUPUESTO]`), estados `cobrado → liberado / retenido parcial / retenido total`, reembolso automático a las 48 h de inspección sin daños `[SUPUESTO]`, y evidencia fotográfica en la inspección |
+| Repositorio | Repositorio **nuevo, privado y gratuito** (plan gratuito de GitHub) | Este documento migra al repo `voga`; CI con GitHub Actions dentro del cupo gratuito |
+
 ---
 
 ## 2. Requisitos
@@ -463,8 +472,8 @@ sequenceDiagram
 
 1. ¿Cuántos vestidos y cuántas tallas tiene hoy? ¿Cada vestido es único o hay varias piezas del mismo modelo?
 2. ¿Plazos de renta típicos (1 noche, 3 días, fin de semana)? ¿Días de colchón para envío y limpieza?
-3. ¿Política de **depósito en garantía** y de **daños/pérdida**? ¿Se acepta cobro + reembolso posterior?
-4. ¿Quién paga el envío (ida y vuelta)? ¿Se incluye en el precio, se cobra aparte o se ofrece gratis sobre cierto monto?
+3. ~~Depósito~~ Resuelto: se cobra y se reembolsa tras inspección. Pendiente: monto por categoría y qué daños se descuentan.
+4. ~~Envío~~ Resuelto: lo paga la clienta. Pendiente: confirmar si paga ambos tramos en renta.
 5. ¿Ciudad(es) de la bodega y zona de entrega local? ¿Se ofrece recolección en tienda?
 6. ¿Cuenta de Stripe México ya creada y verificada? ¿Qué métodos (OXXO, SPEI, MSI) están habilitados?
 7. ¿Porcentaje de comisión de afiliadas, ventana de pago, monto mínimo y régimen fiscal de las afiliadas?
