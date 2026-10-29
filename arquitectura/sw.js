@@ -1,5 +1,5 @@
-const CACHE = 'arquitectura-v2';
-const FILES = ['./', 'index.html', 'styles.css', 'app.js', 'course1.js', 'course2.js', 'course3.js', 'manifest.json', 'icon.svg', 'icon-180.png', 'icon-512.png'];
+const CACHE = 'arquitectura-v3';
+const FILES = ['./', 'index.html', 'styles.css', 'app.js', 'course1.js', 'course2.js', 'course3.js', 'prompt.js', 'manifest.json', 'icon.svg', 'icon-180.png', 'icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });

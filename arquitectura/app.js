@@ -171,6 +171,15 @@ const views = {
     ${s.flip ? `<div class="row"><button class="btn bad grow" data-act="grade" data-v="0">❌ No la sabía</button><button class="btn ok grow" data-act="grade" data-v="1">✅ La sabía</button></div>` : `<button class="btn block" data-act="flip">Mostrar respuesta</button>`}`;
   },
 
+  prompt() {
+    const txt = S.prompt ?? window.PROMPT_BASE;
+    return `<h1>Prompt base</h1><p class="mute">Plantilla lista para copiar y pegar en una IA. Reemplaza los campos <code>[[ASÍ]]</code> con los datos de tu proyecto; puedes editar el texto aquí mismo y se guarda.</p>
+    <div class="row" style="margin-bottom:10px"><button class="btn grow" data-act="pcopy">📋 Copiar prompt</button><button class="btn ghost sm" data-act="preset">Restaurar original</button></div>
+    <label for="ptxt">Prompt (editable)</label><textarea id="ptxt" class="ptxt" data-act="ptxt" spellcheck="false">${esc(txt)}</textarea>
+    <h2>Módulos opcionales</h2><p class="mute" style="margin-top:0">Pulsa para añadir la instrucción al final del prompt.</p>
+    <div class="row">${window.PROMPT_MODULES.map((m, k) => `<button class="btn sec sm" data-act="addmod" data-k="${k}">+ ${esc(m.k)}</button>`).join('')}</div>`;
+  },
+
   notes(id) {
     if (id) {
       const n = S.notes.find(x => x.id === id); if (!n) return views.notes();
@@ -196,7 +205,7 @@ function go(h) {
 function render() {
   const {name, a, b} = route();
   $('#view').innerHTML = (views[name] || views.home)(a, b);
-  const tab = {home: 'home', course: 'course', mod: 'course', lesson: 'course', quiz: 'course', review: 'review', study: 'review', notes: 'notes'}[name] || 'home';
+  const tab = {home: 'home', course: 'course', mod: 'course', lesson: 'course', quiz: 'course', review: 'review', study: 'review', notes: 'notes', prompt: 'prompt'}[name] || 'home';
   document.querySelectorAll('.tabs a').forEach(t => t.classList.toggle('on', t.dataset.tab === tab));
   const n = streak(); $('#streak').textContent = '🔥 ' + n + (n === 1 ? ' día' : ' días');
 }
@@ -225,6 +234,11 @@ document.addEventListener('click', e => {
     case 'quizagain': { const id = quiz.id; quiz = null; go('#/quiz/' + id); break; }
     case 'newnote': { const n = {id: uid(), title: '', body: '', updated: Date.now()}; S.notes.push(n); save(); go('#/notes/' + n.id); break; }
     case 'delnote': if (arm(el)) { S.notes = S.notes.filter(n => n.id !== el.dataset.id); save(); go('#/notes'); } break;
+    case 'pcopy': {
+      const t = $('#ptxt'), done = () => toast('Prompt copiado ✔'), fb = () => { t.focus(); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ok ? done() : toast('Texto seleccionado: cópialo con Ctrl/⌘+C'); };
+      (navigator.clipboard ? navigator.clipboard.writeText(t.value).then(done, fb) : fb()); break; }
+    case 'preset': if (arm(el)) { delete S.prompt; save(); render(); toast('Prompt restaurado'); } break;
+    case 'addmod': { const t = $('#ptxt'); t.value = t.value.replace(/\s*$/, '') + '\n\n' + window.PROMPT_MODULES[+el.dataset.k].t; S.prompt = t.value; save(); t.scrollTop = t.scrollHeight; toast('Módulo añadido al final'); break; }
     case 'export': showX = !showX; render(); break;
     case 'copyx': { const t = $('#xdata'); t.select(); (navigator.clipboard ? navigator.clipboard.writeText(t.value) : Promise.reject()).then(() => toast('Copiado'), () => toast('Selecciona y copia el texto')); break; }
     case 'doimport':
@@ -239,7 +253,8 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('input', e => {
   const el = e.target;
-  if (el.dataset.act === 'notefield') { const n = S.notes.find(x => x.id === el.dataset.id); if (n) { n[el.dataset.f] = el.value; n.updated = Date.now(); save(); } }
+  if (el.dataset.act === 'ptxt') { S.prompt = el.value; save(); }
+  else if (el.dataset.act === 'notefield') { const n = S.notes.find(x => x.id === el.dataset.id); if (n) { n[el.dataset.f] = el.value; n.updated = Date.now(); save(); } }
   else if (el.dataset.act === 'gfilter') {
     const q = el.value.trim().toLowerCase(); let n = 0;
     document.querySelectorAll('.gl').forEach(g => { const ok = !q || g.dataset.t.includes(q); g.hidden = !ok; if (ok) n++; });
