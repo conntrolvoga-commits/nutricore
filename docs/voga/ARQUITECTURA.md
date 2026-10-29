@@ -293,6 +293,19 @@ Regla: depósito ≈ 20–30 % del valor de reposición, con mínimo $300; cada 
 | Pérdida o no devolución (a los 5 días de retraso `[SUPUESTO]`) | 100 % del depósito; el excedente hasta el valor de reposición solo si los términos aceptados lo prevén `[VERIFICAR con abogado]` |
 | Retraso en la devolución | Cargo diario fijo por día de retraso, descontado del depósito |
 
+**Depósito por vestido:** el nivel es el valor por defecto, pero cada vestido puede tener su propio `deposit_amount` (si está vacío se usa el del nivel).
+
+**Lista inicial de tarifas por daño leve** `[SUPUESTO, la fija VOGA]`:
+
+| Daño | Tarifa |
+|---|---|
+| Botón, broche o gancho faltante | $50 |
+| Cierre descompuesto | $200 |
+| Descosido pequeño | $100 |
+| Mancha removible (lavandería extra) | $150 |
+| Dobladillo manchado o roto | $250 |
+| Pérdida de accesorio incluido (cinturón, estola) | valor del accesorio |
+
 Flujo: devolución recibida → inspección con **fotos obligatorias** (salida y regreso) → liquidación en el panel → reembolso automático a las 48 h si no hay descuentos, o notificación con evidencia si los hay (la clienta puede disputar desde el chat).
 Reembolso por método de pago: tarjeta → reverso a la misma tarjeta; **OXXO/SPEI → no se puede devolver al mismo medio**, por lo que en el checkout se pide la **CLABE** (o se acredita por SPEI manual/lote) `[VERIFICAR con Stripe]`.
 Términos y condiciones: la clienta acepta esta tabla antes de pagar (aceptación registrada con fecha, IP y versión del texto).
