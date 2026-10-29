@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#4f46e5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Estudio">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="styles.css">
+<title>Estudio · Aprende lo básico</title>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#/home"><span aria-hidden="true">📚</span> Estudio</a>
+  <div class="streak" id="streak" title="Racha de días estudiando"></div>
+</header>
+<main id="view" tabindex="-1"></main>
+<nav class="tabs" aria-label="Navegación principal">
+  <a href="#/home" data-tab="home"><i>🏠</i><span>Inicio</span></a>
+  <a href="#/cards" data-tab="cards"><i>🗂️</i><span>Tarjetas</span></a>
+  <a href="#/quiz" data-tab="quiz"><i>✅</i><span>Quiz</span></a>
+  <a href="#/notes" data-tab="notes"><i>📝</i><span>Notas</span></a>
+  <a href="#/focus" data-tab="focus"><i>⏱️</i><span>Enfoque</span></a>
+</nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
