@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Mayoreo · Mosaicca</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+:root{--bg:#f5f3ff;--surface:#fff;--fg:#25104f;--muted:#62588a;--line:#e2dcf7;--brand:#6c63c7;--brand-fg:#fff;--sun:#ffd23f;--sun-fg:#25104f;--candy:#c2185b;--d:'Fredoka',system-ui,sans-serif;--b:'Nunito',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#17112e;--surface:#241a47;--fg:#f1edff;--muted:#a79fd0;--line:#3a2e69;--brand:#8b83e0;--brand-fg:#17112e;--candy:#ff6db3}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--b);padding:0 max(16px,env(safe-area-inset-left)) 60px}
+.w{max-width:980px;margin:0 auto}
+header{padding:28px 0 8px}
+h1,h2{font-family:var(--d);margin:0;line-height:1.15}
+h1{font-size:clamp(30px,5vw,44px)}h2{font-size:24px;margin:26px 0 8px}
+a{color:var(--brand)}
+.sub{color:var(--muted);max-width:66ch}
+.box{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:16px 18px}
+.tiers{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tiers span{background:var(--sun);color:var(--sun-fg);font-weight:800;border-radius:999px;padding:4px 14px;font-size:14px}
+.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px}
+label.l{display:grid;gap:4px;font-weight:700;font-size:14px}
+input,textarea{font:inherit;color:var(--fg);background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:9px 12px;width:100%;min-width:0}
+input:focus,textarea:focus{outline:3px solid var(--brand);outline-offset:1px}
+.tw{overflow-x:auto;border:2px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left}
+th{font-family:var(--d);font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td input{width:84px;text-align:right}
+tr.g td{background:var(--bg);font-family:var(--d);font-weight:600}
+.bar{position:sticky;bottom:0;background:var(--surface);border:2px solid var(--fg);border-radius:16px;padding:12px 16px;margin-top:18px;display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;justify-content:space-between;box-shadow:0 4px 0 0 var(--fg)}
+.btn{font:700 16px var(--d);background:var(--sun);color:var(--sun-fg);border:2px solid var(--fg);border-radius:999px;padding:10px 26px;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err{color:var(--candy);font-weight:700;min-height:1.4em}
+.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+pre{white-space:pre-wrap;background:var(--bg);border-radius:12px;padding:12px;margin:8px 0 0;font:14px/1.5 ui-monospace,Menlo,monospace}
+</style>
+</head>
+<body>
+<div class="w">
+<header><h1>Mayoreo Mosaicca</h1><p class="sub">Para tiendas, papelerías, regalos y eventos. Elige tus cantidades: el descuento sube con el monto del pedido y se calcula solo.</p></header>
+<div id="off" class="box" hidden><b>El pedido de mayoreo en línea aún no está activo.</b><p style="margin:6px 0 0">Escríbenos por <a href="https://wa.me/528147902474?text=Hola%2C%20quiero%20informaci%C3%B3n%20de%20mayoreo">WhatsApp</a> y te mandamos la lista de precios.</p></div>
+<form id="f" hidden novalidate>
+  <div class="tiers" id="tiers"></div>
+  <h2>Tu negocio</h2>
+  <div class="box f">
+    <label class="l">Nombre del negocio<input id="business" autocomplete="organization" required></label>
+    <label class="l">Persona de contacto<input id="contact" autocomplete="name" required></label>
+    <label class="l">Correo<input id="email" type="email" autocomplete="email" required></label>
+    <label class="l">Teléfono o WhatsApp<input id="phone" type="tel" autocomplete="tel" required></label>
+    <label class="l">Ciudad<input id="city" autocomplete="address-level2" required></label>
+    <label class="l">Estado<input id="state" autocomplete="address-level1" required></label>
+    <label class="l">RFC (si necesitas factura)<input id="rfc" maxlength="13" autocomplete="off"></label>
+    <label class="l" style="align-content:end;grid-template-columns:auto 1fr;align-items:center"><input id="invoice" type="checkbox" style="width:auto"> Necesito factura</label>
+  </div>
+  <p class="hp" aria-hidden="true"><label>No llenar<input id="website" tabindex="-1" autocomplete="off"></label></p>
+  <h2>Artículos</h2>
+  <div class="tw"><table><thead><tr><th>Producto</th><th class="n">Público</th><th class="n">Mayoreo</th><th class="n">Cantidad</th><th class="n">Importe</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <h2>Notas</h2>
+  <label class="l"><textarea id="notes" rows="3" maxlength="500" placeholder="Diseños, colores, fecha en que lo necesitas…"></textarea></label>
+  <div class="bar" role="status"><div><b id="tot">$0.00</b> <span class="sub" id="dsc"></span><br><span class="sub" id="min"></span></div><button class="btn" id="go" type="submit" disabled>Enviar pedido</button></div>
+  <p class="err" id="err" role="alert"></p>
+  <p class="sub" id="terms"></p>
+</form>
+<div id="ok" class="box" hidden><h2 style="margin-top:0">¡Pedido recibido!</h2><p id="okid"></p><pre id="okpay"></pre><p class="sub">También te enviamos este resumen por correo. Confirmamos existencias, producción y envío por WhatsApp o correo.</p></div>
+<p class="sub" style="margin-top:28px"><a href="/">← Volver a la tienda</a></p>
+</div>
+<script>
+const $ = (s) => document.querySelector(s), mxn = (n) => '$' + n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const GROUPS = { fichas: 'Fichas de lotería', paquetes: 'Paquetes de fichas', tazas: 'Tazas', vasos: 'Vasos', termos: 'Termos', agendas: 'Agendas', libretas: 'Libretas', selmadera: 'Sellos de madera', selauto: 'Sellos autoentintables', selcera: 'Sellos de cera', pride: 'Colección Pride', musica: 'Mini CDs con NFC' };
+let cfg = null; const qty = {};
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const disc = (pub) => cfg.tiers.reduce((d, [min, p]) => (pub >= min ? p : d), 0);
+function calc() {
+  let pub = 0; cfg.items.forEach((i) => { pub += i.price * (qty[i.id] || 0); });
+  const d = disc(pub); let tot = 0;
+  cfg.items.forEach((i) => { const q = qty[i.id] || 0, u = Math.round(i.price * (1 - d) * 100) / 100; const el = document.getElementById('a_' + i.id), pe = document.getElementById('p_' + i.id); if (el) el.textContent = q ? mxn(u * q) : '—'; if (pe) pe.textContent = mxn(u); tot += u * q; });
+  $('#tot').textContent = mxn(tot); $('#dsc').textContent = d ? 'con ' + Math.round(d * 100) + '% de descuento' : '';
+  const falta = cfg.min_order - pub; $('#min').textContent = falta > 0 ? 'Te faltan ' + mxn(falta) + ' a precio público para el pedido mínimo.' : 'Pedido mínimo alcanzado.';
+  $('#go').disabled = falta > 0 || pub <= 0;
+}
+fetch('/api/mayoreo.php', { cache: 'no-store' }).then((r) => r.json()).then((c) => {
+  if (!c.enabled) { $('#off').hidden = false; return; }
+  cfg = c; $('#f').hidden = false; $('#terms').textContent = c.terms;
+  $('#tiers').innerHTML = `<span>Pedido mínimo ${mxn(c.min_order).replace('.00', '')}</span>` + c.tiers.map(([m, p]) => `<span>Desde ${mxn(m).replace('.00', '')}: ${Math.round(p * 100)}% menos</span>`).join('');
+  let last = '', h = '';
+  c.items.forEach((i) => {
+    if (i.g !== last) { last = i.g; h += `<tr class="g"><td colspan="5">${esc(GROUPS[i.g] || i.g)}</td></tr>`; }
+    h += `<tr><td>${esc(i.name)}</td><td class="n">${mxn(i.price)}</td><td class="n" id="p_${esc(i.id)}">${mxn(i.price)}</td><td class="n"><input type="number" min="0" max="9999" inputmode="numeric" data-id="${esc(i.id)}" aria-label="Cantidad de ${esc(i.name)}"></td><td class="n" id="a_${esc(i.id)}">—</td></tr>`;
+  });
+  $('#rows').innerHTML = h;
+  $('#rows').addEventListener('input', (e) => { const t = e.target; if (!t.dataset.id) return; qty[t.dataset.id] = Math.max(0, Math.min(9999, parseInt(t.value, 10) || 0)); calc(); });
+  calc();
+}).catch(() => { $('#off').hidden = false; });
+$('#f').addEventListener('submit', async (e) => {
+  e.preventDefault(); const err = $('#err'); err.textContent = ''; $('#go').disabled = true;
+  const v = (id) => $('#' + id).value.trim();
+  const body = { website: v('website'), buyer: { business: v('business'), contact: v('contact'), email: v('email'), phone: v('phone'), city: v('city'), state: v('state'), rfc: v('rfc'), invoice: $('#invoice').checked, notes: v('notes') },
+    items: Object.entries(qty).filter(([, q]) => q > 0).map(([id, q]) => ({ id, qty: q })) };
+  try {
+    const r = await fetch('/api/mayoreo.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d.ok) throw new Error(d.error || 'No se pudo enviar el pedido');
+    $('#f').hidden = true; $('#ok').hidden = false; $('#okid').textContent = 'Folio ' + d.orderId + ' · Total sin envío ' + mxn(d.total); $('#okpay').textContent = d.payment;
+    window.scrollTo({ top: 0 });
+  } catch (x) { err.textContent = x.message; $('#go').disabled = false; }
+});
+</script>
+</body>
+</html>

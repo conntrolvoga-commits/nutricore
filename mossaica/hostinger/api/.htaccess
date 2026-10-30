@@ -1,0 +1,5 @@
+# Los archivos internos nunca se sirven por la web
+<FilesMatch "^(config|config\.sample|lib|catalog)\.php$">
+  Require all denied
+</FilesMatch>
+Options -Indexes
