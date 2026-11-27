@@ -263,7 +263,7 @@ const MENSAJES={
 /* ============ ESTADO ============ */
 const S={ get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let eventos=S.get("ief_eventos",[]); let diario=S.get("ief_diario",[]); let vistos=S.get("ief_vistos",[]);
-const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
+const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["tipos","🌟 Tipos de IE"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
 let tab=(location.hash||"#inicio").slice(1); if(!TABS.find(t=>t[0]===tab))tab="inicio";
 
 const $=s=>document.querySelector(s);
@@ -280,7 +280,7 @@ function vInicio(){
  return `<div class="card"><h2>Bienvenida</h2><p>«${esc(f)}»</p>
  <p class="hint">Elige una sección para empezar. Cada módulo tiene frases para decir, frases para evitar y ejercicios prácticos.</p></div>
  <div class="row">${Object.entries(MODULOS).map(([k,m])=>`<button class="btn ghost" onclick="go('${k}')">${m.icon} ${m.nombre}</button>`).join("")}
- <button class="btn ghost" onclick="go('libro')">📖 Libros</button><button class="btn ghost" onclick="go('limites')">🚧 Límites</button><button class="btn ghost" onclick="go('calendario')">📅 Calendario</button></div>
+ <button class="btn ghost" onclick="go('libro')">📖 Libros</button><button class="btn ghost" onclick="go('limites')">🚧 Límites</button><button class="btn ghost" onclick="go('tipos')">🌟 Tipos de IE</button><button class="btn ghost" onclick="go('calendario')">📅 Calendario</button></div>
  <div class="card"><h3>🔔 Próximas fechas</h3>${prox.length?prox.map(evRow).join(""):'<p class="hint">Aún no hay fechas. Agrega cumpleaños y eventos en el Calendario.</p>'}</div>
  <div class="card"><h3>Mi progreso</h3><p>Capítulos leídos: <b>${vistos.length}/${LIBROS.reduce((a,l)=>a+l.capitulos.length,0)}</b></p>
  <div style="background:var(--line);border-radius:8px;height:10px"><div style="width:${vistos.length/LIBROS.reduce((a,l)=>a+l.capitulos.length,0)*100}%;background:var(--pri);height:10px;border-radius:8px"></div></div></div>`;
@@ -430,6 +430,57 @@ function vLimites(){
 function resTest(){const n=document.querySelectorAll(".lt:checked").length;
  $("#lr").textContent=n===0?"Excelente: vas por buen camino. Sigue preguntando antes de entrar.":n<=3?"Hay detalles por cuidar. Practica la pausa de 3 segundos y la pregunta de permiso.":"Conviene trabajarlo: empieza con el Semáforo de límites y la Revisión semanal."}
 
+/* ----- tipos de inteligencia emocional ----- */
+const TIPOS_IE=[
+ {g:"🧠 Los componentes (Goleman)",items:[
+  ["Autoconciencia","Reconocer lo que sientes, por qué lo sientes y cómo influye en tu conducta.","Tres veces al día completa: «Ahora siento ___ porque ___».","«Estoy molesta porque me sentí ignorada.»"],
+  ["Autorregulación","Manejar impulsos y emociones intensas sin reprimirlas ni descargarlas sobre otros.","Respira 3 veces antes de responder; espera 20 minutos antes de contestar algo hiriente.","«Necesito un momento para pensarlo y luego lo hablamos.»"],
+  ["Motivación","Mantener el ánimo, la disciplina y el sentido de propósito aun con obstáculos.","Escribe para qué haces lo que haces y divide la meta en pasos pequeños.","«Esto es difícil, pero me acerca a lo que quiero.»"],
+  ["Empatía","Entender lo que otra persona siente y necesita desde su punto de vista.","Pregunta «¿cómo te sientes con esto?» y repite lo que oíste antes de opinar.","«Si te entiendo bien, te sentiste solo en esa situación.»"],
+  ["Habilidades sociales","Comunicar con claridad, resolver conflictos, colaborar y construir vínculos.","Practica decir un límite y un agradecimiento cada día.","«Me gustaría que lo habláramos con calma.»"]]},
+ {g:"🔬 Las cuatro ramas (Mayer y Salovey)",items:[
+  ["Percibir emociones","Leer emociones en el rostro, el tono, el cuerpo y el ambiente.","Observa expresiones y tono de voz durante una conversación, sin interpretar de más.","«Noto que te cambió el gesto, ¿pasa algo?»"],
+  ["Usar las emociones para pensar","Aprovechar el estado emocional: alegría para crear, calma para decidir, miedo para prevenir.","Antes de decidir, pregúntate: ¿qué emoción tengo y cómo me está influyendo?","«Mejor decido mañana, cuando esté más tranquila.»"],
+  ["Comprender las emociones","Entender causas, mezclas y evolución de las emociones (el enojo puede venir de dolor o miedo).","Cuando te enojes, busca qué hay debajo: ¿dolor, miedo o impotencia?","«Creo que mi enojo es en realidad tristeza.»"],
+  ["Manejar las emociones","Regular las propias y ayudar a otros a calmarse y encontrar salidas.","Elige una estrategia: caminar, escribir, hablar con alguien, respirar.","«¿Quieres que te escuche o que busquemos soluciones?»"]]},
+ {g:"🌈 Inteligencias múltiples (Gardner)",items:[
+  ["Intrapersonal","Conocerte profundamente: valores, límites, fortalezas y emociones.","Lleva un diario emocional (está en esta app) y revisa tus patrones cada semana.","«Sé lo que necesito y lo que no.»"],
+  ["Interpersonal","Entender a otros, cooperar, liderar y comunicarte con cada tipo de persona.","Ponte en el lugar del otro antes de una conversación importante.","«Cuéntame cómo lo ves tú.»"],
+  ["Otras inteligencias (apoyo emocional)","Lingüística, lógico-matemática, espacial, musical, corporal-cinestésica y naturalista: cada una ayuda a procesar emociones de forma distinta.","Escribir, ordenar ideas, dibujar, escuchar música, bailar o caminar en la naturaleza pueden regular tu emoción.","«Hoy me ayuda salir a caminar.»"]]},
+ {g:"🔗 Inteligencias cercanas",items:[
+  ["Inteligencia social","Leer situaciones, adaptarte al entorno y moverte con naturalidad entre personas.","Observa el ambiente antes de intervenir: ¿es el momento, es el lugar?","«Vi que estaban conversando; ¿me puedo unir?»"],
+  ["Inteligencia espiritual","Buscar sentido, propósito y trascendencia; vivir de acuerdo con tus valores y tu fe.","Dedica unos minutos al día a silencio, oración, gratitud o meditación.","«¿Para qué hago esto y qué valor expresa?»"],
+  ["Inteligencia relacional","Cuidar los vínculos en el tiempo: constancia, reparación y confianza.","Un gesto diario pequeño: mensaje, agradecimiento, abrazo.","«Quiero que estemos bien; ¿qué necesitas de mí?»"],
+  ["Inteligencia cultural","Respetar y adaptarse a costumbres, creencias y maneras distintas de pensar.","Pregunta con curiosidad antes de juzgar y aprende de otras tradiciones.","«Cuéntame cómo se hace esto en tu familia.»"],
+  ["Inteligencia ética o moral","Actuar con integridad, justicia y responsabilidad hacia los demás.","Antes de decidir: ¿es justo, honesto y respetuoso para todos?","«Prefiero decir la verdad con cuidado.»"],
+  ["Inteligencia financiera emocional","Manejar las emociones que acompañan al dinero: miedo, culpa, envidia, ansiedad.","Habla de dinero con calma, define acuerdos y presupuesto sin reproches.","«Hablemos de cómo nos sentimos con nuestros gastos.»"],
+  ["Resiliencia","Recuperarte de crisis y pérdidas, aprender de ellas y seguir adelante.","Identifica qué sí controlas, pide apoyo y reconoce cada pequeño avance.","«Esto duele, y aun así puedo con ayuda.»"]]},
+ {g:"💼 Aplicaciones: trabajo y liderazgo",items:[
+  ["Liderazgo y trabajo en equipo","Un buen líder inspira confianza, escucha, reconoce y corrige con respeto. Un equipo con seguridad emocional rinde más.","Reconoce un logro cada día; da retroalimentación específica y privada; pregunta «¿cómo puedo apoyarte?».","«Valoro tu esfuerzo; propongo ajustar esto así.»"],
+  ["Ventas y negociación","Detrás de cada decisión de compra hay una emoción. Escucha, pregunta y busca beneficio mutuo.","Antes de ofrecer, pregunta qué necesita y qué le preocupa. No presiones.","«Veamos una solución que funcione para los dos.»"],
+  ["Servicio al cliente","Cliente que se siente escuchado, respetado y bien atendido regresa y recomienda (revisa el módulo Negocios).","Aplica el método ABC: Aceptar, Buscar solución, Cumplir.","«Gracias por avisarme; lo resolvemos hoy.»"],
+  ["Emprendimiento","Manejar incertidumbre, miedo al fracaso, soledad y exceso de trabajo sin perder la visión.","Define horarios, celebra pequeños logros y busca una red de apoyo.","«Un tropiezo es información, no identidad.»"]]},
+ {g:"🏠 Aplicaciones: familia y vida",items:[
+  ["Educación: maestros y estudiantes","El aprendizaje depende de sentirse seguro. Maestros que validan y estudiantes que regulan su frustración aprenden más.","Inicia la clase con un minuto de chequeo emocional; usa errores como parte del aprendizaje.","«Equivocarse es parte de aprender.»"],
+  ["Salud y cuidado de enfermos","Cuidadores y pacientes experimentan miedo, cansancio, culpa y tristeza. Cuidar al cuidador es esencial.","Acompaña sin minimizar: «Estoy aquí»; pide relevos y descansa.","«No tienes que estar bien; yo te acompaño.»"],
+  ["Duelo y pérdidas","El duelo no tiene fases fijas ni tiempos. Se vive con tristeza, enojo, culpa o alivio, y todos son normales.","Permite llorar, habla del ser querido, mantén rutinas básicas y pide apoyo profesional si el dolor te paraliza.","«No sé qué decir, pero estoy contigo.» (Evita: «ya pasará», «está en un lugar mejor».)"],
+  ["Adultos mayores y vejez","Pérdidas, soledad y cambio de roles. Necesitan dignidad, escucha y participación en decisiones.","Visitas regulares, pedir su consejo, escuchar sus historias y no tratarlos como niños.","«Tu experiencia me importa, cuéntame.»"],
+  ["Crianza de nietos y abuelidad","Amar sin sustituir a los padres: respetar sus reglas y ser un refugio afectivo.","Pregunta a los padres cómo prefieren que cuides; comparte tradiciones y tiempo de calidad.","«¿Cómo quieren que lo haga cuando los cuide?»"],
+  ["Divorcio y familias reconstituidas","Hijos, nuevas parejas y exparejas deben convivir. Se necesitan tiempo, límites claros y que los hijos no se sientan en medio.","No hables mal del otro progenitor, no uses a los hijos de mensajeros, construye vínculos despacio.","«Tú puedes querernos a todos; no tienes que elegir.»"],
+  ["Redes sociales y comunicación digital","Los mensajes carecen de tono y gesto. La comparación y la prisa dañan relaciones y autoestima.","Antes de enviar, relee; no discutas por chat; limita tiempo en redes; pide permiso para publicar fotos.","«Prefiero hablarlo por llamada para entendernos mejor.»"],
+  ["Manejo del estrés y la ansiedad","Reconocer señales del cuerpo, calmar el sistema nervioso y no cargar todo sola.","Respiración 4-6, pausas activas, dormir bien, hablar con alguien y buscar ayuda profesional cuando sea necesario.","«Me siento sobrepasada y necesito apoyo.»"]]}
+];
+function vTipos(){
+ return `<div class="card"><h2>🌟 Diferentes tipos de inteligencia emocional</h2>
+ <p>La inteligencia emocional tiene muchas caras. Aquí encontrarás sus componentes, las inteligencias cercanas y sus aplicaciones en distintas áreas de la vida. Cada una trae una descripción, una práctica y una frase de ejemplo.</p>
+ <input id="tq" placeholder="🔍 Buscar (ej. duelo, liderazgo, empatía)" oninput="filtraTipos()"></div><div id="tl">${tiposHtml("")}</div>`;
+}
+function tiposHtml(q){q=q.toLowerCase();let h="";
+ TIPOS_IE.forEach(g=>{const it=g.items.filter(i=>!q||(i[0]+i[1]+i[2]+i[3]).toLowerCase().includes(q));if(!it.length)return;
+  h+=`<h3 style="margin-top:18px">${g.g}</h3>`+it.map(i=>`<details ${q?'open':''}><summary>${esc(i[0])}</summary><div><p>${esc(i[1])}</p><div class="say"><b>Práctica:</b> ${esc(i[2])}</div><div class="say"><b>Frase:</b> ${esc(i[3])}</div></div></details>`).join("")});
+ return h||'<p class="hint">Sin resultados.</p>'}
+function filtraTipos(){$("#tl").innerHTML=tiposHtml($("#tq").value.trim())}
+
 /* ----- diario ----- */
 let sel=null;
 function vDiario(){
@@ -446,7 +497,7 @@ function saveD(){if(!sel){alert("Elige una emoción.");return}diario.push({f:Dat
 function clearD(){if(confirm("¿Borrar todo el diario?")){diario=[];S.set("ief_diario",diario);render()}}
 
 /* ============ RENDER ============ */
-function render(){nav();$("#app").innerHTML= tab==="inicio"?vInicio():tab==="libro"?vLibro():tab==="calendario"?vCal():tab==="diario"?vDiario():tab==="limites"?vLimites():vModulo(tab)}
+function render(){nav();$("#app").innerHTML= tab==="inicio"?vInicio():tab==="libro"?vLibro():tab==="calendario"?vCal():tab==="diario"?vDiario():tab==="limites"?vLimites():tab==="tipos"?vTipos():vModulo(tab)}
 window.addEventListener("hashchange",()=>{const t=location.hash.slice(1);if(TABS.find(x=>x[0]===t)&&t!==tab){tab=t;render()}});
 render();
 </script>
