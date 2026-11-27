@@ -47,7 +47,7 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:20px}
 <body>
 <header>
   <h1>💗 Corazón en Familia</h1>
-  <p>Inteligencia emocional para hijos, pareja, familia política, amigos y clientas</p>
+  <p>Inteligencia emocional para hijos, pareja, familia política, amigos y negocios</p>
 </header>
 <nav id="nav"></nav>
 <main id="app"></main>
@@ -102,9 +102,9 @@ const LIBRO = {
    {t:"Capítulo 9 · Amistades que nutren",
     p:["Los amigos son la familia que se elige. Una amistad sana se reconoce porque después de verla te sientes más tú, no menos. También requiere mantenimiento: constancia, honestidad y perdón.",
        "Aprende a diferenciar entre un amigo que está pasando un mal momento y una relación que siempre drena. Puedes amar a alguien y poner distancia."]},
-   {t:"Capítulo 10 · Emociones en el servicio: clientas y negocio",
-    p:["Vender o rentar un vestido es acompañar un momento: una boda, unos XV años, una graduación. La clienta no solo compra tela; compra confianza, ilusión y seguridad en su cuerpo.",
-       "Una atención emocionalmente inteligente: recibir con calidez, preguntar antes de proponer, cuidar comentarios sobre el cuerpo, ser honesta con lo que le favorece y manejar con calma las quejas. Una clienta bien tratada vuelve y recomienda."]},
+   {t:"Capítulo 10 · Emociones en el servicio: clientes y negocio",
+    p:["Atender a un cliente es acompañar un momento: una compra, una necesidad, una ilusión o un problema. Nadie compra solo un producto; compra confianza, tranquilidad y la sensación de ser bien tratado.",
+       "Una atención emocionalmente inteligente: recibir con calidez, preguntar antes de proponer, ser honesta, manejar con calma las quejas y dar seguimiento. Un cliente bien tratado vuelve y recomienda."]},
    {t:"Capítulo 11 · Perdonar y reparar",
     p:["Perdonar no es olvidar ni aprobar; es soltar el peso de cargar el rencor. La reparación tiene cuatro pasos: reconocer el daño, nombrar el impacto, pedir perdón sin «peros» y proponer cómo cambiar.",
        "«Perdón si te ofendí» no es una disculpa. «Me equivoqué al decir eso y entiendo que te dolió; la próxima vez lo hablaré en privado» sí lo es."]},
@@ -228,38 +228,42 @@ const MODULOS = {
   ],
   ejercicios:["Cada noche, dos agradecimientos mutuos.","Lenguajes del amor: cada uno anota qué lo hace sentir amado y se comparten las listas.","Reunión semanal de 20 minutos: lo que salió bien, lo que ajustar, lo que necesitamos."]},
 
- clientas:{icon:"👗",nombre:"Clientas · VOGA Renta",titulo:"Inteligencia emocional con clientas — Renta de vestidos",
-  intro:"Detrás de cada vestido hay un momento especial: una boda, unos XV, una graduación, una gala. Tu trabajo es cuidar la emoción y la confianza de la clienta.",
+ negocios:{icon:"💼",nombre:"Negocios y clientes",titulo:"Inteligencia emocional para cualquier tipo de negocio",
+  intro:"Sea cual sea tu negocio (tienda, servicio, restaurante, salud, belleza, consultoría, ventas o emprendimiento), detrás de cada cliente hay una persona con emociones. Quien se siente escuchado, respetado y bien tratado vuelve y recomienda.",
   etapas:[
-   {n:"Atención en cada paso",pts:["<b>Bienvenida:</b> sonríe, usa su nombre y pregunta por el evento: «¿Para qué ocasión es? Cuéntame».","<b>Escucha:</b> presupuesto, estilo, comodidad, qué le preocupa de su cuerpo; no supongas.","<b>Prueba:</b> hazla sentir cómoda, cuida privacidad y comentarios; céntrate en lo que le favorece.","<b>Cierre:</b> explica con claridad fechas, ajustes, depósito, devolución; las sorpresas generan desconfianza.","<b>Posventa:</b> un mensaje antes del evento («¡que lo disfrutes!») y otro después («cuéntame cómo te fue»)."],
-    di:["«Ese color te hace brillar. ¿Cómo te sientes con él?»","«Te acompaño en todo; si algo no te convence, probamos otro.»","«Lo importante es que te sientas tú misma y segura.»"],evita:["«Ese no te queda por tu cuerpo.»","Presionar para cerrar la venta.","Comentarios sobre peso o edad."]},
-   {n:"Manejo de situaciones difíciles",pts:["<b>Clienta indecisa:</b> reduce opciones a dos o tres; pregunta qué emoción quiere sentir ese día.","<b>Queja o reclamo:</b> escucha completo, valida («entiendo que estés preocupada»), propone solución concreta y cumple.","<b>Cambios de último minuto:</b> mantén la calma, ofrece alternativas y deja claras las políticas con amabilidad.","<b>Estrés propio:</b> si estás saturada, respira antes de contestar un mensaje; tu tono se transmite incluso por WhatsApp."],
-    di:["«Tienes razón en sentirte así. Veamos cómo lo solucionamos hoy mismo.»","«Gracias por avisarme, eso me ayuda a atenderte mejor.»"],evita:["Discutir o justificarte de inmediato.","Responder en caliente."]},
-   {n:"Plantillas de mensajes (WhatsApp)",pts:["<b>Confirmación:</b> «Hola [nombre] 💗 confirmo tu vestido [modelo] para el [fecha]. Cualquier duda aquí estoy.»","<b>Antes del evento:</b> «¡Faltan pocos días! Estoy segura de que te verás hermosa. ¿Necesitas algo más?»","<b>Después:</b> «¿Cómo te fue en tu evento? Me encantaría ver una foto, ¡me alegra haber sido parte de ese día!»","<b>Cumpleaños de clienta frecuente:</b> «Feliz cumpleaños, [nombre]. Que sea un día lleno de alegría. Un detalle de VOGA para ti…»"],
+   {n:"Las 6 etapas de la atención emocionalmente inteligente",pts:["<b>1. Recibe:</b> sonríe, saluda por su nombre y muestra interés genuino.","<b>2. Escucha:</b> pregunta qué necesita antes de ofrecer; no supongas.","<b>3. Valida:</b> «entiendo lo que necesitas» hace que la persona baje la guardia.","<b>4. Resuelve:</b> ofrece opciones claras y honestas, sin presionar.","<b>5. Cumple:</b> lo que prometes, lo entregas en el tiempo acordado.","<b>6. Da seguimiento:</b> un mensaje después demuestra que te importa la persona, no solo la venta."],
+    di:["«Cuéntame qué necesitas, para ayudarte mejor.»","«Gracias por tu confianza.»"],evita:["Interrumpir, presionar o prometer lo que no puedes cumplir."]},
+   {n:"Qué emoción hay detrás de cada tipo de cliente",pts:["<b>El indeciso:</b> tiene miedo a equivocarse. Reduce opciones y acompaña.","<b>El apurado:</b> siente ansiedad por el tiempo. Sé clara, rápida y concreta.","<b>El enojado:</b> casi siempre se siente ignorado o engañado. Escucha completo antes de responder.","<b>El desconfiado:</b> ha tenido malas experiencias. Transparencia total: precios, condiciones, plazos.","<b>El que regatea:</b> busca sentir que ganó. Reconoce su interés, mantén tu valor y ofrece alternativas.","<b>El cliente fiel:</b> necesita sentirse reconocido. Recuerda su nombre y sus gustos."],
+    di:["«Lo entiendo y quiero ayudarte a resolverlo.»","«Te explico cómo funciona para que no haya sorpresas.»"],evita:["«Eso no es mi culpa.»","Discutir o justificarte de inmediato."]},
+   {n:"Manejo de quejas: método ABC",pts:["<b>A – Aceptar la emoción:</b> «Tienes razón en sentirte así.»","<b>B – Buscar la solución:</b> ofrece una acción concreta y un plazo.","<b>C – Cumplir y confirmar:</b> hazlo y pregunta si quedó conforme.","Tu tono pesa más que tus palabras: en mensajes escritos, no respondas en caliente; espera, respira y redacta con calma.","Una queja bien resuelta puede generar más lealtad que una venta sin problemas."],
+    di:["«Gracias por avisarme, me ayuda a mejorar.»","«Lo resolvemos hoy; te confirmo en cuanto esté listo.»"],evita:["Culpar al cliente.","Ignorar mensajes."]},
+   {n:"Inteligencia emocional del dueño o vendedor",pts:["Reconoce tu propio estrés antes de atender: si estás saturada, haz una pausa de tres respiraciones.","Pon límites claros: horarios, políticas y canales de atención, comunicados con amabilidad.","No te tomes los «no» como algo personal: son información, no rechazo.","Cuida a tu equipo: reconocimiento, claridad y respeto. Un equipo emocionalmente sano atiende mejor.","Descansa: un negocio sostenible necesita una persona sostenible."],
+    di:["«Mi horario de atención es de… con gusto te respondo en ese tiempo.»"],evita:["Atender desde el enojo o la prisa."]},
+   {n:"Mensajes (WhatsApp) para cualquier negocio",pts:["<b>Bienvenida:</b> «Hola [nombre] 😊 gracias por escribirnos. ¿En qué te puedo ayudar?»","<b>Confirmación:</b> «Listo, [nombre]. Tu pedido/cita quedó para [fecha]. Cualquier duda aquí estoy.»","<b>Seguimiento:</b> «Hola [nombre], ¿cómo te fue con tu compra/servicio? Tu opinión nos ayuda mucho.»","<b>Disculpa:</b> «Lamento el inconveniente, [nombre]. Ya estoy revisándolo y te aviso hoy mismo.»","<b>Cumpleaños:</b> «Feliz cumpleaños, [nombre] 🎂 Gracias por ser parte de nuestro negocio.»"],
     di:[],evita:[]}
   ],
-  ejercicios:["Anota en tu libreta de clientas: nombre, evento, fecha, talla, detalle personal (para felicitar y recordar).","Practica el ABC: Aceptar la emoción, Buscar la solución, Cumplir lo prometido.","Cada semana revisa una queja y pregúntate: ¿qué me enseñó?"]}
+  ejercicios:["Llama o escribe a un cliente sin vender nada: solo para saber cómo le fue.","Anota tus tres quejas más frecuentes y escribe cómo aplicar el método ABC en cada una.","Antes de cada atención, pregúntate: «¿Qué emoción trae esta persona?»","Revisa tus mensajes de la semana: ¿suenan cálidos, claros y respetuosos?"]}
 };
 
 const FRASES=["Respira. Nombra la emoción. Elige tu respuesta.","Escuchar es una forma de amar.","Un mensaje a tiempo vale más que mil explicaciones tarde.","No tienes que ganar la discusión, tienes que cuidar la relación.","Lo que se valida se calma.","Tus límites son una forma de cuidar el vínculo.","Perdonar es soltar el peso, no aprobar el daño.","Habla desde lo que sientes, no desde lo que el otro hizo mal.","Un abrazo sincero también es una conversación.","La familia no es perfecta; es el lugar donde aprendemos a querer."];
 
 const EMOCIONES=["Alegría","Gratitud","Calma","Ilusión","Cansancio","Tristeza","Preocupación","Miedo","Enojo","Frustración","Soledad","Culpa","Celos","Estrés"];
-const TIPOS={cumple:"🎂 Cumpleaños",aniv:"💍 Aniversario",evento:"🎉 Evento familiar",renta:"👗 Evento de clienta (renta)",otro:"📌 Otro"};
-const REL={hijo:"Hijo/a",yerno:"Yerno/Nuera",politica:"Familia política",amigo:"Amigo/a",pareja:"Pareja/Esposo/a",clienta:"Clienta",otro:"Otro"};
+const TIPOS={cumple:"🎂 Cumpleaños",aniv:"💍 Aniversario",evento:"🎉 Evento familiar",renta:"💼 Evento de cliente",otro:"📌 Otro"};
+const REL={hijo:"Hijo/a",yerno:"Yerno/Nuera",politica:"Familia política",amigo:"Amigo/a",pareja:"Pareja/Esposo/a",clienta:"Cliente/a",otro:"Otro"};
 const MENSAJES={
  hijo:"Hoy pensé en ti y en lo orgullosa que estoy de la persona que eres. Te quiero mucho.",
  yerno:"Qué alegría tenerte en nuestra familia. Que tengas un día muy especial; te queremos.",
  politica:"Te mando un abrazo cálido. Gracias por ser parte de nuestra familia; que tengas un día hermoso.",
  amigo:"Pensé en ti hoy y quise decirte cuánto valoro tu amistad. ¡Que lo disfrutes mucho!",
  pareja:"Gracias por caminar a mi lado. Elegirte cada día es mi mejor decisión. Te amo.",
- clienta:"Feliz día, [nombre] 💗 Que sea un día lleno de alegría. Un abrazo de parte de todo el equipo de VOGA.",
+ clienta:"Feliz día, [nombre] 💗 Gracias por tu confianza. Que sea un día lleno de alegría; un abrazo de parte de todo el equipo.",
  otro:"Te mando un abrazo con cariño en este día tan especial."
 };
 
 /* ============ ESTADO ============ */
 const S={ get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let eventos=S.get("ief_eventos",[]); let diario=S.get("ief_diario",[]); let vistos=S.get("ief_vistos",[]);
-const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["clientas","👗 Clientas"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
+const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
 let tab=(location.hash||"#inicio").slice(1); if(!TABS.find(t=>t[0]===tab))tab="inicio";
 
 const $=s=>document.querySelector(s);
@@ -301,7 +305,7 @@ function vModulo(k){
  <button class="btn" onclick="gen('${k}')">Crear mensaje</button></div><textarea id="gm" rows="3" style="margin-top:8px" placeholder="Aquí aparece el mensaje"></textarea>
  <button class="btn ghost" style="margin-top:6px" onclick="copiar()">Copiar</button></div>`;
 }
-const MKEY={hijos:"hijo",yernos:"yerno",politica:"politica",amigos:"amigo",pareja:"pareja",clientas:"clienta"};
+const MKEY={hijos:"hijo",yernos:"yerno",politica:"politica",amigos:"amigo",pareja:"pareja",negocios:"clienta"};
 function gen(k){const n=$("#gn").value.trim();let m=MENSAJES[MKEY[k]];m=m.replace("[nombre]",n||"").replace(/\s+,/g,",");if(n&&!/\[nombre\]/.test(MENSAJES[MKEY[k]]))m=n+", "+m.charAt(0).toLowerCase()+m.slice(1);$("#gm").value=m}
 function copiar(){const t=$("#gm");t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand("copy")}}
 
@@ -339,7 +343,7 @@ function vCal(){
  <input id="ef" type="date"></div>
  <div class="row"><select id="et">${Object.entries(TIPOS).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>
  <select id="er">${Object.entries(REL).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></div>
- <input id="eno" placeholder="Nota (ej. le gustan las flores, talla 8, vestido rojo)"><label class="hint"><input type="checkbox" id="ea" style="width:auto"> Se repite cada año</label><br>
+ <input id="eno" placeholder="Nota (ej. le gustan las flores, prefiere WhatsApp)"><label class="hint"><input type="checkbox" id="ea" style="width:auto"> Se repite cada año</label><br>
  <button class="btn" style="margin-top:8px" onclick="addEv()">Guardar</button></div>
  <div class="card"><h3>🔔 Próximas fechas</h3>${pr.length?pr.map(e=>evRow(e)+`<div style="text-align:right" class="noprint"><button class="btn ghost" style="padding:3px 9px;font-size:.78rem" onclick="msgEv('${e.id}')">✉️ Mensaje</button> <button class="btn ghost" style="padding:3px 9px;font-size:.78rem" onclick="delEv('${e.id}')">🗑</button></div>`).join(""):'<p class="hint">Sin fechas guardadas.</p>'}</div>
  <div id="msgbox"></div>
@@ -382,7 +386,7 @@ const LIM={
   ["🏡 Suegros y familia política","No te instales en su casa ni opines sobre su hogar sin invitación; acuerda reglas de visitas. A los suegros: no pedir cuentas ni exigir presencia en cada fecha.","Di: «Gracias por invitarnos; ¿cuál sería un buen horario?»  Evita: rumores, comparar familias."],
   ["💞 Pareja","Cada uno tiene tiempo personal, amistades, intimidad y privacidad. Sin revisar celulares ni controlar horarios. El consentimiento íntimo siempre es libre y puede cambiar.","Di: «Necesito una hora para mí; luego estoy contigo.»  Evita: celos controladores, ley del hielo."],
   ["🫶 Amigos","No exijas disponibilidad total, no cuentes sus secretos, no presiones para beber, gastar o ir a planes. Respeta si hoy no pueden.","Di: «Cuando puedas, me encantará verte.»  Evita: «Siempre me dejas plantada.»"],
-  ["👗 Clientas","No toques ni comentes su cuerpo sin permiso; ofrece privacidad en el probador; no presiones para decidir; no compartas fotos ni datos sin autorización.","Di: «¿Te parece si te ayudo con el cierre?»  Evita: «Estás subida de peso», presionar al cierre."],
+  ["💼 Clientes (cualquier negocio)","No toques ni comentes su cuerpo sin permiso; ofrece privacidad en el probador; no presiones para decidir; no compartas fotos ni datos sin autorización.","Di: «¿Te parece si te ayudo con el cierre?»  Evita: «Estás subida de peso», presionar al cierre."],
   ["💼 Compañeros de trabajo","Respeta horarios, no hagas preguntas personales invasivas, no bromees con temas sensibles, no pidas favores personales continuamente.","Di: «¿Tienes un momento?»  Evita: mensajes laborales fuera de horario salvo urgencia."],
   ["🏘️ Vecinos y conocidos","Respeta el ruido, los horarios, la privacidad y las fotos. Pide permiso para usar espacios compartidos.","Di: «¿Te molesta si…?»  Evita: opinar de su vida."],
   ["🧓 Adultos mayores","Dignidad ante todo: no los trates como niños, no decidas por ellos si pueden decidir, pide permiso para ayudar y para tocar sus cosas.","Di: «¿Quieres que te ayude con esto?»  Evita: hablar de ellos delante de ellos como si no estuvieran."],
