@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Corazón en Familia – Inteligencia Emocional</title>
+<meta name="theme-color" content="#7b3f61">
+<style>
+:root{--bg:#fbf6f3;--card:#fff;--ink:#2e2430;--mute:#7a6b78;--pri:#7b3f61;--pri2:#a85b86;--acc:#e8b4a0;--ok:#3f7d5a;--no:#b0463c;--line:#eadfe2}
+@media(prefers-color-scheme:dark){:root{--bg:#1c161d;--card:#272029;--ink:#f1e9ee;--mute:#b3a3b0;--pri:#d58db5;--pri2:#e6a8c9;--acc:#7a4a3b;--ok:#7fcf9f;--no:#f09088;--line:#3b323d}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--ink);line-height:1.6}
+h1,h2,h3,button,nav,label,input,select,textarea{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:22px 16px 14px;text-align:center}
+header h1{margin:0;font-size:1.5rem}header p{margin:4px 0 0;opacity:.9;font-size:.95rem}
+nav{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;gap:4px;padding:8px}
+nav button{flex:0 0 auto;border:0;background:transparent;color:var(--ink);padding:8px 12px;border-radius:20px;font-size:.88rem;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--pri);color:#fff}
+main{max-width:860px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+h2{color:var(--pri);margin:6px 0 8px}h3{color:var(--pri);margin:14px 0 6px;font-size:1.05rem}
+.say,.avoid{border-left:4px solid var(--ok);padding:6px 10px;margin:6px 0;background:rgba(63,125,90,.08);border-radius:0 8px 8px 0}
+.avoid{border-color:var(--no);background:rgba(176,70,60,.08)}
+.say b{color:var(--ok)}.avoid b{color:var(--no)}
+details{border:1px solid var(--line);border-radius:12px;margin:8px 0;background:var(--card)}
+summary{cursor:pointer;padding:12px 14px;font-family:system-ui,sans-serif;font-weight:600;color:var(--pri)}
+details>div{padding:0 14px 12px}
+button.btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:9px 14px;font-size:.92rem;cursor:pointer}
+button.ghost{background:transparent;color:var(--pri);border:1px solid var(--pri)}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.95rem}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:8px 0}
+.tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.75rem;background:var(--acc);color:#3a2118;font-family:system-ui}
+.ev{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:9px 0}
+.ev small{color:var(--mute);display:block}
+.days{font-family:system-ui;font-weight:700;color:var(--pri);min-width:70px;text-align:right}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-family:system-ui;font-size:.82rem}
+.grid div{padding:7px 0;border-radius:8px}.grid .h{color:var(--mute);font-weight:600}
+.grid .has{background:var(--pri);color:#fff;font-weight:700}.grid .today{outline:2px solid var(--pri2)}
+.emo{display:flex;flex-wrap:wrap;gap:6px}.emo button{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:6px 11px;cursor:pointer;color:var(--ink);font-size:.88rem}
+.emo button.on{background:var(--pri);color:#fff}
+.hint{color:var(--mute);font-size:.88rem;font-family:system-ui}
+.pill-row{display:flex;gap:6px;flex-wrap:wrap}
+footer{text-align:center;color:var(--mute);font-size:.8rem;padding:20px}
+@media print{nav,header button,.noprint{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>💗 Corazón en Familia</h1>
+  <p>Inteligencia emocional para hijos, pareja, familia política, amigos y clientas</p>
+</header>
+<nav id="nav"></nav>
+<main id="app"></main>
+<footer>Esta app ofrece guía educativa de inteligencia emocional; no sustituye la atención de un psicólogo o terapeuta.<br>Tus datos (calendario, diario) se guardan solo en este dispositivo.</footer>
+
+<script>
+/* ============ CONTENIDO ============ */
+const LIBRO = {
+  titulo:"El Arte de Querer Bien",
+  subtitulo:"Un libro de inteligencia emocional para la familia que construimos y la que se suma",
+  capitulos:[
+   {t:"Introducción: Querer no basta, hay que saber querer",
+    p:["Amamos a nuestra familia con todo el corazón y, aun así, nos herimos. No es falta de amor: es falta de herramientas. La inteligencia emocional es la habilidad de reconocer lo que sentimos, comprender lo que sienten los demás y elegir cómo responder en lugar de reaccionar.",
+       "Este libro parte de una idea simple: las relaciones no se arreglan con más razón, sino con más presencia. Cuando una madre, un suegro, una nuera o una amiga se sienten vistos, la mitad del conflicto desaparece antes de empezar.",
+       "Cada capítulo cierra con una práctica pequeña. No leas para saber: lee para practicar."]},
+   {t:"Capítulo 1 · Conócete: las cinco habilidades",
+    p:["Daniel Goleman describió cinco pilares: autoconciencia, autorregulación, motivación, empatía y habilidades sociales. Piénsalos como cinco músculos que se entrenan.",
+       "<b>Autoconciencia:</b> poner nombre a lo que sientes. No es lo mismo «estoy mal» que «estoy dolida porque no me invitaron». Nombrar baja la intensidad de la emoción.",
+       "<b>Autorregulación:</b> el espacio entre lo que sientes y lo que haces. Respirar tres veces antes de contestar ya es regulación.",
+       "<b>Motivación:</b> recordar para qué quieres la relación: paz, cercanía, respeto.",
+       "<b>Empatía:</b> preguntarte «¿qué necesita esta persona que no sabe pedir?».",
+       "<b>Habilidades sociales:</b> decir lo difícil con cuidado y escuchar lo difícil sin defenderte.",
+       "<b>Práctica:</b> hoy, tres veces, detente y completa la frase «Ahora siento ___ porque necesito ___»."]},
+   {t:"Capítulo 2 · El mapa de las emociones",
+    p:["Hay cuatro emociones base: alegría, tristeza, miedo y enojo. Casi todo lo demás es una mezcla. Detrás del enojo casi siempre hay dolor, miedo o impotencia; el enojo es el guardaespaldas de una emoción más vulnerable.",
+       "Ninguna emoción es mala. Lo que importa es qué hacemos con ella. Sentir enojo es humano; gritar para humillar, es una elección.",
+       "<b>Práctica:</b> ante el próximo enojo, pregúntate: «¿qué hay debajo?». Escribe la respuesta antes de hablar."]},
+   {t:"Capítulo 3 · Escuchar para entender, no para ganar",
+    p:["La mayoría escucha esperando su turno. La escucha emocional tiene tres pasos: callar, reflejar («si te entiendo bien, te sentiste ignorada») y validar («tiene sentido que te sintieras así»). Validar no es dar la razón; es decir «tu emoción es real».",
+       "Una persona que se siente escuchada baja la guardia. Una que se siente corregida, la sube.",
+       "<b>Práctica:</b> en tu próxima conversación tensa, repite con tus palabras lo que oíste antes de responder."]},
+   {t:"Capítulo 4 · Límites: el amor con puertas",
+    p:["Poner límites no es rechazar; es enseñar cómo quieres ser tratada. Un límite sano tiene la forma: «Cuando pasa ___, me siento ___, y necesito ___». Se dice una vez, con calma y se sostiene con coherencia.",
+       "Quien no sabe poner límites termina acumulando resentimiento, y el resentimiento sale por donde menos queremos: ironía, silencios, distancia.",
+       "<b>Práctica:</b> identifica un límite que has postergado y escríbelo en la fórmula de arriba."]},
+   {t:"Capítulo 5 · Criar hijos emocionalmente fuertes",
+    p:["Los niños no necesitan padres perfectos, necesitan padres que reparen. Un «me equivoqué, perdóname» enseña más que mil sermones.",
+       "Acompañar emociones sin resolverlas por ellos: nombrar («estás frustrado»), validar («es difícil cuando algo no sale») y guiar («¿qué podemos hacer?»).",
+       "Con hijos adultos el reto cambia: pasar de mandar a acompañar. Ya no educas, aconsejas solo cuando te lo piden, y confías."]},
+   {t:"Capítulo 6 · Hijos adultos, yernos y nueras: ampliar el círculo",
+    p:["Cuando un hijo elige pareja, no «pierdes» a un hijo: se amplía tu familia. Pero esa persona no es tu hijo; es un adulto con su historia, que entra a un clan con reglas que no conoce.",
+       "Tres actitudes que construyen puentes: <b>curiosidad</b> (preguntar por su familia y su historia), <b>respeto</b> (no comparar ni opinar sobre la crianza ni las decisiones de la pareja sin que se pida) y <b>cuidado de la privacidad</b> (lo que te cuenta tu hijo de su pareja, no se repite).",
+       "El mejor regalo para una pareja joven: que sus padres no los obliguen a elegir bando."]},
+   {t:"Capítulo 7 · Familia política: convivir sin perderse",
+    p:["Suegros, cuñados, concuñas, consuegros: personas que no elegimos pero con quienes compartimos lo que más amamos. La clave es la <b>lealtad dual</b>: puedes querer a tu familia de origen y a tu familia política sin traicionar a ninguna.",
+       "Reglas de oro: no quejarte de la familia de tu pareja ante terceros, no pedirle a tu pareja que «defienda» contra su propia madre, y resolver los desacuerdos directamente y a tiempo, no por rumores.",
+       "Los cumpleaños, bodas y celebraciones son oportunidades: un mensaje cálido a tiempo vale más que una discusión ganada."]},
+   {t:"Capítulo 8 · La pareja: el equipo que se cuida",
+    p:["John Gottman encontró que las parejas estables comparten cinco interacciones positivas por cada una negativa. El amor se sostiene en pequeños gestos diarios: saludar, agradecer, mirar a los ojos.",
+       "Los cuatro jinetes que destruyen: <b>crítica</b> (atacar a la persona), <b>desprecio</b> (burla, ironía), <b>actitud defensiva</b> y <b>muralla</b> (cerrarse). Sus antídotos: queja suave, cultura de aprecio, responsabilidad y autocalma.",
+       "Hablar de pareja no es hablar de quién tiene razón, sino de qué necesitamos cada quien para sentirnos amados."]},
+   {t:"Capítulo 9 · Amistades que nutren",
+    p:["Los amigos son la familia que se elige. Una amistad sana se reconoce porque después de verla te sientes más tú, no menos. También requiere mantenimiento: constancia, honestidad y perdón.",
+       "Aprende a diferenciar entre un amigo que está pasando un mal momento y una relación que siempre drena. Puedes amar a alguien y poner distancia."]},
+   {t:"Capítulo 10 · Emociones en el servicio: clientas y negocio",
+    p:["Vender o rentar un vestido es acompañar un momento: una boda, unos XV años, una graduación. La clienta no solo compra tela; compra confianza, ilusión y seguridad en su cuerpo.",
+       "Una atención emocionalmente inteligente: recibir con calidez, preguntar antes de proponer, cuidar comentarios sobre el cuerpo, ser honesta con lo que le favorece y manejar con calma las quejas. Una clienta bien tratada vuelve y recomienda."]},
+   {t:"Capítulo 11 · Perdonar y reparar",
+    p:["Perdonar no es olvidar ni aprobar; es soltar el peso de cargar el rencor. La reparación tiene cuatro pasos: reconocer el daño, nombrar el impacto, pedir perdón sin «peros» y proponer cómo cambiar.",
+       "«Perdón si te ofendí» no es una disculpa. «Me equivoqué al decir eso y entiendo que te dolió; la próxima vez lo hablaré en privado» sí lo es."]},
+   {t:"Capítulo 12 · Cuidarte para poder cuidar",
+    p:["No puedes dar lo que no tienes. El autocuidado emocional incluye descanso, movimiento, amistades, espiritualidad (si es tu camino) y pedir ayuda profesional cuando el dolor pasa de lo que puedes cargar sola.",
+       "Cierra cada día con tres preguntas: ¿qué sentí?, ¿qué agradezco?, ¿a quién puedo llamar mañana con cariño?"]}
+  ]
+};
+
+const MODULOS = {
+ hijos:{icon:"🧒",nombre:"Hijos",titulo:"Inteligencia emocional con los hijos",
+  intro:"Los hijos aprenden más de lo que ven en nosotros que de lo que escuchan. Esta guía abarca desde niños hasta hijos adultos.",
+  etapas:[
+   {n:"Niños (3–11 años)",pts:["Nombra sus emociones: «Estás enojado porque se terminó el juego».","Valida antes de corregir: la emoción se acepta, la conducta se limita.","Dedica 15 minutos diarios sin pantallas, solo para él o ella.","Repara cuando te equivoques: modelas humildad."],
+    di:["«Entiendo que estés molesto. Puedes enojarte, pero no pegar.»","«Cuéntame, te escucho.»"],evita:["«No llores por eso.»","«Si no te portas bien, no te quiero.»"]},
+   {n:"Adolescentes (12–18)",pts:["Escucha más de lo que hablas: primero conexión, luego consejo.","Negocia límites claros y pocos; explica el porqué.","Respeta su privacidad y su necesidad de independencia.","Si hay señales de depresión, autolesión o consumo, busca ayuda profesional sin demora."],
+    di:["«No estoy de acuerdo, pero quiero entender cómo lo ves.»","«Estoy aquí, sin juicio.»"],evita:["«Cuando yo tenía tu edad…»","Burlarte de lo que sienten."]},
+   {n:"Hijos adultos",pts:["Pasa de «dirigir» a «acompañar»: aconseja solo si te lo piden.","Reconoce sus logros y respeta sus decisiones aunque no las compartas.","No uses el dinero, la culpa o la enfermedad como moneda emocional.","Procura que la relación no sea solo de obligaciones: llamadas sin motivo, un «pensé en ti»."],
+    di:["«Confío en ti. Si me necesitas, aquí estoy.»","«¿Quieres mi opinión o solo que te escuche?»"],evita:["«Después de todo lo que hice por ti…»","Compararlo con hermanos o primos."]}
+  ],
+  ejercicios:["Ritual de la noche: cada quien dice «lo mejor y lo más difícil de mi día».","Carta de aprecio: escríbele a cada hijo tres cualidades que admiras.","Termómetro de emociones en el refrigerador para los más pequeños."]},
+
+ yernos:{icon:"🤝",nombre:"Yernos y nueras",titulo:"Inteligencia emocional para yernos y nueras",
+  intro:"Para quien entra a una familia nueva, y para los suegros que los reciben. Los vínculos fuertes se construyen con respeto, paciencia y pequeños gestos.",
+  etapas:[
+   {n:"Si eres yerno o nuera",pts:["Recuerda que estás entrando a una cultura familiar con costumbres propias: observa antes de juzgar.","Habla con tu pareja en privado de lo que te incomoda; no lo coloques entre tú y sus padres.","Reconoce el esfuerzo: un «gracias por recibirnos» abre puertas.","Define tus límites con amabilidad (visitas, consejos, crianza)."],
+    di:["«Me encantó la comida, ¿me enseñas la receta?»","«Quiero que nos llevemos bien; ¿cómo puedo ayudar?»"],evita:["Quejarte de tus suegros con tu pareja de forma humillante.","Comparar a tu familia con la suya delante de todos."]},
+   {n:"Si eres suegra o suegro",pts:["Tu hijo/a eligió a esa persona: confía en su elección.","No des consejos de crianza ni de pareja sin que te los pidan.","Evita competir por el cariño de tu hijo/a.","Incluye de forma genuina: invitaciones, mensajes de cumpleaños, un lugar en la mesa."],
+    di:["«Me alegra que seas parte de la familia.»","«Si en algún momento necesitan ayuda, me dicen.»"],evita:["«Mi hijo/a antes no hacía eso.»","Contar a otros lo que tu hijo/a te confía de su pareja."]}
+  ],
+  ejercicios:["Escribe tres cualidades que valoras de tu yerno/nuera y díselas en voz alta.","Un detalle al mes: un mensaje, un café, una pregunta por su día.","Acuerden juntos las «reglas de visitas» para evitar roces."]},
+
+ politica:{icon:"🏡",nombre:"Familia política",titulo:"Inteligencia emocional con la familia política",
+  intro:"Consuegros, cuñados, concuñas, tíos políticos… Una red familiar amplia necesita acuerdos claros y mucha empatía.",
+  etapas:[
+   {n:"Claves de convivencia",pts:["Lealtad dual: puedes querer a ambas familias sin traicionar a ninguna.","No juzgues por rumores: pregunta directamente.","Las reuniones grandes tienen temas sensibles (dinero, política, religión): acuerda evitarlos o abordarlos con respeto.","No uses a los niños como mensajeros ni como excusa."],
+    di:["«Prefiero hablarlo contigo directamente.»","«Gracias por incluirnos, nos hace sentir bienvenidos.»"],evita:["Hablar mal de la familia de tu pareja ante terceros.","Pedirle a tu pareja que «elija» entre tu familia y la suya."]},
+   {n:"Conflictos comunes y cómo abordarlos",pts:["<b>Celos o competencia:</b> reconocer el valor de cada quien. Cuando todos se sienten importantes, baja la rivalidad.","<b>Intromisión:</b> agradece la intención y marca el límite. «Gracias por tu consejo, lo vamos a pensar nosotros».","<b>Heridas antiguas:</b> si el pasado pesa, propón una conversación de reparación sin reproches.","<b>Dinero y herencias:</b> acuerdos claros, por escrito y a tiempo."],
+    di:["«Valoro tu opinión y es una decisión que tomaremos como pareja.»"],evita:["Ironías, indirectas o silencios prolongados."]}
+  ],
+  ejercicios:["Haz un «mapa familiar» y escribe en cada persona algo que aprecias.","Escoge una persona difícil y propón un paso pequeño: un saludo cálido en su cumpleaños.","Planea una reunión con reglas de juego: tiempos, temas, quién cocina, quién recoge."]},
+
+ amigos:{icon:"🫶",nombre:"Amigos",titulo:"Inteligencia emocional para la amistad",
+  intro:"La amistad es una de las fuentes más fuertes de bienestar. También requiere cuidado.",
+  etapas:[
+   {n:"Amistades sanas",pts:["Constancia: un mensaje corto a tiempo sostiene mucho.","Honestidad con cariño: decir lo que piensas sin herir.","Alegrarte por sus logros sin compararte.","Estar presente en lo difícil: a veces solo escuchar es suficiente."],
+    di:["«Pensé en ti hoy. ¿Cómo estás de verdad?»","«No sé qué decir, pero aquí estoy.»"],evita:["Dar consejos cuando solo necesita desahogarse.","Desaparecer en los momentos difíciles."]},
+   {n:"Cuando la amistad duele",pts:["Habla en privado y pronto: «Me sentí mal cuando… ¿podemos hablarlo?»","Distingue un mal momento de un patrón: si siempre hay crítica o manipulación, está bien tomar distancia.","Despedirte con gratitud también es una forma de cuidar."],
+    di:["«Valoro mucho nuestra amistad por eso quiero decirte esto…»"],evita:["Hablar de ella a sus espaldas.","Cobrarle favores con rencor."]}
+  ],
+  ejercicios:["Escribe a un amigo con quien perdiste contacto: «me acordé de ti».","Reserva una cita mensual sin pantallas.","Haz una lista de amistades que te nutren y cuida a esas."]},
+
+ pareja:{icon:"💞",nombre:"Pareja y matrimonio",titulo:"Inteligencia emocional en pareja y matrimonio",
+  intro:"Para novios, casados y quienes quieren recuperar la cercanía. Una relación sana no es la que no tiene problemas, sino la que sabe repararlos.",
+  etapas:[
+   {n:"Para parejas",pts:["Cinco interacciones positivas por cada negativa.","Usa la fórmula: «Cuando pasa ___, me siento ___, necesito ___».","Haz «citas» semanales aunque sea en casa.","Pide con claridad; no esperes que adivinen.","Toma una pausa de 20 minutos si la discusión sube de tono, y retoma después."],
+    di:["«Me importa que estemos bien.»","«Gracias por lo que hiciste hoy.»"],evita:["«Siempre / nunca…»","Insultos, ironías, ley del hielo."]},
+   {n:"De esposa a esposo",pts:["Dile lo que necesitas en positivo: «me ayudaría que…» en lugar de «nunca haces…».","Reconoce su esfuerzo antes de plantear una queja: muchos hombres se cierran cuando sienten que nunca es suficiente.","Elige el momento: no en pleno cansancio, ni delante de los hijos.","Comparte tus emociones sin esperar que las resuelva: «solo quiero que me escuches».","Cuida el aprecio y la admiración: un «confío en ti» fortalece más que cualquier reclamo.","Acuerden tareas y expectativas del hogar, para que no se acumule resentimiento."],
+    di:["«Me siento sola cuando llegamos tarde y no hablamos; ¿podemos tener 15 minutos juntos?»","«Gracias por trabajar tanto; quiero que nos cuidemos como equipo.»","«Necesito tu ayuda con esto, ¿cómo lo organizamos?»"],evita:["«Eres igual que tu mamá/papá.»","Corregirlo frente a los demás.","Compararlo con otros esposos."]},
+   {n:"De esposo a esposa (complemento)",pts:["Escucha sin querer arreglar: pregunta «¿quieres consejo o apoyo?»","Valida: «tiene sentido que te sientas así».","Detalles pequeños diarios: un mensaje, un abrazo, ayuda con la casa sin que te lo pidan.","Cuida tu tono: lo que dices importa, pero cómo lo dices importa más."],
+    di:["«Veo todo lo que haces. Gracias.»"],evita:["«No es para tanto.»","Minimizar sus emociones."]}
+  ],
+  ejercicios:["Cada noche, dos agradecimientos mutuos.","Lenguajes del amor: cada uno anota qué lo hace sentir amado y se comparten las listas.","Reunión semanal de 20 minutos: lo que salió bien, lo que ajustar, lo que necesitamos."]},
+
+ clientas:{icon:"👗",nombre:"Clientas · VOGA Renta",titulo:"Inteligencia emocional con clientas — Renta de vestidos",
+  intro:"Detrás de cada vestido hay un momento especial: una boda, unos XV, una graduación, una gala. Tu trabajo es cuidar la emoción y la confianza de la clienta.",
+  etapas:[
+   {n:"Atención en cada paso",pts:["<b>Bienvenida:</b> sonríe, usa su nombre y pregunta por el evento: «¿Para qué ocasión es? Cuéntame».","<b>Escucha:</b> presupuesto, estilo, comodidad, qué le preocupa de su cuerpo; no supongas.","<b>Prueba:</b> hazla sentir cómoda, cuida privacidad y comentarios; céntrate en lo que le favorece.","<b>Cierre:</b> explica con claridad fechas, ajustes, depósito, devolución; las sorpresas generan desconfianza.","<b>Posventa:</b> un mensaje antes del evento («¡que lo disfrutes!») y otro después («cuéntame cómo te fue»)."],
+    di:["«Ese color te hace brillar. ¿Cómo te sientes con él?»","«Te acompaño en todo; si algo no te convence, probamos otro.»","«Lo importante es que te sientas tú misma y segura.»"],evita:["«Ese no te queda por tu cuerpo.»","Presionar para cerrar la venta.","Comentarios sobre peso o edad."]},
+   {n:"Manejo de situaciones difíciles",pts:["<b>Clienta indecisa:</b> reduce opciones a dos o tres; pregunta qué emoción quiere sentir ese día.","<b>Queja o reclamo:</b> escucha completo, valida («entiendo que estés preocupada»), propone solución concreta y cumple.","<b>Cambios de último minuto:</b> mantén la calma, ofrece alternativas y deja claras las políticas con amabilidad.","<b>Estrés propio:</b> si estás saturada, respira antes de contestar un mensaje; tu tono se transmite incluso por WhatsApp."],
+    di:["«Tienes razón en sentirte así. Veamos cómo lo solucionamos hoy mismo.»","«Gracias por avisarme, eso me ayuda a atenderte mejor.»"],evita:["Discutir o justificarte de inmediato.","Responder en caliente."]},
+   {n:"Plantillas de mensajes (WhatsApp)",pts:["<b>Confirmación:</b> «Hola [nombre] 💗 confirmo tu vestido [modelo] para el [fecha]. Cualquier duda aquí estoy.»","<b>Antes del evento:</b> «¡Faltan pocos días! Estoy segura de que te verás hermosa. ¿Necesitas algo más?»","<b>Después:</b> «¿Cómo te fue en tu evento? Me encantaría ver una foto, ¡me alegra haber sido parte de ese día!»","<b>Cumpleaños de clienta frecuente:</b> «Feliz cumpleaños, [nombre]. Que sea un día lleno de alegría. Un detalle de VOGA para ti…»"],
+    di:[],evita:[]}
+  ],
+  ejercicios:["Anota en tu libreta de clientas: nombre, evento, fecha, talla, detalle personal (para felicitar y recordar).","Practica el ABC: Aceptar la emoción, Buscar la solución, Cumplir lo prometido.","Cada semana revisa una queja y pregúntate: ¿qué me enseñó?"]}
+};
+
+const FRASES=["Respira. Nombra la emoción. Elige tu respuesta.","Escuchar es una forma de amar.","Un mensaje a tiempo vale más que mil explicaciones tarde.","No tienes que ganar la discusión, tienes que cuidar la relación.","Lo que se valida se calma.","Tus límites son una forma de cuidar el vínculo.","Perdonar es soltar el peso, no aprobar el daño.","Habla desde lo que sientes, no desde lo que el otro hizo mal.","Un abrazo sincero también es una conversación.","La familia no es perfecta; es el lugar donde aprendemos a querer."];
+
+const EMOCIONES=["Alegría","Gratitud","Calma","Ilusión","Cansancio","Tristeza","Preocupación","Miedo","Enojo","Frustración","Soledad","Culpa","Celos","Estrés"];
+const TIPOS={cumple:"🎂 Cumpleaños",aniv:"💍 Aniversario",evento:"🎉 Evento familiar",renta:"👗 Evento de clienta (renta)",otro:"📌 Otro"};
+const REL={hijo:"Hijo/a",yerno:"Yerno/Nuera",politica:"Familia política",amigo:"Amigo/a",pareja:"Pareja/Esposo/a",clienta:"Clienta",otro:"Otro"};
+const MENSAJES={
+ hijo:"Hoy pensé en ti y en lo orgullosa que estoy de la persona que eres. Te quiero mucho.",
+ yerno:"Qué alegría tenerte en nuestra familia. Que tengas un día muy especial; te queremos.",
+ politica:"Te mando un abrazo cálido. Gracias por ser parte de nuestra familia; que tengas un día hermoso.",
+ amigo:"Pensé en ti hoy y quise decirte cuánto valoro tu amistad. ¡Que lo disfrutes mucho!",
+ pareja:"Gracias por caminar a mi lado. Elegirte cada día es mi mejor decisión. Te amo.",
+ clienta:"Feliz día, [nombre] 💗 Que sea un día lleno de alegría. Un abrazo de parte de todo el equipo de VOGA.",
+ otro:"Te mando un abrazo con cariño en este día tan especial."
+};
+
+/* ============ ESTADO ============ */
+const S={ get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let eventos=S.get("ief_eventos",[]); let diario=S.get("ief_diario",[]); let vistos=S.get("ief_vistos",[]);
+const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libro"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["clientas","👗 Clientas"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
+let tab=(location.hash||"#inicio").slice(1); if(!TABS.find(t=>t[0]===tab))tab="inicio";
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function nav(){ $("#nav").innerHTML=TABS.map(([k,l])=>`<button class="${k===tab?'on':''}" data-t="${k}">${l}</button>`).join("");
+ $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>go(b.dataset.t)); }
+function go(t){tab=t;location.hash=t;render();window.scrollTo(0,0)}
+
+/* ============ VISTAS ============ */
+function vInicio(){
+ const f=FRASES[new Date().getDate()%FRASES.length];
+ const prox=proximos().slice(0,3);
+ return `<div class="card"><h2>Bienvenida</h2><p>«${esc(f)}»</p>
+ <p class="hint">Elige una sección para empezar. Cada módulo tiene frases para decir, frases para evitar y ejercicios prácticos.</p></div>
+ <div class="row">${Object.entries(MODULOS).map(([k,m])=>`<button class="btn ghost" onclick="go('${k}')">${m.icon} ${m.nombre}</button>`).join("")}
+ <button class="btn ghost" onclick="go('libro')">📖 Libro</button><button class="btn ghost" onclick="go('calendario')">📅 Calendario</button></div>
+ <div class="card"><h3>🔔 Próximas fechas</h3>${prox.length?prox.map(evRow).join(""):'<p class="hint">Aún no hay fechas. Agrega cumpleaños y eventos en el Calendario.</p>'}</div>
+ <div class="card"><h3>Mi progreso</h3><p>Capítulos leídos: <b>${vistos.length}/${LIBRO.capitulos.length}</b></p>
+ <div style="background:var(--line);border-radius:8px;height:10px"><div style="width:${vistos.length/LIBRO.capitulos.length*100}%;background:var(--pri);height:10px;border-radius:8px"></div></div></div>`;
+}
+function vLibro(){
+ return `<div class="card"><h2>📖 ${esc(LIBRO.titulo)}</h2><p><i>${esc(LIBRO.subtitulo)}</i></p><p class="hint">Marca cada capítulo como leído para ver tu progreso.</p></div>`+
+ LIBRO.capitulos.map((c,i)=>`<details><summary>${vistos.includes(i)?'✅ ':''}${esc(c.t)}</summary><div>${c.p.map(p=>`<p>${p}</p>`).join("")}
+ <button class="btn ${vistos.includes(i)?'ghost':''}" onclick="marcar(${i})">${vistos.includes(i)?'Marcar como no leído':'Marcar como leído'}</button></div></details>`).join("")+
+ `<div class="card noprint"><button class="btn" onclick="window.print()">🖨️ Imprimir / guardar PDF</button></div>`;
+}
+function marcar(i){const x=vistos.indexOf(i);x>=0?vistos.splice(x,1):vistos.push(i);S.set("ief_vistos",vistos);const y=window.scrollY;render();window.scrollTo(0,y)}
+function vModulo(k){
+ const m=MODULOS[k];
+ return `<div class="card"><h2>${m.icon} ${esc(m.titulo)}</h2><p>${m.intro}</p></div>`+
+ m.etapas.map(e=>`<details open><summary>${esc(e.n)}</summary><div><ul>${e.pts.map(p=>`<li>${p}</li>`).join("")}</ul>
+ ${e.di.map(d=>`<div class="say"><b>✔ Di:</b> ${esc(d)}</div>`).join("")}${e.evita.map(d=>`<div class="avoid"><b>✖ Evita:</b> ${esc(d)}</div>`).join("")}</div></details>`).join("")+
+ `<div class="card"><h3>🌱 Ejercicios prácticos</h3><ul>${m.ejercicios.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+ <div class="card"><h3>✉️ Generador de mensaje</h3><p class="hint">Escribe un nombre y copia un mensaje cálido.</p>
+ <input id="gn" placeholder="Nombre (opcional)"><div class="pill-row" style="margin-top:8px">
+ <button class="btn" onclick="gen('${k}')">Crear mensaje</button></div><textarea id="gm" rows="3" style="margin-top:8px" placeholder="Aquí aparece el mensaje"></textarea>
+ <button class="btn ghost" style="margin-top:6px" onclick="copiar()">Copiar</button></div>`;
+}
+const MKEY={hijos:"hijo",yernos:"yerno",politica:"politica",amigos:"amigo",pareja:"pareja",clientas:"clienta"};
+function gen(k){const n=$("#gn").value.trim();let m=MENSAJES[MKEY[k]];m=m.replace("[nombre]",n||"").replace(/\s+,/g,",");if(n&&!/\[nombre\]/.test(MENSAJES[MKEY[k]]))m=n+", "+m.charAt(0).toLowerCase()+m.slice(1);$("#gm").value=m}
+function copiar(){const t=$("#gm");t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand("copy")}}
+
+/* ----- calendario ----- */
+function proxFecha(e){ // próxima ocurrencia
+ const hoy=new Date();hoy.setHours(0,0,0,0);const [y,m,d]=e.fecha.split("-").map(Number);
+ let f=new Date(y,m-1,d);
+ if(e.anual||["cumple","aniv"].includes(e.tipo)){f=new Date(hoy.getFullYear(),m-1,d);if(f<hoy)f=new Date(hoy.getFullYear()+1,m-1,d)}
+ return f;
+}
+function proximos(){const hoy=new Date();hoy.setHours(0,0,0,0);
+ return eventos.map(e=>({...e,prox:proxFecha(e)})).filter(e=>e.prox>=hoy).sort((a,b)=>a.prox-b.prox)}
+function diasPara(f){const hoy=new Date();hoy.setHours(0,0,0,0);return Math.round((f-hoy)/864e5)}
+function evRow(e){const d=diasPara(e.prox);const edad=(e.tipo==="cumple"||e.tipo==="aniv")?(()=>{const y=+e.fecha.slice(0,4);const a=e.prox.getFullYear()-y;return a>0&&y>1900?` · ${a} ${e.tipo==="cumple"?"años":"años de casados/aniversario"}`:""})():"";
+ return `<div class="ev"><div><b>${esc(e.nombre)}</b> <span class="tag">${REL[e.rel]||""}</span><small>${TIPOS[e.tipo]} · ${e.prox.toLocaleDateString("es",{weekday:"long",day:"numeric",month:"long"})}${edad}${e.nota?" · "+esc(e.nota):""}</small></div>
+ <div class="days">${d===0?"¡Hoy! 🎉":d===1?"Mañana":d+" días"}</div></div>`}
+let mesVer=new Date().getMonth(), anioVer=new Date().getFullYear();
+function vCal(){
+ const meses=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+ const primer=new Date(anioVer,mesVer,1).getDay(); const dim=new Date(anioVer,mesVer+1,0).getDate();
+ const hoy=new Date();
+ const marcados={};eventos.forEach(e=>{const p=proxFecha(e);const [y,m,d]=e.fecha.split("-").map(Number);
+   const rec=e.anual||["cumple","aniv"].includes(e.tipo);
+   if((rec&&m-1===mesVer)||(!rec&&y===anioVer&&m-1===mesVer))marcados[d]=(marcados[d]||[]).concat(e.nombre)});
+ let cel=["D","L","M","M","J","V","S"].map(x=>`<div class="h">${x}</div>`).join("")+"<div></div>".repeat(primer);
+ for(let d=1;d<=dim;d++){const es=hoy.getDate()===d&&hoy.getMonth()===mesVer&&hoy.getFullYear()===anioVer;
+  cel+=`<div class="${marcados[d]?'has':''} ${es?'today':''}" ${marcados[d]?`title="${esc(marcados[d].join(', '))}"`:''}>${d}</div>`}
+ const pr=proximos();
+ const delMes=pr.length?'':'';
+ return `<div class="card"><h2>📅 Calendario de fechas</h2>
+ <div class="ev" style="border:0"><button class="btn ghost" onclick="cambiaMes(-1)">◀</button><b>${meses[mesVer]} ${anioVer}</b><button class="btn ghost" onclick="cambiaMes(1)">▶</button></div>
+ <div class="grid">${cel}</div></div>
+ <div class="card"><h3>➕ Agregar fecha</h3>
+ <div class="row"><input id="en" placeholder="Nombre (ej. Mamá, Ana, Sra. Pérez)">
+ <input id="ef" type="date"></div>
+ <div class="row"><select id="et">${Object.entries(TIPOS).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select>
+ <select id="er">${Object.entries(REL).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></div>
+ <input id="eno" placeholder="Nota (ej. le gustan las flores, talla 8, vestido rojo)"><label class="hint"><input type="checkbox" id="ea" style="width:auto"> Se repite cada año</label><br>
+ <button class="btn" style="margin-top:8px" onclick="addEv()">Guardar</button></div>
+ <div class="card"><h3>🔔 Próximas fechas</h3>${pr.length?pr.map(e=>evRow(e)+`<div style="text-align:right" class="noprint"><button class="btn ghost" style="padding:3px 9px;font-size:.78rem" onclick="msgEv('${e.id}')">✉️ Mensaje</button> <button class="btn ghost" style="padding:3px 9px;font-size:.78rem" onclick="delEv('${e.id}')">🗑</button></div>`).join(""):'<p class="hint">Sin fechas guardadas.</p>'}</div>
+ <div id="msgbox"></div>
+ <div class="card noprint"><button class="btn ghost" onclick="exportIcs()">⬇️ Exportar a mi calendario (.ics)</button></div>`;
+}
+function cambiaMes(n){mesVer+=n;if(mesVer<0){mesVer=11;anioVer--}if(mesVer>11){mesVer=0;anioVer++}render()}
+function addEv(){const n=$("#en").value.trim(),f=$("#ef").value;if(!n||!f){alert("Escribe un nombre y una fecha.");return}
+ eventos.push({id:"e"+Date.now(),nombre:n,fecha:f,tipo:$("#et").value,rel:$("#er").value,nota:$("#eno").value.trim(),anual:$("#ea").checked});
+ S.set("ief_eventos",eventos);render()}
+function delEv(id){if(!confirm("¿Eliminar esta fecha?"))return;eventos=eventos.filter(e=>e.id!==id);S.set("ief_eventos",eventos);render()}
+function msgEv(id){const e=eventos.find(x=>x.id===id);let m=MENSAJES[e.rel]||MENSAJES.otro;
+ m=m.includes("[nombre]")?m.replace("[nombre]",e.nombre):e.nombre+", "+m.charAt(0).toLowerCase()+m.slice(1);
+ $("#msgbox").innerHTML=`<div class="card"><h3>✉️ Mensaje sugerido</h3><textarea id="gm" rows="3">${esc(m)}</textarea><button class="btn ghost" style="margin-top:6px" onclick="copiar()">Copiar</button></div>`;
+ $("#msgbox").scrollIntoView({behavior:"smooth"})}
+function exportIcs(){const p=n=>String(n).padStart(2,"0");
+ const l=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Corazon en Familia//ES"];
+ eventos.forEach(e=>{const d=e.fecha.replace(/-/g,"");const rec=(e.anual||["cumple","aniv"].includes(e.tipo))?["RRULE:FREQ=YEARLY"]:[];
+  l.push("BEGIN:VEVENT","UID:"+e.id+"@corazon-familia","DTSTAMP:"+d+"T000000Z","DTSTART;VALUE=DATE:"+d,"SUMMARY:"+(TIPOS[e.tipo].split(" ")[0])+" "+e.nombre,...rec,"END:VEVENT")});
+ l.push("END:VCALENDAR");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([l.join("\r\n")],{type:"text/calendar"}));a.download="fechas-familia.ics";a.click()}
+
+/* ----- diario ----- */
+let sel=null;
+function vDiario(){
+ const hist=diario.slice().reverse().slice(0,15);
+ return `<div class="card"><h2>📝 Diario emocional</h2><p class="hint">¿Cómo te sientes hoy? Nombrar la emoción ya te ayuda a regularla.</p>
+ <div class="emo">${EMOCIONES.map(e=>`<button class="${sel===e?'on':''}" onclick="sel='${e}';render()">${e}</button>`).join("")}</div>
+ <h3>¿Qué la provocó?</h3><textarea id="dq" rows="2" placeholder="Situación o persona…"></textarea>
+ <h3>¿Qué necesito? ¿Qué puedo hacer?</h3><textarea id="dn" rows="2" placeholder="Necesito… Puedo…"></textarea>
+ <button class="btn" style="margin-top:8px" onclick="saveD()">Guardar</button></div>
+ <div class="card"><h3>Mis registros</h3>${hist.length?hist.map(d=>`<div class="ev"><div><b>${esc(d.emo)}</b><small>${new Date(d.f).toLocaleDateString("es",{day:"numeric",month:"short"})} · ${esc(d.q)} → ${esc(d.n)}</small></div></div>`).join(""):'<p class="hint">Aún no hay registros.</p>'}
+ ${hist.length?'<button class="btn ghost noprint" onclick="clearD()">Borrar diario</button>':''}</div>`;
+}
+function saveD(){if(!sel){alert("Elige una emoción.");return}diario.push({f:Date.now(),emo:sel,q:$("#dq").value,n:$("#dn").value});S.set("ief_diario",diario);sel=null;render()}
+function clearD(){if(confirm("¿Borrar todo el diario?")){diario=[];S.set("ief_diario",diario);render()}}
+
+/* ============ RENDER ============ */
+function render(){nav();$("#app").innerHTML= tab==="inicio"?vInicio():tab==="libro"?vLibro():tab==="calendario"?vCal():tab==="diario"?vDiario():vModulo(tab)}
+window.addEventListener("hashchange",()=>{const t=location.hash.slice(1);if(TABS.find(x=>x[0]===t)&&t!==tab){tab=t;render()}});
+render();
+</script>
+</body>
+</html>
