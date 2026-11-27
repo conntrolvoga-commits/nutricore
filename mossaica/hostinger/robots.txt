@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /gracias.html
-Sitemap: https://www.mosaicca.mx/sitemap.xml
