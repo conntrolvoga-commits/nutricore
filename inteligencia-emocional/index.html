@@ -196,6 +196,22 @@ const MODULOS = {
   ],
   ejercicios:["Escribe tres cualidades que valoras de tu yerno/nuera y díselas en voz alta.","Un detalle al mes: un mensaje, un café, una pregunta por su día.","Acuerden juntos las «reglas de visitas» para evitar roces."]},
 
+ suegros:{icon:"👵",nombre:"Suegros → Nueras y yernos",titulo:"Inteligencia emocional de suegros hacia nueras y yernos",
+  intro:"Para suegras y suegros que quieren construir una relación cálida con la pareja de sus hijos. Tu hijo o hija eligió a esa persona: tratarla con respeto y cariño es la mejor forma de cuidar también a tu hijo o hija.",
+  etapas:[
+   {n:"Actitud base: de «perder un hijo» a «ganar un miembro»",pts:["Reconoce tus emociones: miedo a perder lugar, nostalgia, celos o preocupación son normales. Nómbralas y no las descargues en la pareja de tu hijo.","Tu hijo o hija formó un nuevo hogar: sus decisiones son de ellos. Tu rol es de apoyo, no de supervisión.","Pasa de la autoridad a la invitación: «cuando quieran», «si les sirve».","Recibe a la persona como es, no como la imaginabas ni como era tu ex nuera o tu propio yerno anterior.","Recuerda que ella o él también es hijo o hija de alguien: trátalo como te gustaría que trataran al tuyo."],
+    di:["«Me alegra que seas parte de nuestra familia.»","«Esta es tu casa también.»"],evita:["«Mi hijo/a antes no era así.»","Comparar con otras nueras o yernos."]},
+   {n:"Con tu nuera",pts:["Reconoce su valor como persona, no solo como esposa o madre de tus nietos.","Evita críticas sobre la casa, la cocina, la ropa, el trabajo o la crianza. Si algo te preocupa de verdad, dilo una vez, con cariño y en privado.","No compitas por ser «la mujer de su vida»: tu lugar y el de ella son distintos y ambos importan.","Ofrece ayuda concreta («¿te llevo comida el sábado?»), no consejos no pedidos.","Valida su carga: trabajo, hijos, hogar. Un «gracias» y un «lo estás haciendo muy bien» valen mucho.","Evita preguntas invasivas: cuándo tendrán hijos, por qué no cocina, cuánto gana."],
+    di:["«Admiro cómo te organizas con todo.»","«Si quieres, me quedo con los niños para que descansen.»"],evita:["«En mi casa se hacía de otra forma.»","Opinar sobre su cuerpo o su forma de criar."]},
+   {n:"Con tu yerno",pts:["Reconoce su esfuerzo como pareja y como proveedor o compañero; evita medirlo solo por el dinero o el éxito.","No lo trates como «el que se llevó a mi hija»: es un adulto con quien compartes el cariño por ella.","Evita interrogatorios y pruebas de lealtad; conversa de temas comunes (deporte, trabajo, intereses).","Respeta su rol en el hogar y la crianza; no lo corrijas delante de su pareja o de sus hijos.","Cuida las bromas: lo que en confianza parece gracioso puede lastimar.","Si tienes una preocupación sobre su trato a tu hija, habla con calma y con hechos, no con rumores."],
+    di:["«Gracias por cuidar de mi hija y de los niños.»","«Cuando quieras platicar, aquí estoy.»"],evita:["«Mi hija merecía algo mejor.»","Hablar con tu hija en su contra."]},
+   {n:"Situaciones difíciles y cómo manejarlas",pts:["<b>Intromisión en la crianza:</b> antes de opinar, pregunta «¿cómo prefieren que lo haga?». Si no piden consejo, no lo des.","<b>Celos o sensación de desplazamiento:</b> habla de lo que sientes con tu pareja o una amistad, no con tu hijo ni su pareja. Pide tiempo juntos sin exigirlo.","<b>Comparaciones entre hijos y parejas:</b> evítalas; generan heridas y rivalidad.","<b>Desacuerdos entre ellos:</b> no tomes partido ni seas mensajera. Escucha y devuelve: «ustedes sabrán cómo resolverlo».","<b>Visitas y fechas especiales:</b> pregunta con tiempo, ofrece alternativas y acepta un «no» sin drama; la pareja también tiene su otra familia.","<b>Dinero y favores:</b> aclara si es regalo o préstamo; no lo uses como control.","<b>Después de un conflicto:</b> da el primer paso con un mensaje breve y sincero: «Me importa que estemos bien»."],
+    di:["«Si necesitan mi apoyo, me lo dicen; si no, confío en ustedes.»","«Lo siento, me excedí. Gracias por decírmelo.»"],evita:["Silencios castigadores, ironías o indirectas.","Contar a otros lo que tu hijo/a te confía."]},
+   {n:"Tu espacio y bienestar como suegro/a",pts:["Cultiva tu propia vida: amistades, hobbies, pareja, salud. Quien tiene vida propia no depende emocionalmente de las visitas.","Acepta que las prioridades de la pareja cambian con trabajo, hijos y cansancio; menos tiempo no significa menos cariño.","Mantén contacto sin presión: un mensaje corto, un saludo, un detalle sin esperar respuesta inmediata.","Si sientes tristeza o soledad intensa, busca apoyo; no se lo pidas a tus hijos como obligación."],
+    di:["«Te extraño, y me alegra que estés bien con tu familia.»"],evita:["«Ya casi no vienen.»","Usar la culpa o la enfermedad para que visiten."]}
+  ],
+  ejercicios:["Escribe tres cualidades de tu nuera o yerno y díselas esta semana, en persona o por mensaje.","Antes de dar un consejo, cuenta hasta diez y pregunta: «¿Quieres mi opinión?».","Planea un detalle mensual sin motivo: un café, una receta, una llamada para preguntar cómo está.","Escribe una carta (aunque no la envíes) con lo que sientes por la nueva familia y revisa qué parte es miedo y cuál es amor."]},
+
  politica:{icon:"🏡",nombre:"Familia política",titulo:"Inteligencia emocional con la familia política",
   intro:"Consuegros, cuñados, concuñas, tíos políticos… Una red familiar amplia necesita acuerdos claros y mucha empatía.",
   etapas:[
@@ -263,7 +279,7 @@ const MENSAJES={
 /* ============ ESTADO ============ */
 const S={ get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let eventos=S.get("ief_eventos",[]); let diario=S.get("ief_diario",[]); let vistos=S.get("ief_vistos",[]);
-const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["tipos","🌟 Tipos de IE"],["personas","👥 Personas"],["escuchar","🎧 Escuchar"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
+const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["suegros","👵 Suegros"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["tipos","🌟 Tipos de IE"],["personas","👥 Personas"],["escuchar","🎧 Escuchar"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
 let tab=(location.hash||"#inicio").slice(1); if(!TABS.find(t=>t[0]===tab))tab="inicio";
 
 const $=s=>document.querySelector(s);
@@ -305,7 +321,7 @@ function vModulo(k){
  <button class="btn" onclick="gen('${k}')">Crear mensaje</button></div><textarea id="gm" rows="3" style="margin-top:8px" placeholder="Aquí aparece el mensaje"></textarea>
  <button class="btn ghost" style="margin-top:6px" onclick="copiar()">Copiar</button></div>`;
 }
-const MKEY={hijos:"hijo",yernos:"yerno",politica:"politica",amigos:"amigo",pareja:"pareja",negocios:"clienta"};
+const MKEY={hijos:"hijo",yernos:"yerno",suegros:"yerno",politica:"politica",amigos:"amigo",pareja:"pareja",negocios:"clienta"};
 function gen(k){const n=$("#gn").value.trim();let m=MENSAJES[MKEY[k]];m=m.replace("[nombre]",n||"").replace(/\s+,/g,",");if(n&&!/\[nombre\]/.test(MENSAJES[MKEY[k]]))m=n+", "+m.charAt(0).toLowerCase()+m.slice(1);$("#gm").value=m}
 function copiar(){const t=$("#gm");t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand("copy")}}
 
@@ -510,7 +526,7 @@ ${abierta===p.id?`<div style="margin-top:8px">${guiaHtml(p)}</div>`:""}</div>`).
 /* ----- modo lectura (voz) ----- */
 const WAIT={wait:true};
 const WMSG="Tómate un momento para reflexionar o hacer el ejercicio. Cuando quieras seguir, di continúa, o toca el botón Continuar.";
-const ESC_OPTS=[["todo","📚 Toda la app"],["libro0","📖 Libro 1: El Arte de Querer Bien"],["libro1","📖 Libro 2: De Padres a Amigos"],["m:hijos","🧒 Hijos"],["m:yernos","🤝 Yernos y nueras"],["m:politica","🏡 Familia política"],["m:amigos","🫶 Amigos"],["m:pareja","💞 Pareja y matrimonio"],["m:negocios","💼 Negocios y clientes"],["limites","🚧 Límites"],["tipos","🌟 Tipos de inteligencia emocional"],["personas","👥 Guías de mis personas"]];
+const ESC_OPTS=[["todo","📚 Toda la app"],["libro0","📖 Libro 1: El Arte de Querer Bien"],["libro1","📖 Libro 2: De Padres a Amigos"],["m:hijos","🧒 Hijos"],["m:yernos","🤝 Yernos y nueras"],["m:suegros","👵 Suegros hacia nueras y yernos"],["m:politica","🏡 Familia política"],["m:amigos","🫶 Amigos"],["m:pareja","💞 Pareja y matrimonio"],["m:negocios","💼 Negocios y clientes"],["limites","🚧 Límites"],["tipos","🌟 Tipos de inteligencia emocional"],["personas","👥 Guías de mis personas"]];
 function qLibro(b){const L=LIBROS[b],q=[{t:L.titulo+". "+L.subtitulo}];L.capitulos.forEach(c=>{q.push({t:c.t});c.p.forEach(p=>{q.push({t:T(p)});if(/^<b>(Práctica|Carta)/.test(p))q.push(WAIT)})});return q}
 function qModulo(k){const m=MODULOS[k],q=[{t:m.titulo},{t:T(m.intro)}];m.etapas.forEach(e=>{q.push({t:e.n});e.pts.forEach(p=>q.push({t:T(p)}));e.di.forEach(d=>q.push({t:"Puedes decir: "+d}));e.evita.forEach(d=>q.push({t:"Evita decir: "+d}))});q.push({t:"Ejercicios prácticos."});m.ejercicios.forEach(x=>{q.push({t:x});q.push(WAIT)});return q}
 function qLimites(){const q=[{t:"Respetar los límites de los demás. Un límite dice: hasta aquí me siento cómodo."},{t:"Diez reglas generales."}];LIM.reglas.forEach((r,i)=>q.push({t:(i+1)+". "+r[0]+". "+r[1]}));q.push({t:"Cómo respetar a cada tipo de relación."});LIM.rel.forEach(r=>{q.push({t:r[0].replace(/^\S+\s/,"")+". "+r[1]});q.push({t:r[2].replace("Di:","Puedes decir:").replace("Evita:","Evita decir:")})});q.push({t:"Prácticas."});LIM.practicas.forEach(r=>{q.push({t:r[0]+". "+r[1]});q.push(WAIT)});return q}
