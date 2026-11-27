@@ -263,7 +263,7 @@ const MENSAJES={
 /* ============ ESTADO ============ */
 const S={ get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let eventos=S.get("ief_eventos",[]); let diario=S.get("ief_diario",[]); let vistos=S.get("ief_vistos",[]);
-const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["tipos","🌟 Tipos de IE"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
+const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["tipos","🌟 Tipos de IE"],["personas","👥 Personas"],["escuchar","🎧 Escuchar"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
 let tab=(location.hash||"#inicio").slice(1); if(!TABS.find(t=>t[0]===tab))tab="inicio";
 
 const $=s=>document.querySelector(s);
@@ -280,7 +280,7 @@ function vInicio(){
  return `<div class="card"><h2>Bienvenida</h2><p>«${esc(f)}»</p>
  <p class="hint">Elige una sección para empezar. Cada módulo tiene frases para decir, frases para evitar y ejercicios prácticos.</p></div>
  <div class="row">${Object.entries(MODULOS).map(([k,m])=>`<button class="btn ghost" onclick="go('${k}')">${m.icon} ${m.nombre}</button>`).join("")}
- <button class="btn ghost" onclick="go('libro')">📖 Libros</button><button class="btn ghost" onclick="go('limites')">🚧 Límites</button><button class="btn ghost" onclick="go('tipos')">🌟 Tipos de IE</button><button class="btn ghost" onclick="go('calendario')">📅 Calendario</button></div>
+ <button class="btn ghost" onclick="go('libro')">📖 Libros</button><button class="btn ghost" onclick="go('limites')">🚧 Límites</button><button class="btn ghost" onclick="go('tipos')">🌟 Tipos de IE</button><button class="btn ghost" onclick="go('personas')">👥 Personas</button><button class="btn ghost" onclick="go('escuchar')">🎧 Escuchar</button><button class="btn ghost" onclick="go('calendario')">📅 Calendario</button></div>
  <div class="card"><h3>🔔 Próximas fechas</h3>${prox.length?prox.map(evRow).join(""):'<p class="hint">Aún no hay fechas. Agrega cumpleaños y eventos en el Calendario.</p>'}</div>
  <div class="card"><h3>Mi progreso</h3><p>Capítulos leídos: <b>${vistos.length}/${LIBROS.reduce((a,l)=>a+l.capitulos.length,0)}</b></p>
  <div style="background:var(--line);border-radius:8px;height:10px"><div style="width:${vistos.length/LIBROS.reduce((a,l)=>a+l.capitulos.length,0)*100}%;background:var(--pri);height:10px;border-radius:8px"></div></div></div>`;
@@ -288,7 +288,7 @@ function vInicio(){
 function vLibro(){
  const L=LIBROS[libroSel];
  return `<div class="card"><div class="pill-row noprint" style="margin-bottom:10px">${LIBROS.map((x,i)=>`<button class="btn ${i===libroSel?'':'ghost'}" onclick="libroSel=${i};render()">📖 Libro ${i+1}</button>`).join("")}</div>
- <h2>${esc(L.titulo)}</h2><p><i>${esc(L.subtitulo)}</i></p><p class="hint">Marca cada capítulo como leído para ver tu progreso.</p></div>`+
+ <h2>${esc(L.titulo)}</h2><p><i>${esc(L.subtitulo)}</i></p><p class="hint">Marca cada capítulo como leído para ver tu progreso.</p>${listenBtn("libro"+libroSel)}</div>`+
  L.capitulos.map((c,i)=>{const k=vk(libroSel,i),on=vistos.includes(k);return `<details><summary>${on?'✅ ':''}${esc(c.t)}</summary><div>${c.p.map(p=>`<p>${p}</p>`).join("")}
  <button class="btn ${on?'ghost':''}" onclick="marcar(${libroSel},${i})">${on?'Marcar como no leído':'Marcar como leído'}</button></div></details>`}).join("")+
  `<div class="card noprint"><button class="btn" onclick="window.print()">🖨️ Imprimir / guardar PDF</button></div>`;
@@ -296,7 +296,7 @@ function vLibro(){
 function marcar(b,i){const k=vk(b,i),x=vistos.indexOf(k);x>=0?vistos.splice(x,1):vistos.push(k);S.set("ief_vistos",vistos);const y=window.scrollY;render();window.scrollTo(0,y)}
 function vModulo(k){
  const m=MODULOS[k];
- return `<div class="card"><h2>${m.icon} ${esc(m.titulo)}</h2><p>${m.intro}</p></div>`+
+ return `<div class="card"><h2>${m.icon} ${esc(m.titulo)}</h2><p>${m.intro}</p>${listenBtn("m:"+k)}</div>`+
  m.etapas.map(e=>`<details open><summary>${esc(e.n)}</summary><div><ul>${e.pts.map(p=>`<li>${p}</li>`).join("")}</ul>
  ${e.di.map(d=>`<div class="say"><b>✔ Di:</b> ${esc(d)}</div>`).join("")}${e.evita.map(d=>`<div class="avoid"><b>✖ Evita:</b> ${esc(d)}</div>`).join("")}</div></details>`).join("")+
  `<div class="card"><h3>🌱 Ejercicios prácticos</h3><ul>${m.ejercicios.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
@@ -414,7 +414,7 @@ const LIM={
 };
 function vLimites(){
  return `<div class="card"><h2>🚧 Respetar los límites de los demás</h2>
- <p>Un límite es una frase invisible que dice: «hasta aquí me siento cómodo(a)». Respetarlo no te aleja de las personas: les demuestra que son seguras contigo. Invadir, aunque sea con buena intención, daña la confianza.</p></div>
+ <p>Un límite es una frase invisible que dice: «hasta aquí me siento cómodo(a)». Respetarlo no te aleja de las personas: les demuestra que son seguras contigo. Invadir, aunque sea con buena intención, daña la confianza.</p>${listenBtn("limites")}</div>
  <details open><summary>📜 10 reglas generales para todas las relaciones</summary><div><ol>${LIM.reglas.map(r=>`<li><b>${r[0]}.</b> ${r[1]}</li>`).join("")}</ol></div></details>
  <h3 style="margin-top:18px">👥 Cómo respetar a cada tipo de relación</h3>
  ${LIM.rel.map(r=>`<details><summary>${r[0]}</summary><div><p>${r[1]}</p><div class="say"><b>✔</b> ${esc(r[2].split("  Evita:")[0].replace("Di: ",""))}</div><div class="avoid"><b>✖</b> ${esc((r[2].split("Evita:")[1]||"").trim())}</div></div></details>`).join("")}
@@ -473,13 +473,97 @@ const TIPOS_IE=[
 function vTipos(){
  return `<div class="card"><h2>🌟 Diferentes tipos de inteligencia emocional</h2>
  <p>La inteligencia emocional tiene muchas caras. Aquí encontrarás sus componentes, las inteligencias cercanas y sus aplicaciones en distintas áreas de la vida. Cada una trae una descripción, una práctica y una frase de ejemplo.</p>
- <input id="tq" placeholder="🔍 Buscar (ej. duelo, liderazgo, empatía)" oninput="filtraTipos()"></div><div id="tl">${tiposHtml("")}</div>`;
+ ${listenBtn("tipos")}<input id="tq" placeholder="🔍 Buscar (ej. duelo, liderazgo, empatía)" oninput="filtraTipos()"></div><div id="tl">${tiposHtml("")}</div>`;
 }
 function tiposHtml(q){q=q.toLowerCase();let h="";
  TIPOS_IE.forEach(g=>{const it=g.items.filter(i=>!q||(i[0]+i[1]+i[2]+i[3]).toLowerCase().includes(q));if(!it.length)return;
   h+=`<h3 style="margin-top:18px">${g.g}</h3>`+it.map(i=>`<details ${q?'open':''}><summary>${esc(i[0])}</summary><div><p>${esc(i[1])}</p><div class="say"><b>Práctica:</b> ${esc(i[2])}</div><div class="say"><b>Frase:</b> ${esc(i[3])}</div></div></details>`).join("")});
  return h||'<p class="hint">Sin resultados.</p>'}
 function filtraTipos(){$("#tl").innerHTML=tiposHtml($("#tq").value.trim())}
+
+/* ----- personas y roles ----- */
+const T=s=>String(s).replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+const ROLES=[["hijo","🧒 Hijo/a","hijos",2],["nieto","👶 Nieto/a","hijos",0],["yerno","🤝 Yerno / Nuera","yernos",3],["suegro","🏡 Suegro/a o consuegro/a","politica",4],["cunado","🏡 Cuñado/a o familia política","politica",4],["pareja","💞 Pareja / Esposo/a","pareja",5],["amigo","🫶 Amigo/a","amigos",6],["cliente","💼 Cliente/a","negocios",7],["companero","💼 Compañero/a de trabajo",null,8],["vecino","🏘️ Vecino/a",null,9],["mayor","🧓 Adulto mayor",null,10],["otro","📌 Otro",null,null]];
+let personas=S.get("ief_personas",null)||["hijo","hijo","yerno","suegro","cunado","pareja","amigo","amigo","cliente","otro"].map((r,i)=>({id:"p"+i,nombre:"",rol:r,nota:""}));
+let abierta=null;
+const saveP=()=>S.set("ief_personas",personas);
+function upP(id,k,v){const p=personas.find(x=>x.id===id);if(p){p[k]=v;saveP()}}
+function addP(){personas.push({id:"p"+Date.now(),nombre:"",rol:"otro",nota:""});saveP();render()}
+function delP(id){if(!confirm("¿Quitar esta persona?"))return;personas=personas.filter(p=>p.id!==id);saveP();render()}
+function guiaRol(p){const R=ROLES.find(r=>r[0]===p.rol)||ROLES[11];const nom=p.nombre.trim(),rl=R[1].replace(/^\S+\s/,"");const o=[];
+ o.push(["h","Cómo tratar a "+(nom||"esta persona")+" ("+rl+")"]);
+ if(p.nota.trim())o.push(["p","Tu nota: "+p.nota.trim()]);
+ const m=R[2]?MODULOS[R[2]]:null;
+ if(m){const es=p.rol==="hijo"?m.etapas.slice(-1):m.etapas.slice(0,2);es.forEach(e=>{o.push(["h2",e.n]);e.pts.slice(0,4).forEach(x=>o.push(["p",T(x)]));e.di.forEach(x=>o.push(["say",T(x)]));e.evita.forEach(x=>o.push(["avoid",T(x)]))})}
+ const L=R[3]!=null?LIM.rel[R[3]]:null;
+ if(L){o.push(["h2","Respeta sus límites"]);o.push(["p",L[1]]);const ab=L[2].split("Evita:");o.push(["say",ab[0].replace("Di:","").trim()]);if(ab[1])o.push(["avoid",ab[1].trim()])}
+ else LIM.reglas.slice(0,3).forEach(r=>o.push(["p",r[0]+". "+r[1]]));
+ o.push(["h2","Antes de actuar"]);o.push(["p","Respira tres veces, pregunta antes de opinar y escucha para entender."]);return o}
+function guiaHtml(p){return guiaRol(p).map(([k,t])=>k==="h"?`<h3>${esc(t)}</h3>`:k==="h2"?`<b>${esc(t)}</b>`:k==="say"?`<div class="say"><b>✔ Di:</b> ${esc(t)}</div>`:k==="avoid"?`<div class="avoid"><b>✖ Evita:</b> ${esc(t)}</div>`:`<p>${esc(t)}</p>`).join("")}
+function vPersonas(){return `<div class="card"><h2>👥 Mis personas y su rol</h2><p class="hint">Escribe el nombre de cada persona (puedes llenarlo después) y elige el papel que juega en tu vida. Toca <b>Guía</b> para ver cómo actuar y qué decir según ese rol, o <b>Escuchar</b> para oírla con audífonos.</p>
+<div class="pill-row"><button class="btn" onclick="addP()">➕ Agregar persona</button><button class="btn ghost" onclick="listen('personas')">🎧 Escuchar todas las guías</button></div></div>`+
+personas.map(p=>`<div class="card"><div class="row"><input placeholder="Nombre (llenar después)" value="${esc(p.nombre)}" onchange="upP('${p.id}','nombre',this.value)"><select onchange="upP('${p.id}','rol',this.value);render()">${ROLES.map(r=>`<option value="${r[0]}" ${r[0]===p.rol?'selected':''}>${r[1]}</option>`).join("")}</select></div>
+<input placeholder="Nota: qué quiero recordar con esta persona" value="${esc(p.nota)}" onchange="upP('${p.id}','nota',this.value)">
+<div class="pill-row" style="margin-top:8px"><button class="btn ghost" onclick="abierta=abierta==='${p.id}'?null:'${p.id}';render()">💡 Guía</button><button class="btn ghost" onclick="listen('rol:${p.id}')">🔊 Escuchar</button><button class="btn ghost" onclick="delP('${p.id}')">🗑</button></div>
+${abierta===p.id?`<div style="margin-top:8px">${guiaHtml(p)}</div>`:""}</div>`).join("")}
+
+/* ----- modo lectura (voz) ----- */
+const WAIT={wait:true};
+const WMSG="Tómate un momento para reflexionar o hacer el ejercicio. Cuando quieras seguir, di continúa, o toca el botón Continuar.";
+const ESC_OPTS=[["todo","📚 Toda la app"],["libro0","📖 Libro 1: El Arte de Querer Bien"],["libro1","📖 Libro 2: De Padres a Amigos"],["m:hijos","🧒 Hijos"],["m:yernos","🤝 Yernos y nueras"],["m:politica","🏡 Familia política"],["m:amigos","🫶 Amigos"],["m:pareja","💞 Pareja y matrimonio"],["m:negocios","💼 Negocios y clientes"],["limites","🚧 Límites"],["tipos","🌟 Tipos de inteligencia emocional"],["personas","👥 Guías de mis personas"]];
+function qLibro(b){const L=LIBROS[b],q=[{t:L.titulo+". "+L.subtitulo}];L.capitulos.forEach(c=>{q.push({t:c.t});c.p.forEach(p=>{q.push({t:T(p)});if(/^<b>(Práctica|Carta)/.test(p))q.push(WAIT)})});return q}
+function qModulo(k){const m=MODULOS[k],q=[{t:m.titulo},{t:T(m.intro)}];m.etapas.forEach(e=>{q.push({t:e.n});e.pts.forEach(p=>q.push({t:T(p)}));e.di.forEach(d=>q.push({t:"Puedes decir: "+d}));e.evita.forEach(d=>q.push({t:"Evita decir: "+d}))});q.push({t:"Ejercicios prácticos."});m.ejercicios.forEach(x=>{q.push({t:x});q.push(WAIT)});return q}
+function qLimites(){const q=[{t:"Respetar los límites de los demás. Un límite dice: hasta aquí me siento cómodo."},{t:"Diez reglas generales."}];LIM.reglas.forEach((r,i)=>q.push({t:(i+1)+". "+r[0]+". "+r[1]}));q.push({t:"Cómo respetar a cada tipo de relación."});LIM.rel.forEach(r=>{q.push({t:r[0].replace(/^\S+\s/,"")+". "+r[1]});q.push({t:r[2].replace("Di:","Puedes decir:").replace("Evita:","Evita decir:")})});q.push({t:"Prácticas."});LIM.practicas.forEach(r=>{q.push({t:r[0]+". "+r[1]});q.push(WAIT)});return q}
+function qTipos(){const q=[{t:"Diferentes tipos de inteligencia emocional."}];TIPOS_IE.forEach(g=>{q.push({t:g.g});g.items.forEach(i=>{q.push({t:i[0]+". "+i[1]});q.push({t:"Práctica: "+i[2]});q.push({t:"Frase de ejemplo: "+i[3]})});q.push(WAIT)});return q}
+function qRol(p){const q=[];guiaRol(p).forEach(([k,t])=>q.push({t:k==="say"?"Puedes decir: "+t:k==="avoid"?"Evita decir: "+t:t}));q.push(WAIT);return q}
+function buildQ(sc){
+ if(sc==="todo")return [].concat(qLibro(0),qLibro(1),Object.keys(MODULOS).flatMap(k=>qModulo(k)),qLimites(),qTipos());
+ if(sc.startsWith("libro"))return qLibro(+sc.slice(5));
+ if(sc.startsWith("m:"))return qModulo(sc.slice(2));
+ if(sc==="limites")return qLimites(); if(sc==="tipos")return qTipos();
+ if(sc==="personas"){const l=personas.filter(p=>p.nombre.trim());return (l.length?l:personas).flatMap(p=>qRol(p))}
+ if(sc.startsWith("rol:")){const p=personas.find(x=>x.id===sc.slice(4));return p?qRol(p):[]}
+ return []}
+const SP={q:[],i:0,st:"idle",tok:0,rec:null,sc:"todo",rate:1,vi:"",pausar:true,voz:true};
+const synth=window.speechSynthesis;
+function clean(t){return t.replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,"").replace(/[✔✖«»]/g,"")}
+function chunk(t){const o=[];(t.match(/[^.!?]+[.!?]*\s*/g)||[t]).forEach(x=>{if(o.length&&(o[o.length-1].length+x.length)<160)o[o.length-1]+=x;else o.push(x)});return o}
+function say(text,cb){if(!synth){return}synth.cancel();const my=++SP.tok;const parts=chunk(clean(text));let k=0;
+ const next=()=>{if(my!==SP.tok||SP.st!=="play")return;if(k>=parts.length){cb();return}const u=new SpeechSynthesisUtterance(parts[k++]);u.lang="es-MX";u.rate=SP.rate;const v=synth.getVoices().find(x=>x.name===SP.vi);if(v){u.voice=v;u.lang=v.lang}u.onend=next;u.onerror=()=>{};synth.speak(u)};
+ setTimeout(next,60)}
+function step(){if(SP.st!=="play")return;
+ if(SP.i>=SP.q.length){ui();say("Hemos terminado. Gracias por escuchar.",()=>{SP.st="idle";SP.i=0;ui()});return}
+ const it=SP.q[SP.i];ui();
+ if(it.wait){if(!SP.pausar){SP.i++;step();return}say(WMSG,()=>{SP.st="wait";ui();startRec()});return}
+ say(it.t,()=>{SP.i++;step()})}
+function empezar(sc){stopRec();SP.sc=sc||SP.sc;SP.q=buildQ(SP.sc);SP.i=0;if(!SP.q.length){ui();return}SP.st="play";step()}
+function pausar(){if(SP.st==="play"){SP.st="paused";SP.tok++;if(synth)synth.cancel();ui()}}
+function continuar(){if(SP.st==="idle"){return}stopRec();const it=SP.q[SP.i];if(it&&it.wait)SP.i++;SP.st="play";step()}
+function detener(){SP.st="idle";SP.tok++;if(synth)synth.cancel();stopRec();SP.i=0;ui()}
+function jump(d){if(SP.st==="idle")return;stopRec();SP.i=Math.max(0,Math.min(SP.q.length-1,SP.i+d));SP.st="play";step()}
+function startRec(){stopRec();if(!SP.voz)return;const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R)return;
+ try{const r=new R();r.lang="es-MX";r.continuous=true;r.interimResults=false;
+  r.onresult=e=>{const t=Array.from(e.results).map(x=>x[0].transcript).join(" ").toLowerCase();if(/contin|sigue|seguir|adelante/.test(t))continuar()};
+  r.onend=()=>{if(SP.st==="wait"&&SP.rec===r){try{r.start()}catch(e){}}};r.onerror=()=>{};SP.rec=r;r.start()}catch(e){}}
+function stopRec(){const r=SP.rec;SP.rec=null;if(r){try{r.abort()}catch(e){}}}
+function ui(){const c=$("#lcur");if(!c)return;const it=SP.q[SP.i];
+ const m={idle:"Detenido",play:"Leyendo…",paused:"En pausa",wait:"🧘 Tiempo para reflexionar. Di «continúa» o toca Continuar."}[SP.st];
+ $("#lst").textContent=m+(SP.q.length?" ("+Math.min(SP.i+1,SP.q.length)+"/"+SP.q.length+")":"");
+ c.textContent=it?(it.wait?"Espacio para reflexionar o hacer el ejercicio…":it.t):"Elige qué escuchar y toca Empezar."}
+function listen(sc){SP.sc=sc;go("escuchar");empezar(sc)}
+function listenBtn(sc){return `<button class="btn ghost noprint" onclick="listen('${sc}')">🎧 Escuchar esta sección</button>`}
+function vEscuchar(){const ok=!!synth;const voces=ok?synth.getVoices().filter(v=>/^es/i.test(v.lang)):[];
+ const opts=ESC_OPTS.some(o=>o[0]===SP.sc)?ESC_OPTS:ESC_OPTS.concat([[SP.sc,"👤 Guía de una persona"]]);
+ return `<div class="card"><h2>🎧 Modo lectura</h2><p>La app te lee el contenido en voz alta; úsalo con audífonos. En cada ejercicio o reflexión se detiene y deja un espacio para pensar o practicar. Cuando quieras seguir, di <b>«continúa»</b> o toca <b>Continuar</b>.</p>${ok?"":'<p class="avoid">Tu navegador no admite lectura en voz alta.</p>'}
+ <label>¿Qué quieres escuchar?</label><select id="lsc" onchange="SP.sc=this.value">${opts.map(o=>`<option value="${o[0]}" ${o[0]===SP.sc?'selected':''}>${o[1]}</option>`).join("")}</select>
+ <div class="row"><div><label>Velocidad: <span id="lrv">${SP.rate}</span>x</label><input type="range" min="0.6" max="1.4" step="0.1" value="${SP.rate}" oninput="SP.rate=+this.value;$('#lrv').textContent=this.value"></div>
+ <div><label>Voz</label><select onchange="SP.vi=this.value"><option value="">Automática</option>${voces.map(v=>`<option value="${esc(v.name)}" ${v.name===SP.vi?'selected':''}>${esc(v.name)}</option>`).join("")}</select></div></div>
+ <label><input type="checkbox" style="width:auto" ${SP.pausar?'checked':''} onchange="SP.pausar=this.checked"> Hacer pausa en cada ejercicio o reflexión</label><br>
+ <label><input type="checkbox" style="width:auto" ${SP.voz?'checked':''} onchange="SP.voz=this.checked"> Escuchar mi voz para el comando «continúa» (pide micrófono; si no funciona, usa el botón)</label>
+ <div class="pill-row" style="margin-top:10px"><button class="btn" onclick="empezar($('#lsc').value)">▶️ Empezar</button><button class="btn ghost" onclick="pausar()">⏸ Pausa</button><button class="btn" onclick="continuar()">⏯ Continuar</button><button class="btn ghost" onclick="jump(-1)">⏮</button><button class="btn ghost" onclick="jump(1)">⏭</button><button class="btn ghost" onclick="detener()">⏹ Detener</button></div></div>
+ <div class="card"><p id="lst" class="hint"></p><p id="lcur" style="font-size:1.15rem"></p></div>
+ <div class="card"><h3>📝 Mis reflexiones</h3><textarea rows="4" placeholder="Escribe aquí lo que reflexionas durante la pausa..." oninput="S.set('ief_nota',this.value)">${esc(S.get('ief_nota',''))}</textarea></div>`}
+if(synth)synth.onvoiceschanged=()=>{if(tab==="escuchar"&&SP.st==="idle")render()};
 
 /* ----- diario ----- */
 let sel=null;
@@ -497,7 +581,7 @@ function saveD(){if(!sel){alert("Elige una emoción.");return}diario.push({f:Dat
 function clearD(){if(confirm("¿Borrar todo el diario?")){diario=[];S.set("ief_diario",diario);render()}}
 
 /* ============ RENDER ============ */
-function render(){nav();$("#app").innerHTML= tab==="inicio"?vInicio():tab==="libro"?vLibro():tab==="calendario"?vCal():tab==="diario"?vDiario():tab==="limites"?vLimites():tab==="tipos"?vTipos():vModulo(tab)}
+function render(){nav();$("#app").innerHTML= tab==="inicio"?vInicio():tab==="libro"?vLibro():tab==="calendario"?vCal():tab==="diario"?vDiario():tab==="limites"?vLimites():tab==="tipos"?vTipos():tab==="personas"?vPersonas():tab==="escuchar"?vEscuchar():vModulo(tab);if(tab==="escuchar")ui()}
 window.addEventListener("hashchange",()=>{const t=location.hash.slice(1);if(TABS.find(x=>x[0]===t)&&t!==tab){tab=t;render()}});
 render();
 </script>
