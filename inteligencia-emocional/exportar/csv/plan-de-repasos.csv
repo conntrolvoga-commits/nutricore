@@ -1,9 +1,9 @@
-﻿Repaso,Días después del estudio,Fecha (llenar),Tema,Hecho (sí/no)
-Estudio inicial,0,,,
-Repaso 1 (al día siguiente),1,,,
-Repaso 2,3,,,
-Repaso 3 (1 semana),7,,,
-Repaso 4 (2 semanas),14,,,
-Repaso 5 (1 mes),30,,,
-Repaso 6 (2 meses),60,,,
-Repaso 7 (4 meses),120,,,
+﻿Repaso,Días después del estudio,Técnica a usar,Fecha (escribe la fecha de estudio en D2),Hecho (sí/no)
+Estudio inicial,0,Estudio con SQ3R / Cornell; crea tarjetas y mapa mental,,
+Repaso 1 (al día siguiente),1,Recuerdo activo: escribe lo que recuerdas sin mirar,,
+Repaso 2,3,Tarjetas Leitner + explicarlo con Feynman,,
+Repaso 3 (1 semana),7,Mapa mental de memoria y completar espacios,,
+Repaso 4 (2 semanas),14,Práctica aplicada (aprender haciendo) + tarjetas,,
+Repaso 5 (1 mes),30,Repaso intercalado con otro tema,,
+Repaso 6 (2 meses),60,Repaso final: explicarlo a otra persona,,
+Repaso 7 (4 meses),120,Repaso final: explicarlo a otra persona,,
