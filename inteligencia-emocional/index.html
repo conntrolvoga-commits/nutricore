@@ -279,7 +279,7 @@ const MENSAJES={
 /* ============ ESTADO ============ */
 const S={ get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let eventos=S.get("ief_eventos",[]); let diario=S.get("ief_diario",[]); let vistos=S.get("ief_vistos",[]);
-const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["suegros","👵 Suegros"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["tipos","🌟 Tipos de IE"],["personas","👥 Personas"],["escuchar","🎧 Escuchar"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
+const TABS=[["inicio","🏠 Inicio"],["libro","📖 Libros"],["hijos","🧒 Hijos"],["yernos","🤝 Yernos/Nueras"],["suegros","👵 Suegros"],["politica","🏡 Fam. política"],["amigos","🫶 Amigos"],["pareja","💞 Pareja"],["limites","🚧 Límites"],["tipos","🌟 Tipos de IE"],["estudio","📚 Estudio"],["personas","👥 Personas"],["escuchar","🎧 Escuchar"],["negocios","💼 Negocios"],["calendario","📅 Calendario"],["diario","📝 Diario"]];
 let tab=(location.hash||"#inicio").slice(1); if(!TABS.find(t=>t[0]===tab))tab="inicio";
 
 const $=s=>document.querySelector(s);
@@ -296,7 +296,7 @@ function vInicio(){
  return `<div class="card"><h2>Bienvenida</h2><p>«${esc(f)}»</p>
  <p class="hint">Elige una sección para empezar. Cada módulo tiene frases para decir, frases para evitar y ejercicios prácticos.</p></div>
  <div class="row">${Object.entries(MODULOS).map(([k,m])=>`<button class="btn ghost" onclick="go('${k}')">${m.icon} ${m.nombre}</button>`).join("")}
- <button class="btn ghost" onclick="go('libro')">📖 Libros</button><button class="btn ghost" onclick="go('limites')">🚧 Límites</button><button class="btn ghost" onclick="go('tipos')">🌟 Tipos de IE</button><button class="btn ghost" onclick="go('personas')">👥 Personas</button><button class="btn ghost" onclick="go('escuchar')">🎧 Escuchar</button><button class="btn ghost" onclick="go('calendario')">📅 Calendario</button></div>
+ <button class="btn ghost" onclick="go('libro')">📖 Libros</button><button class="btn ghost" onclick="go('limites')">🚧 Límites</button><button class="btn ghost" onclick="go('tipos')">🌟 Tipos de IE</button><button class="btn ghost" onclick="go('personas')">👥 Personas</button><button class="btn ghost" onclick="go('estudio')">📚 Estudio</button><button class="btn ghost" onclick="go('escuchar')">🎧 Escuchar</button><button class="btn ghost" onclick="go('calendario')">📅 Calendario</button></div>
  <div class="card"><h3>🔔 Próximas fechas</h3>${prox.length?prox.map(evRow).join(""):'<p class="hint">Aún no hay fechas. Agrega cumpleaños y eventos en el Calendario.</p>'}</div>
  <div class="card"><h3>Mi progreso</h3><p>Capítulos leídos: <b>${vistos.length}/${LIBROS.reduce((a,l)=>a+l.capitulos.length,0)}</b></p>
  <div style="background:var(--line);border-radius:8px;height:10px"><div style="width:${vistos.length/LIBROS.reduce((a,l)=>a+l.capitulos.length,0)*100}%;background:var(--pri);height:10px;border-radius:8px"></div></div></div>`;
@@ -526,7 +526,7 @@ ${abierta===p.id?`<div style="margin-top:8px">${guiaHtml(p)}</div>`:""}</div>`).
 /* ----- modo lectura (voz) ----- */
 const WAIT={wait:true};
 const WMSG="Tómate un momento para reflexionar o hacer el ejercicio. Cuando quieras seguir, di continúa, o toca el botón Continuar.";
-const ESC_OPTS=[["todo","📚 Toda la app"],["libro0","📖 Libro 1: El Arte de Querer Bien"],["libro1","📖 Libro 2: De Padres a Amigos"],["m:hijos","🧒 Hijos"],["m:yernos","🤝 Yernos y nueras"],["m:suegros","👵 Suegros hacia nueras y yernos"],["m:politica","🏡 Familia política"],["m:amigos","🫶 Amigos"],["m:pareja","💞 Pareja y matrimonio"],["m:negocios","💼 Negocios y clientes"],["limites","🚧 Límites"],["tipos","🌟 Tipos de inteligencia emocional"],["personas","👥 Guías de mis personas"]];
+const ESC_OPTS=[["todo","📚 Toda la app"],["libro0","📖 Libro 1: El Arte de Querer Bien"],["libro1","📖 Libro 2: De Padres a Amigos"],["m:hijos","🧒 Hijos"],["m:yernos","🤝 Yernos y nueras"],["m:suegros","👵 Suegros hacia nueras y yernos"],["m:politica","🏡 Familia política"],["m:amigos","🫶 Amigos"],["m:pareja","💞 Pareja y matrimonio"],["m:negocios","💼 Negocios y clientes"],["limites","🚧 Límites"],["tipos","🌟 Tipos de inteligencia emocional"],["estudio","📚 Técnicas de estudio"],["personas","👥 Guías de mis personas"]];
 function qLibro(b){const L=LIBROS[b],q=[{t:L.titulo+". "+L.subtitulo}];L.capitulos.forEach(c=>{q.push({t:c.t});c.p.forEach(p=>{q.push({t:T(p)});if(/^<b>(Práctica|Carta)/.test(p))q.push(WAIT)})});return q}
 function qModulo(k){const m=MODULOS[k],q=[{t:m.titulo},{t:T(m.intro)}];m.etapas.forEach(e=>{q.push({t:e.n});e.pts.forEach(p=>q.push({t:T(p)}));e.di.forEach(d=>q.push({t:"Puedes decir: "+d}));e.evita.forEach(d=>q.push({t:"Evita decir: "+d}))});q.push({t:"Ejercicios prácticos."});m.ejercicios.forEach(x=>{q.push({t:x});q.push(WAIT)});return q}
 function qLimites(){const q=[{t:"Respetar los límites de los demás. Un límite dice: hasta aquí me siento cómodo."},{t:"Diez reglas generales."}];LIM.reglas.forEach((r,i)=>q.push({t:(i+1)+". "+r[0]+". "+r[1]}));q.push({t:"Cómo respetar a cada tipo de relación."});LIM.rel.forEach(r=>{q.push({t:r[0].replace(/^\S+\s/,"")+". "+r[1]});q.push({t:r[2].replace("Di:","Puedes decir:").replace("Evita:","Evita decir:")})});q.push({t:"Prácticas."});LIM.practicas.forEach(r=>{q.push({t:r[0]+". "+r[1]});q.push(WAIT)});return q}
@@ -536,7 +536,7 @@ function buildQ(sc){
  if(sc==="todo")return [].concat(qLibro(0),qLibro(1),Object.keys(MODULOS).flatMap(k=>qModulo(k)),qLimites(),qTipos());
  if(sc.startsWith("libro"))return qLibro(+sc.slice(5));
  if(sc.startsWith("m:"))return qModulo(sc.slice(2));
- if(sc==="limites")return qLimites(); if(sc==="tipos")return qTipos();
+ if(sc==="estudio")return qEstudio();if(sc==="limites")return qLimites(); if(sc==="tipos")return qTipos();
  if(sc==="personas"){const l=personas.filter(p=>p.nombre.trim());return (l.length?l:personas).flatMap(p=>qRol(p))}
  if(sc.startsWith("rol:")){const p=personas.find(x=>x.id===sc.slice(4));return p?qRol(p):[]}
  return []}
@@ -581,6 +581,70 @@ function vEscuchar(){const ok=!!synth;const voces=ok?synth.getVoices().filter(v=
  <div class="card"><h3>📝 Mis reflexiones</h3><textarea rows="4" placeholder="Escribe aquí lo que reflexionas durante la pausa..." oninput="S.set('ief_nota',this.value)">${esc(S.get('ief_nota',''))}</textarea></div>`}
 if(synth)synth.onvoiceschanged=()=>{if(tab==="escuchar"&&SP.st==="idle")render()};
 
+/* ----- estudio y aprendizaje ----- */
+const REPASO=[[0,"Estudio inicial"],[1,"Repaso 1 (al día siguiente)"],[3,"Repaso 2"],[7,"Repaso 3 (1 semana)"],[14,"Repaso 4 (2 semanas)"],[30,"Repaso 5 (1 mes)"],[60,"Repaso 6 (2 meses)"],[120,"Repaso 7 (4 meses)"]];
+const ESTUDIO=[
+ {g:"🔁 Repetición y memoria",items:[
+  ["Repetición espaciada","Repasar la información en intervalos cada vez más largos, justo cuando empiezas a olvidarla. Es de los métodos más eficaces para la memoria a largo plazo.","Estudia, y repasa a los 1, 3, 7, 14, 30, 60 y 120 días. Si fallas, vuelve al intervalo anterior.","Calendario sugerido: día 1, 3, 7, 14, 30, 60, 120.","Aprende las 5 habilidades de Goleman hoy; repásalas mañana, en 3 días, en 1 semana…"],
+  ["Curva del olvido (Ebbinghaus)","Sin repaso se olvida rápido: gran parte en las primeras 24 horas. Repasar a tiempo aplana la curva.","Haz un repaso breve a los 20 minutos, 1 hora, 1 día, 2 días, 6 días y 1 mes.","Primeras 24 horas son las más importantes.","Después de leer un capítulo, cierra el libro y escribe lo que recuerdas."],
+  ["Método Leitner (cajas)","Sistema de tarjetas en 5 cajas: si aciertas la tarjeta sube de caja; si fallas, vuelve a la caja 1.","Caja 1 diario, caja 2 cada 2 días, caja 3 cada 4 días, caja 4 cada 9 días, caja 5 cada 14 días.","Revisa cada caja según su frecuencia.","Tarjetas con frases para decir a cada rol (hijo, yerno, suegro…)."],
+  ["Recuerdo activo (autoevaluación)","Intentar recordar sin mirar el material es más eficaz que releer.","Cierra el libro, escribe o di lo que recuerdas y luego compara. Usa preguntas y tarjetas.","Después de cada bloque de estudio.","«¿Cuáles son los 4 jinetes que destruyen una pareja?»"],
+  ["Práctica distribuida","Estudiar poco y a menudo es mejor que atiborrarse la noche anterior.","Sesiones de 20–45 minutos repartidas en varios días.","Varias veces por semana.","Un módulo de la app al día en lugar de todo el domingo."],
+  ["Práctica intercalada","Mezclar temas o tipos de problemas en la misma sesión mejora la comprensión.","Alterna 2 o 3 temas por sesión en vez de uno solo largo.","En sesiones de repaso.","Alterna límites, empatía y escucha en la misma semana."]]},
+ {g:"🧠 Nemotecnia",items:[
+  ["Acrónimo","Formar una palabra con las iniciales de lo que quieres recordar.","Toma la primera letra de cada elemento y crea una palabra.","Útil para listas cortas.","A-A-M-E-H = Autoconciencia, Autorregulación, Motivación, Empatía, Habilidades sociales."],
+  ["Acróstico (frase)","Una frase donde cada palabra empieza con las iniciales de la lista.","Inventa una frase graciosa o personal con las iniciales.","Útil cuando el acrónimo no forma palabra.","«Ana Ama Mucho Esa Hermosa familia»."],
+  ["Palacio de la memoria (loci)","Colocar lo que quieres recordar en lugares de un recorrido que conoces bien (tu casa).","Elige un recorrido fijo y asocia cada dato con una imagen vívida en cada lugar.","Para listas largas y discursos.","Los 10 pasos de una disculpa distribuidos en las habitaciones de tu casa."],
+  ["Historia encadenada","Unir los datos en una historia inventada y exagerada.","Crea una historia con los elementos en orden, con imágenes extrañas.","Para listas ordenadas.","Una historia donde Goleman visita a cada miembro de tu familia."],
+  ["Palabra clave","Asociar una palabra nueva con una imagen o palabra que suene parecido.","Busca una palabra familiar parecida y crea una imagen que una ambas.","Para vocabulario e idiomas.","«Empatía» → «en-pata-día»: ponerte en la pata (zapatos) del otro."],
+  ["Rimas y canciones","Poner el contenido en verso o melodía facilita recordarlo.","Crea una rima o usa una canción conocida con la letra cambiada.","Para reglas y fórmulas.","«Respira, nombra y elige, y tu respuesta se rige»."],
+  ["Método de ganchos (peg)","Asociar cada número con una imagen fija (1=vela, 2=cisne…) y atar los datos a ella.","Memoriza una lista de ganchos y asocia cada dato con su gancho.","Para listas numeradas.","Las 10 reglas de límites atadas a 10 ganchos."],
+  ["Chunking (agrupar)","Dividir información larga en bloques pequeños con sentido.","Agrupa en 3–5 elementos y dales un nombre.","Para números, listas y conceptos.","Agrupa las 31 inteligencias en 6 familias."]]},
+ {g:"📝 Comprender y organizar",items:[
+  ["Técnica Feynman","Explicar el tema con palabras simples, como a un niño, para detectar lagunas.","1) Elige un tema. 2) Explícalo sin tecnicismos. 3) Identifica lo que no sabes. 4) Revisa y simplifica.","Al terminar de estudiar un tema.","Explica a un familiar qué es validar una emoción."],
+  ["Método Cornell","Notas en 3 zonas: apuntes, preguntas clave y resumen al final.","Divide la hoja: columna izquierda de preguntas, derecha de notas, abajo un resumen.","Durante la clase o lectura, y repaso posterior.","Preguntas: «¿qué es autorregulación?» con notas al lado."],
+  ["Método SQ3R","Cinco pasos para leer: Survey (explorar), Question (preguntar), Read, Recite (recitar), Review.","Hojea el capítulo, convierte títulos en preguntas, lee, responde sin mirar y repasa.","Para textos largos.","Aplícalo a un capítulo de los libros de la app."],
+  ["Mapa mental","Esquema radial con una idea central y ramas con palabras clave e imágenes.","Escribe el tema al centro, dibuja ramas y usa colores y dibujos.","Para visión global y lluvia de ideas.","Centro: «Familia»; ramas: hijos, pareja, suegros, amigos…"],
+  ["Mapa conceptual","Conceptos unidos con flechas y verbos que explican su relación.","Lista conceptos, ordénalos de general a particular y une con verbos.","Para entender relaciones.","«Emoción → genera → conducta → afecta → relación»."],
+  ["Resumen y subrayado selectivo","Condensar con tus palabras y marcar solo lo esencial.","Subraya como máximo 10–20% del texto; reescribe con tus palabras.","Después de leer.","Resume cada capítulo en 3 líneas."],
+  ["Doble codificación","Combinar palabras con imágenes o esquemas.","Acompaña cada concepto con un dibujo o diagrama simple.","Para conceptos abstractos.","Dibuja el semáforo de límites."],
+  ["Elaboración (preguntarte por qué)","Relacionar lo nuevo con lo que ya sabes y preguntarte por qué y cómo.","Después de cada idea: «¿por qué es así?», «¿dónde lo he visto?».","Siempre que estudies.","«¿Por qué validar calma a la otra persona?»"],
+  ["Zettelkasten (fichas conectadas)","Notas breves, cada una con una idea, enlazadas entre sí.","Una idea por ficha, con enlaces a otras fichas relacionadas.","Para estudio a largo plazo.","Una ficha por cada tipo de inteligencia emocional."]]},
+ {g:"⏱️ Organización del tiempo y hábitos",items:[
+  ["Técnica Pomodoro","Bloques de trabajo con descansos para mantener la concentración.","25 minutos de estudio, 5 de descanso; cada 4 bloques, descanso largo de 15–30 minutos.","En sesiones de estudio largas.","4 pomodoros para estudiar un libro."],
+  ["Bloques de tiempo (time blocking)","Reservar horas fijas en el calendario para estudiar.","Agenda tus sesiones como citas y protégelas.","Planeación semanal.","Martes y jueves 7–8 pm: módulo de la app."],
+  ["Técnica 52/17","Trabajar 52 minutos y descansar 17.","Cronometra los bloques y descansa lejos de las pantallas.","Estudio profundo.","Para sesiones de lectura del libro."],
+  ["Regla de los 2 minutos","Si algo tarda menos de 2 minutos, hazlo ahora; para empezar un hábito, empieza con 2 minutos.","Reduce el hábito a una versión mínima y repítela a diario.","Al empezar a estudiar.","Lee una página al día."],
+  ["Estudiar en pareja o grupo","Explicarse mutuamente y hacerse preguntas.","Cada uno enseña un tema y el otro hace preguntas.","Semanal.","Un círculo de estudio con tu pareja o amigos."],
+  ["Sueño, ejercicio y alimentación","El sueño consolida la memoria; el ejercicio y una buena alimentación mejoran la atención.","Duerme 7–9 horas y repasa brevemente antes de dormir; muévete 20–30 minutos al día.","Todos los días.","Repasa 10 minutos antes de dormir."]]},
+ {g:"🎯 Cómo aprender esta app",items:[
+  ["Plan semanal sugerido","Una forma práctica de estudiar la inteligencia emocional con esta app.","Lun: leer un capítulo. Mar: practicar el ejercicio. Mié: repasar con recuerdo activo. Jue: aplicar con una persona. Vie: reflexionar en el diario. Sáb: repaso espaciado. Dom: descanso.","Cada semana.","Un capítulo por semana, con repaso a los 1, 3 y 7 días."],
+  ["Aprender haciendo","La inteligencia emocional se aprende practicando en situaciones reales.","Elige una persona y un rol (pestaña Personas) y aplica una frase esta semana.","Diario.","Usa la pausa de 3 segundos con tu familia."],
+  ["Escuchar y reflexionar","Combinar audio (modo lectura) con pausas de reflexión.","Escucha un módulo con audífonos y escribe en «Mis reflexiones» durante la pausa.","3–4 veces por semana.","Escucha el módulo de pareja caminando."]]}
+];
+function vEstudio(){
+ return `<div class="card"><h2>📚 Técnicas y métodos de estudio</h2>
+ <p>Métodos para aprender y recordar mejor: nemotecnia, repetición espaciada, mapas, técnicas de tiempo y más. Cada uno trae cómo usarlo, con qué frecuencia y un ejemplo.</p>
+ <div class="pill-row"><button class="btn ghost noprint" onclick="listen('estudio')">🎧 Escuchar esta sección</button></div>
+ <input id="eq" placeholder="🔍 Buscar (ej. nemotecnia, repaso, Pomodoro)" oninput="filtraEst()" style="margin-top:8px"></div>
+ <div class="card"><h3>🗓️ Plan de repasos (repetición espaciada)</h3><p class="hint">Escribe lo que aprendiste y la fecha de estudio. Te armo los días de repaso y los puedes agregar al calendario.</p>
+ <div class="row"><input id="rt" placeholder="Tema (ej. Libro 1 – Cap. 3)"><input id="rf" type="date" value="${hoyISO()}"></div>
+ <button class="btn" onclick="planRep()">Generar plan</button><div id="rp"></div></div>
+ <div id="el">${estHtml("")}</div>`}
+function hoyISO(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function sumDias(f,n){const [y,m,d]=f.split("-").map(Number);const x=new Date(y,m-1,d+n);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")}
+function estHtml(q){q=q.toLowerCase();let h="";
+ ESTUDIO.forEach(g=>{const it=g.items.filter(i=>!q||i.join(" ").toLowerCase().includes(q));if(!it.length)return;
+  h+=`<h3 style="margin-top:18px">${g.g}</h3>`+it.map(i=>`<details ${q?'open':''}><summary>${esc(i[0])}</summary><div><p>${esc(i[1])}</p><div class="say"><b>Cómo:</b> ${esc(i[2])}</div><div class="say"><b>Cuándo / frecuencia:</b> ${esc(i[3])}</div><p class="hint"><b>Ejemplo:</b> ${esc(i[4])}</p></div></details>`).join("")});
+ return h||'<p class="hint">Sin resultados.</p>'}
+function filtraEst(){$("#el").innerHTML=estHtml($("#eq").value.trim())}
+let planActual=null;
+function planRep(){const t=$("#rt").value.trim(),f=$("#rf").value;if(!t||!f){alert("Escribe el tema y la fecha.");return}
+ planActual={t,f};$("#rp").innerHTML=REPASO.map(r=>{const d=sumDias(f,r[0]);return `<div class="ev"><div><b>${esc(r[1])}</b><small>${d}</small></div></div>`}).join("")+`<button class="btn" style="margin-top:8px" onclick="planCal()">➕ Agregar al calendario</button>`}
+function planCal(){if(!planActual)return;REPASO.slice(1).forEach(r=>eventos.push({id:"e"+Date.now()+r[0],nombre:"📚 Repasar: "+planActual.t,fecha:sumDias(planActual.f,r[0]),tipo:"otro",rel:"otro",nota:r[1],anual:false}));
+ S.set("ief_eventos",eventos);alert("Listo: agregué "+(REPASO.length-1)+" repasos al calendario.")}
+function qEstudio(){const q=[{t:"Técnicas y métodos de estudio."}];ESTUDIO.forEach(g=>{q.push({t:g.g});g.items.forEach(i=>{q.push({t:i[0]+". "+i[1]});q.push({t:"Cómo: "+i[2]});q.push({t:"Frecuencia: "+i[3]});q.push({t:"Ejemplo: "+i[4]})});q.push(WAIT)});return q}
+
 /* ----- diario ----- */
 let sel=null;
 function vDiario(){
@@ -597,7 +661,7 @@ function saveD(){if(!sel){alert("Elige una emoción.");return}diario.push({f:Dat
 function clearD(){if(confirm("¿Borrar todo el diario?")){diario=[];S.set("ief_diario",diario);render()}}
 
 /* ============ RENDER ============ */
-function render(){nav();$("#app").innerHTML= tab==="inicio"?vInicio():tab==="libro"?vLibro():tab==="calendario"?vCal():tab==="diario"?vDiario():tab==="limites"?vLimites():tab==="tipos"?vTipos():tab==="personas"?vPersonas():tab==="escuchar"?vEscuchar():vModulo(tab);if(tab==="escuchar")ui()}
+function render(){nav();$("#app").innerHTML= tab==="inicio"?vInicio():tab==="libro"?vLibro():tab==="calendario"?vCal():tab==="diario"?vDiario():tab==="limites"?vLimites():tab==="tipos"?vTipos():tab==="personas"?vPersonas():tab==="estudio"?vEstudio():tab==="escuchar"?vEscuchar():vModulo(tab);if(tab==="escuchar")ui()}
 window.addEventListener("hashchange",()=>{const t=location.hash.slice(1);if(TABS.find(x=>x[0]===t)&&t!==tab){tab=t;render()}});
 render();
 </script>
